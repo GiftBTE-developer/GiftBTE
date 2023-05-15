@@ -8,8 +8,6 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
 
 
-set(PETSC_DIR "/home/yuehu/Downloads/petsc-3.14.2")
-set(PETSC_ARCH "arch-linux-c-debug")
 
 
 option(USE_GPU "compile as GPU version" off)
