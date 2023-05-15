@@ -1,0 +1,5 @@
+#add_library(BTEBoundaryCondition BTEBoundaryCondition.cpp "${StaticBTESolver_SOURCE_DIR}/includes/StaticBTESynthetic/BTEBoundaryCondition.h")
+add_library(BTEBoundaryCondition  BTEBoundaryCondition.cpp )
+# target_include_directories(BTEBoundaryCondition PUBLIC "${StaticBTESolver_SOURCE_DIR}/includes")
+target_link_libraries(BTEBoundaryCondition PUBLIC BTEutility)
+# target_compile_features(BTEBoundaryCondition PUBLIC cxx_std_14)

@@ -1,0 +1,4 @@
+cmake-build*/
+bin/
+!bin/input/
+!bin/BTE_CPU
