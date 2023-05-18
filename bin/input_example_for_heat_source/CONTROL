@@ -1,0 +1,14 @@
+Order://1:first order; 2:second order; 2limit: limited second order
+2
+Method:// Synthetic or DOM
+Synthetic
+MatrixSolver:// LU or Iterative
+Iterative
+NumMaxIter:
+1000000
+ErrorTempLimit:
+1e-5
+ErrorFluxLimit:
+1.1e-3
+Multiscale:
+none
