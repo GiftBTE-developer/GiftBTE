@@ -493,3 +493,29 @@ if(world_rank==0)
 
 
 }
+
+void
+SolutionAll::_Transient_BTE_Solver(DistributeMesh *mesh, BTEBoundaryCondition *bcs, BTEBand *bands, BTEAngle *angles,
+                                   int num_proc, int world_rank, int Use_Backup, string Order, double error_temp_limit,
+                                   double error_flux_limit, double deltaT, double totalT) {
+    Transient solver(&mesh->FourierMeshes, bcs, bands, angles, num_proc,
+              world_rank,deltaT,totalT);
+    for (int j = 0; j < solution.numCell; ++j) {
+        solver.temperature[j]=solution.Temperature[j];
+        solver.heatFluxXGlobal[j]=solution.heatFluxX[j];
+        solver.heatFluxYGlobal[j]=solution.heatFluxY[j];
+        solver.heatFluxZGlobal[j]=solution.heatFluxZ[j];
+    }
+    if(Order=="2")
+    {
+        solver.solve(Use_Backup,error_temp_limit,error_flux_limit,deltaT,totalT);
+    }
+
+    for (int j = 0; j < solution.numCell; ++j) {
+        solution.Temperature[j] = solver.temperature[j];
+        solution.heatFluxX[j] = solver.heatFluxXGlobal[j];
+        solution.heatFluxY[j] = solver.heatFluxYGlobal[j];
+        solution.heatFluxZ[j] = solver.heatFluxZGlobal[j];
+    }
+}
+

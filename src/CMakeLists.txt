@@ -17,6 +17,7 @@ add_subdirectory(BTEMesh)
 add_subdirectory(StaticBTESynthetic)
 add_subdirectory(StaticFourier)
 add_subdirectory(TransientFourier)
+add_subdirectory(TransientBTE)
 add_subdirectory(Solution)
 add_subdirectory(utility)
 
@@ -36,7 +37,7 @@ if(USE_GPU)
         endif()
 
 else()
-    target_link_libraries(BTE_CPU PUBLIC StaticBTESynthetic StaticFourier TransientFourier Solution MPI::MPI_CXX "${PETSC_LIBRARIES}")
+    target_link_libraries(BTE_CPU PUBLIC StaticBTESynthetic StaticFourier TransientFourier TransientBTE Solution MPI::MPI_CXX "${PETSC_LIBRARIES}")
 
     if(USE_TIME)
         if(USE_MRM)

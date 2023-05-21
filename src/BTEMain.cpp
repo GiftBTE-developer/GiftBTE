@@ -61,6 +61,9 @@ int main(int argc, char **argv)
     double error_flux_limit;
     bool Use_Backup;
     double Uniform_heat;
+    double DeltaT;
+    double TotalT;
+    int Istransinet;
 
     ifstream fin_const1("input/CONTROL");
     if (!fin_const1.is_open())
@@ -74,6 +77,10 @@ int main(int argc, char **argv)
         char new_line;
         while(getline(fin_const1,str))
         {
+            if(str.find("Transient")>=0 && str.find("Transient") < str.length())
+            {
+                fin_const1>>Istransinet;
+            }
             if(str.find("Order") >= 0 && str.find("Order") < str.length())
             {
                 fin_const1 >> Order ;
@@ -101,6 +108,14 @@ int main(int argc, char **argv)
             if(str.find("Multiscale") >= 0 && str.find("Multiscale") < str.length())
             {
                 fin_const1 >> Name_multiscale_File ;
+            }
+            if(str.find("DeltaTime") >= 0 && str.find("DeltaTime") < str.length())
+            {
+                fin_const1 >> DeltaT ;
+            }
+            if(str.find("TotalTime") >= 0 && str.find("TotalTime") < str.length())
+            {
+                fin_const1 >> TotalT ;
             }
         }
 
@@ -223,13 +238,19 @@ int main(int argc, char **argv)
 
     SolutionAll solutionAll(distributeMesh,bcs,bands,angles,num_proc,world_rank);
     solutionAll._set_initial(distributeMesh,bands,angles);
-    solutionAll._Fourier_Solver(distributeMesh,bcs,bands,num_proc,world_rank);
-    MPI_Barrier(MPI_COMM_WORLD);
-    distributeMesh->_build_BTEMesh(Dimension_Geometry, L_x, L_y, L_z,bands,bcs,heatfile, Uniform_heat,Name_multiscale_File);
-    MPI_Barrier(MPI_COMM_WORLD);
-    solutionAll._BTE_Solver(distributeMesh,bcs,bands,angles,num_proc,world_rank,Use_Backup,
-                            Num_Max_Iter,Order,Method,Matrix_solver,error_temp_limit,error_flux_limit);
-    solutionAll._print_out(distributeMesh);
+    if(Istransinet!=1)
+    {
+        solutionAll._Fourier_Solver(distributeMesh,bcs,bands,num_proc,world_rank);
+        MPI_Barrier(MPI_COMM_WORLD);
+        distributeMesh->_build_BTEMesh(Dimension_Geometry, L_x, L_y, L_z,bands,bcs,heatfile, Uniform_heat,Name_multiscale_File);
+        MPI_Barrier(MPI_COMM_WORLD);
+        solutionAll._BTE_Solver(distributeMesh,bcs,bands,angles,num_proc,world_rank,Use_Backup,
+                                Num_Max_Iter,Order,Method,Matrix_solver,error_temp_limit,error_flux_limit);
+        solutionAll._print_out(distributeMesh);
+    } else
+    {
+        solutionAll._Transient_BTE_Solver(distributeMesh,bcs,bands,angles,num_proc,world_rank,Use_Backup,Order,error_temp_limit,error_flux_limit,DeltaT,TotalT);
+    }
 
 
 //StaticFourier fourierStatic(mesh, bcs, bands,num_proc, world_rank);
