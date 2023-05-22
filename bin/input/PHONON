@@ -1,5 +1,5 @@
 2 #number of matter
-15 #number of bands
+1 #number of bands
 
 # Matter 1: ShengBTE
 input/materials/Ge/ShengBTEFile
@@ -17,6 +17,6 @@ Dimension_Material:
 Angle_method: //1:CADOM,2:GaussDOM
 2
 Ntheta:
-2
+64
 Nphi:
-2
+64

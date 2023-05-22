@@ -15,7 +15,8 @@ void Transient::solve(int Use_Backup, double error_temp_limit, double error_flux
 
     errorIncreaseTime=0;
     _set_initial(Use_Backup);
-
+    
+    
     for (int inf_local = 0; inf_local < numDirectionLocal; inf_local++)
     {
         for (int iband_local = 0; iband_local < numBandLocal; ++iband_local)
@@ -24,6 +25,15 @@ void Transient::solve(int Use_Backup, double error_temp_limit, double error_flux
         }
     }
     _set_bound_ee_1();
+
+    for (int ib = 0; ib < numBound; ++ib) {
+        for (int inf = 0; inf < numDirectionLocal; ++inf) {
+            for (int iband = 0; iband < numBandLocal; ++iband) {
+                ebound[iband * numDirection * numBound * 2 + inf * numBound * 2 + ib*2]=temperature[0] * heatCapacity[matter[boundaryCell[ib][0]]][iband][inf];
+                ebound[iband * numDirection * numBound * 2 + inf * numBound * 2 + ib*2+1]=temperature[0] * heatCapacity[matter[boundaryCell[ib][1]]][iband][inf];
+            }
+        }
+    }
     for (int iband = 0; iband < numBand; ++iband) {
         for (int inf = 0; inf < numDirection ; ++inf) {
             for (int ib = 0; ib < numBound*2; ++ib) {
@@ -48,7 +58,7 @@ void Transient::solve(int Use_Backup, double error_temp_limit, double error_flux
     auto trasfer1_time = chrono::microseconds(0);
 
     _get_CellMatrix_larger();
-
+    ofstream outputT("TTG.dat");
     for (int nt = 0; nt < Num_Max_Iter; ++nt)
     {
         total_iter_time = chrono::microseconds(0);
@@ -116,7 +126,7 @@ void Transient::solve(int Use_Backup, double error_temp_limit, double error_flux
         auto set_bound_end=chrono::high_resolution_clock::now();
         set_bound_time+=chrono::duration_cast<chrono::microseconds>(set_bound_end - set_bound_start);
 
-
+        outputT<<(nt+1)*deltaT<<" "<<temperature[0]<<endl;
         auto total_iter_end = chrono::high_resolution_clock::now();
         total_iter_time += chrono::duration_cast<chrono::microseconds>(total_iter_end - total_iter_start);
         MPI_Barrier(MPI_COMM_WORLD);
@@ -127,7 +137,7 @@ void Transient::solve(int Use_Backup, double error_temp_limit, double error_flux
             if (worldRank == 0)
                 _print_out();
         }
-        if (errorIncreaseTime >= 10)
+        if (errorIncreaseTime >= 10000)
         {
             nt = Num_Max_Iter;
             if (worldRank == 0)
@@ -173,7 +183,7 @@ void Transient::solve(int Use_Backup, double error_temp_limit, double error_flux
         //cout<<nt<<endl;
         MPI_Barrier(MPI_COMM_WORLD);
     }
-
+outputT.close();
     MPI_Barrier(MPI_COMM_WORLD);
 
 

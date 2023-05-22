@@ -1,19 +1,19 @@
 DimensionGeometry=
-2
+1
 Lx=
-1e-6
+6.8e-9
 Ly=
-1e-6
+1e-7
 Lz=
-1e-6
+1e-7
 UniformHeat=
 0
 BCFile=
-input/inputbc_2D.dat
+input/inputbc.dat
 MeshType=
-COMSOL
+1D
 MeshFile=
-input/2D_20_20.mphtxt
+input/inputmesh.dat
 HeatFile=
 none
 
