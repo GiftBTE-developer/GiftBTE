@@ -10,10 +10,12 @@ UniformHeat=
 0
 BCFile=
 input/inputbc.dat
-MeshType=
+MeshType=//1D or COMSOL
 1D
 MeshFile=
 input/inputmesh.dat
+HeatType=//REGION or COORDINATE
+COORDINATE
 HeatFile=
 none
 
