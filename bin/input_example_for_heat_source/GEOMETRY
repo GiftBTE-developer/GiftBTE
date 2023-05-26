@@ -8,11 +8,13 @@ Lz=
 1e-9
 UniformHeat=
 0
-BCfile=
+BCFile=
 input/inputbc.dat
 MeshType=//1D or COMSOL
 COMSOL
 MeshFile=
 input/mesh.mphtxt
+HeatType=//REGION or COORDINATE
+COORDINATE
 HeatFile=
 input/heatfile.dat
