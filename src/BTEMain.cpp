@@ -40,6 +40,7 @@ int main(int argc, char **argv)
 #endif
 
     string Name_Mesh_Type;
+    string Name_Heat_Type; //yufei adding
     string Name_Mesh_File;
     string Name_Band_File;
     string Name_Bc_File;
@@ -166,12 +167,15 @@ int main(int argc, char **argv)
             {
                 fin_const2 >> Name_Mesh_File;
             }
+            if(str.find("HeatType") >= 0 && str.find("HeatType") < str.length())
+            {
+                fin_const2 >> Name_Heat_Type;
+            } // yufei adding
             if(str.find("HeatFile") >= 0 && str.find("HeatFile") < str.length())
             {
                 fin_const2 >> Name_Heat_File;
             }
         }
-
     }
     fin_const2.close();
 
@@ -225,7 +229,7 @@ int main(int argc, char **argv)
     ifstream geofile1(Name_Mesh_File);
     DistributeMesh *distributeMesh;
     distributeMesh=new DistributeMesh(Dimension_Geometry, geofile1, L_x, L_y, L_z,
-                                  Name_Mesh_Type,bands,bcs,heatfile, Uniform_heat);
+                                  Name_Mesh_Type,bands,bcs,heatfile, Uniform_heat, Name_Heat_Type);  //yufei
     geofile.close();
     heatfile.close();
 
