@@ -1,14 +1,16 @@
-1 #number of matter
-5 #number of bands
+Number of matter=
+1
+Number of bands=
+5
 
-# Matter 1:
+Matter 1=
 5.71E+03	1.31E-11	7.22E+03	2.42E-03	0.2
 5.62E+03	1.07E-11	7.28E+03	3.00E-03	0.2
 5.23E+03	7.96E-12	7.16E+03	3.94E-03	0.2
 5.33E+03	7.06E-12	9.17E+03	5.69E-03	0.2
 4.95E+03	5.72E-12	1.26E+04	9.64E-03	0.2
 
-# Geometry: #geo index - matter index start from 0
+Geometry: #geo index - matter index start from 0 =
 0 0
 
 Dimension_Material=

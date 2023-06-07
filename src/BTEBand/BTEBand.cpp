@@ -18,12 +18,22 @@ BTEBand::BTEBand(ifstream &inFile, int Dimension_Material)
         cout << "DEBUG: band file not open" << endl;
         exit(1);
     }
+    string str;
     string line;
-    char new_line;
     int Num_Matter;
-    inFile >> Num_Matter >> new_line;
-    getline(inFile, line);
-    inFile >> nband >> new_line;
+    while(getline(inFile, str))
+    {
+        if(str.find("Number of matter") >= 0 && str.find("Number of matter") < str.length())
+        {
+            inFile >> Num_Matter;
+        }
+
+        if(str.find("Number of bands") >= 0 && str.find("Number of bands") < str.length())
+        {
+            inFile >> nband;
+        }
+    }
+    char new_line;
     bands.resize(Num_Matter);
     bands.resize(nband);
     for (int i = 0; i < nband; ++i)
@@ -36,11 +46,13 @@ BTEBand::BTEBand(ifstream &inFile, int Dimension_Material)
     }
     kappabulk.resize(Num_Matter);
     capacitybulk.resize(Num_Matter);
+    inFile.close();
+    inFile.open("input/PHONON");
     for (int i = 0; i < Num_Matter; ++i)
     {
         while (getline(inFile, line))
         {
-            if (line.find("Matter") > 0 && line.find("Matter") < line.length())
+            if (line.find("Matter") >= 0 && line.find("Matter") < line.length())
             {
 
                 if (line.find("DATABASE") > 0 && line.find("DATABASE") < line.length())
@@ -759,7 +771,7 @@ BTEBand::BTEBand(ifstream &inFile, int Dimension_Material)
     }
     while (getline(inFile, line))
     {
-        if (line.find("Geometry") > 0 && line.find("Geometry") < line.length())
+        if (line.find("Geometry") >= 0 && line.find("Geometry") < line.length())
         {
             while (getline(inFile, line))
             {

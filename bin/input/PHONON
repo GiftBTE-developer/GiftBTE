@@ -1,13 +1,15 @@
-2 #number of matter
-1 #number of bands
+Number of matter=
+1
+Number of bands=
+5
 
-# Matter 1: ShengBTE
+Matter 1: ShengBTE =
 input/materials/Ge/ShengBTEFile
 
-# Matter 2: ShengBTE
+Matter 2: ShengBTE =
 input/materials/Ge/ShengBTEFile
 
-# Geometry: #geo index - matter index start from 0
+Geometry: #geo index - matter index start from 0 =
 0 0
 1 0
 2 0
