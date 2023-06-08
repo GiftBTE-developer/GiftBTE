@@ -23,7 +23,7 @@ void StaticBTESynthetic::solve(int Use_Backup, int Num_Max_Iter, int Use_Limiter
         }
     }
     _get_coefficient_macro();
-    _set_bound_ee_1();
+
 
     auto total_iter_time = chrono::microseconds(0);
     auto get_gradient_time = chrono::microseconds(0);
@@ -40,7 +40,22 @@ void StaticBTESynthetic::solve(int Use_Backup, int Num_Max_Iter, int Use_Limiter
 
     _get_face_matrix();
     _get_CellMatrix_larger();
-
+    for (int inf_local = 0; inf_local < numDirectionLocal; inf_local++) {
+        for (int iband_local = 0; iband_local < numBandLocal; ++iband_local) {
+            _get_gradient_larger(Use_Limiter,iband_local,inf_local);
+            _get_bound_ee(iband_local,inf_local);
+            int inf = ((inf_local) * numProc + worldRank) % numDirection;
+            int iband = iband_local * (ceil(double(numProc) / double(numDirection))) + worldRank / numDirection;
+            MPI_Allgather(eboundLocal + iband_local * numBound * 2,
+                  numBound * 2,
+                  MPI_DOUBLE,
+                  (ebound + numBound * 2 * (inf - worldRank % numDirection)) + numDirection * numBound * 2 * (iband - worldRank / numDirection),
+                  numBound * 2,
+                  MPI_DOUBLE,
+                  MPI_COMM_WORLD);
+        }
+    }
+    _set_bound_ee_1();
     for (int nt = 0; nt < Num_Max_Iter; ++nt)
     {
         total_iter_time = chrono::microseconds(0);
@@ -68,6 +83,7 @@ void StaticBTESynthetic::solve(int Use_Backup, int Num_Max_Iter, int Use_Limiter
 
                 auto get_Re_start =chrono::high_resolution_clock::now();
                 _get_Re(iband_local,inf_local);
+
                 auto get_Re_end =chrono::high_resolution_clock::now();
                 get_Re_time+=chrono::duration_cast<chrono::microseconds>(get_Re_end - get_Re_start);
 
@@ -233,7 +249,7 @@ void StaticBTESynthetic::solve_Iterative(int Use_Backup, int Num_Max_Iter, int U
         }
     }
     _get_coefficient_macro();
-    _set_bound_ee_1();
+    //_set_bound_ee_1();
 
 
     auto total_iter_time = chrono::microseconds(0);
@@ -253,6 +269,24 @@ void StaticBTESynthetic::solve_Iterative(int Use_Backup, int Num_Max_Iter, int U
     _get_face_matrix();
 
     _get_CellMatrix_larger();
+
+    for (int inf_local = 0; inf_local < numDirectionLocal; inf_local++) {
+        for (int iband_local = 0; iband_local < numBandLocal; ++iband_local) {
+            _get_gradient_larger(Use_Limiter,iband_local,inf_local);
+            _get_bound_ee(iband_local,inf_local);
+            int inf = ((inf_local) * numProc + worldRank) % numDirection;
+            int iband = iband_local * (ceil(double(numProc) / double(numDirection))) + worldRank / numDirection;
+            MPI_Allgather(eboundLocal + iband_local * numBound * 2,
+                  numBound * 2,
+                  MPI_DOUBLE,
+                  (ebound + numBound * 2 * (inf - worldRank % numDirection)) + numDirection * numBound * 2 * (iband - worldRank / numDirection),
+                  numBound * 2,
+                  MPI_DOUBLE,
+                  MPI_COMM_WORLD);
+        }
+
+    }
+    _set_bound_ee_1();
     for (int nt = 0; nt < Num_Max_Iter; ++nt)
     {
         total_iter_time = chrono::microseconds(0);
@@ -448,7 +482,7 @@ void StaticBTESynthetic::solve_firstorder
         }
     }
     _get_coefficient_macro();
-    _set_bound_ee_1();
+    //_set_bound_ee_1();
 
     auto total_iter_time = chrono::microseconds(0);
     auto get_gradient_time = chrono::microseconds(0);
@@ -464,6 +498,23 @@ void StaticBTESynthetic::solve_firstorder
     auto trasfer1_time = chrono::microseconds(0);
 
     _get_face_matrix();
+    for (int inf_local = 0; inf_local < numDirectionLocal; inf_local++) {
+        for (int iband_local = 0; iband_local < numBandLocal; ++iband_local) {
+            //_get_gradient_larger(Use_Limiter,iband_local,inf_local);
+            _get_bound_ee_firstorder(iband_local,inf_local);
+            int inf = ((inf_local) * numProc + worldRank) % numDirection;
+            int iband = iband_local * (ceil(double(numProc) / double(numDirection))) + worldRank / numDirection;
+            MPI_Allgather(eboundLocal + iband_local * numBound * 2,
+                  numBound * 2,
+                  MPI_DOUBLE,
+                  (ebound + numBound * 2 * (inf - worldRank % numDirection)) + numDirection * numBound * 2 * (iband - worldRank / numDirection),
+                  numBound * 2,
+                  MPI_DOUBLE,
+                  MPI_COMM_WORLD);
+        }
+
+    }
+    _set_bound_ee_1();
 
      for (int i = 0; i < numCell; ++i) {
          gradientX[i]=0;
@@ -659,7 +710,7 @@ void StaticBTESynthetic::solve_firstorder
         }
     }
     _get_coefficient_macro();
-    _set_bound_ee_1();
+    //_set_bound_ee_1();
 
 
     auto total_iter_time = chrono::microseconds(0);
@@ -677,6 +728,23 @@ void StaticBTESynthetic::solve_firstorder
 
 
     _get_face_matrix();
+    for (int inf_local = 0; inf_local < numDirectionLocal; inf_local++) {
+        for (int iband_local = 0; iband_local < numBandLocal; ++iband_local) {
+            //_get_gradient_larger(Use_Limiter,iband_local,inf_local);
+            _get_bound_ee(iband_local,inf_local);
+            int inf = ((inf_local) * numProc + worldRank) % numDirection;
+            int iband = iband_local * (ceil(double(numProc) / double(numDirection))) + worldRank / numDirection;
+            MPI_Allgather(eboundLocal + iband_local * numBound * 2,
+                  numBound * 2,
+                  MPI_DOUBLE,
+                  (ebound + numBound * 2 * (inf - worldRank % numDirection)) + numDirection * numBound * 2 * (iband - worldRank / numDirection),
+                  numBound * 2,
+                  MPI_DOUBLE,
+                  MPI_COMM_WORLD);
+        }
+
+    }
+    _set_bound_ee_1();
 
     for (int i = 0; i < numCell; ++i) {
         gradientX[i]=0;
@@ -872,7 +940,7 @@ void StaticBTESynthetic::solve_DOM(int Use_Backup, int Num_Max_Iter, int Use_Lim
             _get_coefficient(iband_local, inf_local);
         }
     }
-    _set_bound_ee_1();
+    //_set_bound_ee_1();
 
     auto total_iter_time = chrono::microseconds(0);
     auto get_gradient_time = chrono::microseconds(0);
@@ -888,6 +956,22 @@ void StaticBTESynthetic::solve_DOM(int Use_Backup, int Num_Max_Iter, int Use_Lim
     auto trasfer1_time = chrono::microseconds(0);
 
     _get_CellMatrix_larger();
+    for (int inf_local = 0; inf_local < numDirectionLocal; inf_local++) {
+        for (int iband_local = 0; iband_local < numBandLocal; ++iband_local) {
+            _get_gradient_larger(Use_Limiter,iband_local,inf_local);
+            _get_bound_ee(iband_local,inf_local);
+            int inf = ((inf_local) * numProc + worldRank) % numDirection;
+            int iband = iband_local * (ceil(double(numProc) / double(numDirection))) + worldRank / numDirection;
+            MPI_Allgather(eboundLocal + iband_local * numBound * 2,
+                  numBound * 2,
+                  MPI_DOUBLE,
+                  (ebound + numBound * 2 * (inf - worldRank % numDirection)) + numDirection * numBound * 2 * (iband - worldRank / numDirection),
+                  numBound * 2,
+                  MPI_DOUBLE,
+                  MPI_COMM_WORLD);
+        }
+    }
+    _set_bound_ee_1();
 
     for (int nt = 0; nt < Num_Max_Iter; ++nt)
     {
@@ -1057,7 +1141,7 @@ void StaticBTESynthetic::solve_DOM_Iterative
             _get_coefficient_Iterative(iband_local, inf_local);
         }
     }
-   _set_bound_ee_1();
+   //_set_bound_ee_1();
 
 
     auto total_iter_time = chrono::microseconds(0);
@@ -1074,6 +1158,22 @@ void StaticBTESynthetic::solve_DOM_Iterative
     auto trasfer1_time = chrono::microseconds(0);
 
     _get_CellMatrix_larger();
+    for (int inf_local = 0; inf_local < numDirectionLocal; inf_local++) {
+        for (int iband_local = 0; iband_local < numBandLocal; ++iband_local) {
+            _get_gradient_larger(Use_Limiter,iband_local,inf_local);
+            _get_bound_ee(iband_local,inf_local);
+            int inf = ((inf_local) * numProc + worldRank) % numDirection;
+            int iband = iband_local * (ceil(double(numProc) / double(numDirection))) + worldRank / numDirection;
+            MPI_Allgather(eboundLocal + iband_local * numBound * 2,
+                  numBound * 2,
+                  MPI_DOUBLE,
+                  (ebound + numBound * 2 * (inf - worldRank % numDirection)) + numDirection * numBound * 2 * (iband - worldRank / numDirection),
+                  numBound * 2,
+                  MPI_DOUBLE,
+                  MPI_COMM_WORLD);
+        }
+    }
+    _set_bound_ee_1();
     for (int nt = 0; nt < Num_Max_Iter; ++nt)
     {
         total_iter_time = chrono::microseconds(0);
@@ -1241,7 +1341,7 @@ double error_temp_limit, double error_flux_limit)
             _get_coefficient(iband_local, inf_local);
         }
     }
-    _set_bound_ee_1();
+    //_set_bound_ee_1();
 
     auto total_iter_time = chrono::microseconds(0);
     auto get_gradient_time = chrono::microseconds(0);
@@ -1255,7 +1355,23 @@ double error_temp_limit, double error_flux_limit)
     auto macro_bound_time = chrono::microseconds(0);
     auto macro_iter_time = chrono::microseconds(0);
     auto trasfer1_time = chrono::microseconds(0);
-
+    
+    for (int inf_local = 0; inf_local < numDirectionLocal; inf_local++) {
+        for (int iband_local = 0; iband_local < numBandLocal; ++iband_local) {
+            //_get_gradient_larger(Use_Limiter,iband_local,inf_local);
+            _get_bound_ee_firstorder(iband_local,inf_local);
+            int inf = ((inf_local) * numProc + worldRank) % numDirection;
+            int iband = iband_local * (ceil(double(numProc) / double(numDirection))) + worldRank / numDirection;
+            MPI_Allgather(eboundLocal + iband_local * numBound * 2,
+                  numBound * 2,
+                  MPI_DOUBLE,
+                  (ebound + numBound * 2 * (inf - worldRank % numDirection)) + numDirection * numBound * 2 * (iband - worldRank / numDirection),
+                  numBound * 2,
+                  MPI_DOUBLE,
+                  MPI_COMM_WORLD);
+        }
+    }
+    _set_bound_ee_1();
 
     for (int nt = 0; nt < Num_Max_Iter; ++nt)
     {
@@ -1417,7 +1533,7 @@ void StaticBTESynthetic::solve_DOM_firstorder_Iterative
             _get_coefficient_Iterative(iband_local, inf_local);
         }
     }
-     _set_bound_ee_1();
+     //_set_bound_ee_1();
 
 
     auto total_iter_time = chrono::microseconds(0);
@@ -1433,6 +1549,22 @@ void StaticBTESynthetic::solve_DOM_firstorder_Iterative
     auto macro_iter_time = chrono::microseconds(0);
     auto trasfer1_time = chrono::microseconds(0);
 
+    for (int inf_local = 0; inf_local < numDirectionLocal; inf_local++) {
+        for (int iband_local = 0; iband_local < numBandLocal; ++iband_local) {
+            //_get_gradient_larger(Use_Limiter,iband_local,inf_local);
+            _get_bound_ee_firstorder(iband_local,inf_local);
+            int inf = ((inf_local) * numProc + worldRank) % numDirection;
+            int iband = iband_local * (ceil(double(numProc) / double(numDirection))) + worldRank / numDirection;
+            MPI_Allgather(eboundLocal + iband_local * numBound * 2,
+                  numBound * 2,
+                  MPI_DOUBLE,
+                  (ebound + numBound * 2 * (inf - worldRank % numDirection)) + numDirection * numBound * 2 * (iband - worldRank / numDirection),
+                  numBound * 2,
+                  MPI_DOUBLE,
+                  MPI_COMM_WORLD);
+        }
+    }
+    _set_bound_ee_1();
  for (int nt = 0; nt < Num_Max_Iter; ++nt)
     {
         total_iter_time = chrono::microseconds(0);

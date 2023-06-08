@@ -768,7 +768,7 @@ void StaticBTESynthetic::_set_initial(int Use_Backup) const
             int iband = iband_local * (ceil(double(numProc) / double(numDirection))) + worldRank / numDirection;
             for (int kk = 0; kk < numCell; kk++)
             {
-                energyDensity[iband_local][inf_local][kk]= temperature[kk] * heatCapacity[matter[kk]][iband][inf];
+                energyDensity[iband_local][inf_local][kk]= temperature[kk] * heatCapacity[matter[kk]][iband_local][inf_local];
             }
         }
 
@@ -1459,6 +1459,7 @@ void StaticBTESynthetic::_get_Re(int iband_local, int inf_local)
                   relaxationTime[matter[ie]][iband][inf];
         Re[ie] -= energyDensity[iband_local][inf_local][ie];
 
+
     }
 
     for (int ib = 0; ib < numBound; ++ib) {
@@ -1475,6 +1476,13 @@ void StaticBTESynthetic::_get_Re(int iband_local, int inf_local)
                     double temp = relaxationTime[matter[ie]][iband][inf] *
                                   elementFaceArea[jface + ie * 6] / elementVolume[ie] * dotproduct;
                     Re[ie] -= temp * ebound[iband * numDirection * numBound * 2 + inf * numBound * 2 + ib * 2 + icell];
+                    if(isnan(Re[ie]))
+                    {
+                        cout<<ebound[iband * numDirection * numBound * 2 + inf * numBound * 2 + ib * 2 + icell]<<endl;
+
+                        cout<<Re[ie]<<endl;
+                         }
+
                 }
             }
         }
@@ -1508,11 +1516,22 @@ void StaticBTESynthetic::_get_bound_ee(int iband_local, int inf_local) const
                     double e = (energyDensity[iband_local][inf_local][ie] + (ax * gradientX[ie] + ay * gradientY[ie] + az * gradientZ[ie]) * limit[ie]);
                     eboundLocal[iband_local * numBound * 2 + ib * 2 + icell] = e;
                     ebound[iband * numDirection * numBound * 2 + inf * numBound * 2 + ib * 2 + icell] = e;
+                    if(isnan(e))
+                    {
+                        cout<<e<<endl;
+                    }
                 }
             }
         }
 
     }
+    /*MPI_Allgather(eboundLocal + iband_local * numBound * 2,
+                  numBound * 2,
+                  MPI_DOUBLE,
+                  (ebound + numBound * 2 * (inf - worldRank % numDirection)) + numDirection * numBound * 2 * (iband - worldRank / numDirection),
+                  numBound * 2,
+                  MPI_DOUBLE,
+                  MPI_COMM_WORLD);*/
 }
 
 void StaticBTESynthetic::_set_vertex_energydensity(int iband_local, int inf_local) const
