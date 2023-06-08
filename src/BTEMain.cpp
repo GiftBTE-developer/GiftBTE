@@ -16,7 +16,8 @@ int main(int argc, char **argv)
 {
 
 #ifndef USE_GPU
-    PetscInitialize(nullptr, nullptr, (char *)nullptr, nullptr);
+    //PetscInitialize(nullptr, nullptr, (char *)nullptr, nullptr);
+    MPI_Init(&argc,&argv);
     int num_proc, world_rank;
     MPI_Comm_size(MPI_COMM_WORLD, &num_proc);
     MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);

@@ -9,7 +9,7 @@
 #include "StaticFourier/StaticFourier.h"
 #include <algorithm>
 #include <iomanip>
-#include <petscksp.h>
+//#include <petscksp.h>
 #include "utility/utility.h"
 using namespace std;
 

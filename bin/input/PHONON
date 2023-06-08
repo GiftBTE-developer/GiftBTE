@@ -19,6 +19,6 @@ Dimension_Material:
 Angle_method: //1:CADOM,2:GaussDOM
 2
 Ntheta:
-64
+4
 Nphi:
-64
+4

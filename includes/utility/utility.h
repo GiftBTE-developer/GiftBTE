@@ -12,9 +12,10 @@
 #include <vector>
 #include <iostream>
 #include "mpi.h"
+#include "sstream"
 
 #ifndef USE_GPU
-#include <petscksp.h>
+//#include <petscksp.h>
 #endif
 
 #define PI M_PI

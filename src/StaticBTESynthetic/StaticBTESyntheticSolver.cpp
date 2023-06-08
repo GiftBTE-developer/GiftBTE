@@ -243,13 +243,8 @@ void StaticBTESynthetic::solve_Iterative(int Use_Backup, int Num_Max_Iter, int U
     _set_matrix("Iterative");
     errorIncreaseTime=0;
     _set_initial(Use_Backup);
-    for (int inf_local = 0; inf_local < numDirectionLocal; inf_local++) {
-        for (int iband_local = 0; iband_local < numBandLocal; ++iband_local) {
-            _get_coefficient_Iterative(iband_local, inf_local);
-        }
-    }
+
     _get_coefficient_macro();
-    //_set_bound_ee_1();
 
 
     auto total_iter_time = chrono::microseconds(0);
@@ -265,11 +260,8 @@ void StaticBTESynthetic::solve_Iterative(int Use_Backup, int Num_Max_Iter, int U
     auto macro_iter_time = chrono::microseconds(0);
     auto trasfer1_time = chrono::microseconds(0);
 
-
     _get_face_matrix();
-
     _get_CellMatrix_larger();
-
     for (int inf_local = 0; inf_local < numDirectionLocal; inf_local++) {
         for (int iband_local = 0; iband_local < numBandLocal; ++iband_local) {
             _get_gradient_larger(Use_Limiter,iband_local,inf_local);
@@ -277,14 +269,13 @@ void StaticBTESynthetic::solve_Iterative(int Use_Backup, int Num_Max_Iter, int U
             int inf = ((inf_local) * numProc + worldRank) % numDirection;
             int iband = iband_local * (ceil(double(numProc) / double(numDirection))) + worldRank / numDirection;
             MPI_Allgather(eboundLocal + iband_local * numBound * 2,
-                  numBound * 2,
-                  MPI_DOUBLE,
-                  (ebound + numBound * 2 * (inf - worldRank % numDirection)) + numDirection * numBound * 2 * (iband - worldRank / numDirection),
-                  numBound * 2,
-                  MPI_DOUBLE,
-                  MPI_COMM_WORLD);
+                          numBound * 2,
+                          MPI_DOUBLE,
+                          (ebound + numBound * 2 * (inf - worldRank % numDirection)) + numDirection * numBound * 2 * (iband - worldRank / numDirection),
+                          numBound * 2,
+                          MPI_DOUBLE,
+                          MPI_COMM_WORLD);
         }
-
     }
     _set_bound_ee_1();
     for (int nt = 0; nt < Num_Max_Iter; ++nt)
@@ -301,7 +292,6 @@ void StaticBTESynthetic::solve_Iterative(int Use_Backup, int Num_Max_Iter, int U
         macro_iter_time = chrono::microseconds(0);
         trasfer1_time = chrono::microseconds(0);
 
-
         auto total_iter_start = chrono::high_resolution_clock::now();
         copy();
         for (int inf_local = 0; inf_local < numDirectionLocal; inf_local++)
@@ -315,17 +305,19 @@ void StaticBTESynthetic::solve_Iterative(int Use_Backup, int Num_Max_Iter, int U
 
                 auto get_Re_start =chrono::high_resolution_clock::now();
                 _get_Re(iband_local,inf_local);
+
                 auto get_Re_end =chrono::high_resolution_clock::now();
                 get_Re_time+=chrono::duration_cast<chrono::microseconds>(get_Re_end - get_Re_start);
 
                 auto solve_start = chrono::high_resolution_clock::now();
-                double *sol = _solve_matrix((int*)csrRowPtr[iband_local][inf_local], (int*)csrColInd[iband_local][inf_local], csrVal[iband_local][inf_local], Re,numCell);
+
+                _get_coefficient_Iterative(iband_local,inf_local);
+                Eigen::BiCGSTAB<Eigen::SparseMatrix<double>,Eigen::IncompleteLUT<double>> cg1;
+                sol1=cg1.compute(stiffMatrix).solve(Re1);
                 for (int i = 0; i < numCell; ++i)
                 {
-                    energyDensity[iband_local][inf_local][i]= sol[i] + energyDensity[iband_local][inf_local][i];
+                    energyDensity[iband_local][inf_local][i]= sol1(i) + energyDensity[iband_local][inf_local][i];
                 }
-                delete [] sol;
-
                 auto solve_end = chrono::high_resolution_clock::now();
                 solver1_time += chrono::duration_cast<chrono::microseconds>(solve_end - solve_start);
 
@@ -336,6 +328,7 @@ void StaticBTESynthetic::solve_Iterative(int Use_Backup, int Num_Max_Iter, int U
 
                 auto vertex_start = chrono::high_resolution_clock::now();
                 _set_vertex_energydensity(iband_local,inf_local);
+
                 auto vertex_end = chrono::high_resolution_clock::now();
                 set_vertex_time+=chrono::duration_cast<chrono::microseconds>(vertex_end - vertex_start);
 
@@ -348,12 +341,12 @@ void StaticBTESynthetic::solve_Iterative(int Use_Backup, int Num_Max_Iter, int U
                 _get_non_fourier(iband_local,inf_local);
                 auto fourier_end = chrono::high_resolution_clock::now();
                 non_frourier_time+=chrono::duration_cast<chrono::microseconds>(fourier_end - fourier_start);
-
+                auto transfer_start = chrono::high_resolution_clock::now();
                 _recover_temperature(iband_local,inf_local);
                 _get_total_energy(iband_local,inf_local);
                 _get_heat_flux(iband_local,inf_local);
 
-                auto transfer_start = chrono::high_resolution_clock::now();
+
                 MPI_Allreduce(ReMacroLocal, ReMacro, numCell, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
                 MPI_Allreduce(totalEnergyLocal, totalEnergy, numCell, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
                 MPI_Allreduce(temperatureLocal, temperature, numCell, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
@@ -364,7 +357,6 @@ void StaticBTESynthetic::solve_Iterative(int Use_Backup, int Num_Max_Iter, int U
                 trasfer1_time+=chrono::duration_cast<chrono::microseconds>(transfer_end - transfer_start);
             }
         }
-
 
         auto set_bound_start=chrono::high_resolution_clock::now();
         _set_bound_ee_1();
@@ -385,7 +377,6 @@ void StaticBTESynthetic::solve_Iterative(int Use_Backup, int Num_Max_Iter, int U
         total_iter_time += chrono::duration_cast<chrono::microseconds>(total_iter_end - total_iter_start);
         MPI_Barrier(MPI_COMM_WORLD);
 
-
         if (_get_magin_check_error(nt, error_temp_limit, error_flux_limit))
         {
             nt = Num_Max_Iter;
@@ -398,7 +389,7 @@ void StaticBTESynthetic::solve_Iterative(int Use_Backup, int Num_Max_Iter, int U
             if (worldRank == 0)
                 _print_out();
             if (worldRank == 0)
-                cout << "error increases for 10 times, maybe the solution can not converge. Try limiter or 1 st order" << endl;
+                cout << "error increases for 10 times, maybe the solution can not converge. Try \"-1\" in limiter" << endl;
             MPI_Barrier(MPI_COMM_WORLD);
         }
         if (nt % 1 == 0)
@@ -407,13 +398,12 @@ void StaticBTESynthetic::solve_Iterative(int Use_Backup, int Num_Max_Iter, int U
                 _print_out();
         }
 
-
         if (worldRank == 0){
 
             cout << "  Time taken by inner loop: " << 1.0 * total_iter_time.count() / 1000 << " milliseconds" << endl;
             cout << "  Time taken by gradient 1: " << 1.0 * get_gradient_time.count() / 1000 << " milliseconds" << endl;
             cout << "  Time taken by BTE Re: " << 1.0 * get_Re_time.count() / 1000 << " milliseconds" << endl;
-            cout << "  Time taken by BTE solver: " << 1.0 * solver1_time.count() / 1000 << " milliseconds" << endl;
+            cout << "  Time taken by BTE solver: " << 1.0 * solver1_time.count() /1000  << " milliseconds" << endl;
             cout << "  Time taken by Boundary: " << 1.0 * Boundary_time.count() / 1000 << " milliseconds"
             << " " << 1.0 * set_bound_time.count() / 1000 << " milliseconds" << endl;
             cout << "  Time taken by set_vertex: " << 1.0 * set_vertex_time.count() / 1000 << " milliseconds" << endl;
@@ -423,6 +413,7 @@ void StaticBTESynthetic::solve_Iterative(int Use_Backup, int Num_Max_Iter, int U
             cout << "  Time taken by transfer: " << 1.0 * trasfer1_time.count() / 1000 << " milliseconds"<< endl;
             cout << "----------------------------------------------------------------------------------" << endl;
         }
+
         if(worldRank == 0)
         {
             for (int j = 1; j < numProc ; ++j) {
@@ -435,6 +426,7 @@ void StaticBTESynthetic::solve_Iterative(int Use_Backup, int Num_Max_Iter, int U
             MPI_Status status;
             MPI_Recv(&nt,1,MPI_INT,0,10,MPI_COMM_WORLD,&status);
         }
+        //cout<<nt<<endl;
         MPI_Barrier(MPI_COMM_WORLD);
     }
 
@@ -463,6 +455,7 @@ void StaticBTESynthetic::solve_Iterative(int Use_Backup, int Num_Max_Iter, int U
     _delete_matrix("Iterative");
     _delete_face_matrix();
     _delete_cell_matrix();
+
 
 }
 
@@ -700,18 +693,14 @@ void StaticBTESynthetic::solve_firstorder
   double error_temp_limit, double error_flux_limit)
   {
 
+
     _set_face_matrix();
     _set_matrix("Iterative");
     errorIncreaseTime=0;
     _set_initial(Use_Backup);
-    for (int inf_local = 0; inf_local < numDirectionLocal; inf_local++) {
-        for (int iband_local = 0; iband_local < numBandLocal; ++iband_local) {
-            _get_coefficient_Iterative(iband_local, inf_local);
-        }
-    }
+
     _get_coefficient_macro();
     //_set_bound_ee_1();
-
 
     auto total_iter_time = chrono::microseconds(0);
     auto get_gradient_time = chrono::microseconds(0);
@@ -726,21 +715,20 @@ void StaticBTESynthetic::solve_firstorder
     auto macro_iter_time = chrono::microseconds(0);
     auto trasfer1_time = chrono::microseconds(0);
 
-
     _get_face_matrix();
     for (int inf_local = 0; inf_local < numDirectionLocal; inf_local++) {
         for (int iband_local = 0; iband_local < numBandLocal; ++iband_local) {
             //_get_gradient_larger(Use_Limiter,iband_local,inf_local);
-            _get_bound_ee(iband_local,inf_local);
+            _get_bound_ee_firstorder(iband_local,inf_local);
             int inf = ((inf_local) * numProc + worldRank) % numDirection;
             int iband = iband_local * (ceil(double(numProc) / double(numDirection))) + worldRank / numDirection;
             MPI_Allgather(eboundLocal + iband_local * numBound * 2,
-                  numBound * 2,
-                  MPI_DOUBLE,
-                  (ebound + numBound * 2 * (inf - worldRank % numDirection)) + numDirection * numBound * 2 * (iband - worldRank / numDirection),
-                  numBound * 2,
-                  MPI_DOUBLE,
-                  MPI_COMM_WORLD);
+                          numBound * 2,
+                          MPI_DOUBLE,
+                          (ebound + numBound * 2 * (inf - worldRank % numDirection)) + numDirection * numBound * 2 * (iband - worldRank / numDirection),
+                          numBound * 2,
+                          MPI_DOUBLE,
+                          MPI_COMM_WORLD);
         }
 
     }
@@ -767,7 +755,6 @@ void StaticBTESynthetic::solve_firstorder
         macro_iter_time = chrono::microseconds(0);
         trasfer1_time = chrono::microseconds(0);
 
-
         auto total_iter_start = chrono::high_resolution_clock::now();
         copy();
         for (int inf_local = 0; inf_local < numDirectionLocal; inf_local++)
@@ -780,13 +767,14 @@ void StaticBTESynthetic::solve_firstorder
                 get_Re_time+=chrono::duration_cast<chrono::microseconds>(get_Re_end - get_Re_start);
 
                 auto solve_start = chrono::high_resolution_clock::now();
-                double *sol = _solve_matrix((int*)csrRowPtr[iband_local][inf_local], (int*)csrColInd[iband_local][inf_local], csrVal[iband_local][inf_local], Re,numCell);
+
+                _get_coefficient_Iterative(iband_local,inf_local);
+                Eigen::BiCGSTAB<Eigen::SparseMatrix<double>,Eigen::IncompleteLUT<double>> cg1;
+                sol1=cg1.compute(stiffMatrix).solve(Re1);
                 for (int i = 0; i < numCell; ++i)
                 {
-                    energyDensity[iband_local][inf_local][i]= sol[i];
+                    energyDensity[iband_local][inf_local][i]= sol1(i) ;
                 }
-                delete [] sol;
-
                 auto solve_end = chrono::high_resolution_clock::now();
                 solver1_time += chrono::duration_cast<chrono::microseconds>(solve_end - solve_start);
 
@@ -797,6 +785,7 @@ void StaticBTESynthetic::solve_firstorder
 
                 auto vertex_start = chrono::high_resolution_clock::now();
                 _set_vertex_energydensity(iband_local,inf_local);
+
                 auto vertex_end = chrono::high_resolution_clock::now();
                 set_vertex_time+=chrono::duration_cast<chrono::microseconds>(vertex_end - vertex_start);
 
@@ -809,12 +798,12 @@ void StaticBTESynthetic::solve_firstorder
                 _get_non_fourier(iband_local,inf_local);
                 auto fourier_end = chrono::high_resolution_clock::now();
                 non_frourier_time+=chrono::duration_cast<chrono::microseconds>(fourier_end - fourier_start);
-
+                auto transfer_start = chrono::high_resolution_clock::now();
                 _recover_temperature(iband_local,inf_local);
                 _get_total_energy(iband_local,inf_local);
                 _get_heat_flux(iband_local,inf_local);
 
-                auto transfer_start = chrono::high_resolution_clock::now();
+
                 MPI_Allreduce(ReMacroLocal, ReMacro, numCell, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
                 MPI_Allreduce(totalEnergyLocal, totalEnergy, numCell, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
                 MPI_Allreduce(temperatureLocal, temperature, numCell, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
@@ -825,7 +814,6 @@ void StaticBTESynthetic::solve_firstorder
                 trasfer1_time+=chrono::duration_cast<chrono::microseconds>(transfer_end - transfer_start);
             }
         }
-
 
         auto set_bound_start=chrono::high_resolution_clock::now();
         _set_bound_ee_1();
@@ -846,7 +834,6 @@ void StaticBTESynthetic::solve_firstorder
         total_iter_time += chrono::duration_cast<chrono::microseconds>(total_iter_end - total_iter_start);
         MPI_Barrier(MPI_COMM_WORLD);
 
-
         if (_get_magin_check_error(nt, error_temp_limit, error_flux_limit))
         {
             nt = Num_Max_Iter;
@@ -859,7 +846,7 @@ void StaticBTESynthetic::solve_firstorder
             if (worldRank == 0)
                 _print_out();
             if (worldRank == 0)
-                cout << "error increases for 10 times, maybe the solution can not converge. Try limiter or 1 st order" << endl;
+                cout << "error increases for 10 times, maybe the solution can not converge. Try \"-1\" in limiter" << endl;
             MPI_Barrier(MPI_COMM_WORLD);
         }
         if (nt % 1 == 0)
@@ -868,13 +855,12 @@ void StaticBTESynthetic::solve_firstorder
                 _print_out();
         }
 
-
         if (worldRank == 0){
 
             cout << "  Time taken by inner loop: " << 1.0 * total_iter_time.count() / 1000 << " milliseconds" << endl;
             cout << "  Time taken by gradient 1: " << 1.0 * get_gradient_time.count() / 1000 << " milliseconds" << endl;
             cout << "  Time taken by BTE Re: " << 1.0 * get_Re_time.count() / 1000 << " milliseconds" << endl;
-            cout << "  Time taken by BTE solver: " << 1.0 * solver1_time.count() / 1000 << " milliseconds" << endl;
+            cout << "  Time taken by BTE solver: " << 1.0 * solver1_time.count() /1000  << " milliseconds" << endl;
             cout << "  Time taken by Boundary: " << 1.0 * Boundary_time.count() / 1000 << " milliseconds"
             << " " << 1.0 * set_bound_time.count() / 1000 << " milliseconds" << endl;
             cout << "  Time taken by set_vertex: " << 1.0 * set_vertex_time.count() / 1000 << " milliseconds" << endl;
@@ -884,6 +870,7 @@ void StaticBTESynthetic::solve_firstorder
             cout << "  Time taken by transfer: " << 1.0 * trasfer1_time.count() / 1000 << " milliseconds"<< endl;
             cout << "----------------------------------------------------------------------------------" << endl;
         }
+
         if(worldRank == 0)
         {
             for (int j = 1; j < numProc ; ++j) {
@@ -896,6 +883,7 @@ void StaticBTESynthetic::solve_firstorder
             MPI_Status status;
             MPI_Recv(&nt,1,MPI_INT,0,10,MPI_COMM_WORLD,&status);
         }
+        //cout<<nt<<endl;
         MPI_Barrier(MPI_COMM_WORLD);
     }
 
@@ -923,6 +911,7 @@ void StaticBTESynthetic::solve_firstorder
 #endif
     _delete_matrix("Iterative");
     _delete_face_matrix();
+
 
   }
 
@@ -1132,17 +1121,14 @@ void StaticBTESynthetic::solve_DOM_Iterative
  double error_temp_limit, double error_flux_limit)
  {
 
+
+
     _set_cell_matrix_larger();
     _set_matrix("Iterative");
     errorIncreaseTime=0;
     _set_initial(Use_Backup);
-    for (int inf_local = 0; inf_local < numDirectionLocal; inf_local++) {
-        for (int iband_local = 0; iband_local < numBandLocal; ++iband_local) {
-            _get_coefficient_Iterative(iband_local, inf_local);
-        }
-    }
-   //_set_bound_ee_1();
 
+    //_set_bound_ee_1();
 
     auto total_iter_time = chrono::microseconds(0);
     auto get_gradient_time = chrono::microseconds(0);
@@ -1165,15 +1151,16 @@ void StaticBTESynthetic::solve_DOM_Iterative
             int inf = ((inf_local) * numProc + worldRank) % numDirection;
             int iband = iband_local * (ceil(double(numProc) / double(numDirection))) + worldRank / numDirection;
             MPI_Allgather(eboundLocal + iband_local * numBound * 2,
-                  numBound * 2,
-                  MPI_DOUBLE,
-                  (ebound + numBound * 2 * (inf - worldRank % numDirection)) + numDirection * numBound * 2 * (iband - worldRank / numDirection),
-                  numBound * 2,
-                  MPI_DOUBLE,
-                  MPI_COMM_WORLD);
+                          numBound * 2,
+                          MPI_DOUBLE,
+                          (ebound + numBound * 2 * (inf - worldRank % numDirection)) + numDirection * numBound * 2 * (iband - worldRank / numDirection),
+                          numBound * 2,
+                          MPI_DOUBLE,
+                          MPI_COMM_WORLD);
         }
     }
     _set_bound_ee_1();
+
     for (int nt = 0; nt < Num_Max_Iter; ++nt)
     {
         total_iter_time = chrono::microseconds(0);
@@ -1187,7 +1174,6 @@ void StaticBTESynthetic::solve_DOM_Iterative
         set_bound_time = chrono::microseconds(0);
         macro_iter_time = chrono::microseconds(0);
         trasfer1_time = chrono::microseconds(0);
-
 
         auto total_iter_start = chrono::high_resolution_clock::now();
         copy();
@@ -1206,13 +1192,14 @@ void StaticBTESynthetic::solve_DOM_Iterative
                 get_Re_time+=chrono::duration_cast<chrono::microseconds>(get_Re_end - get_Re_start);
 
                 auto solve_start = chrono::high_resolution_clock::now();
-                double *sol = _solve_matrix((int*)csrRowPtr[iband_local][inf_local], (int*)csrColInd[iband_local][inf_local], csrVal[iband_local][inf_local], Re,numCell);
+
+                _get_coefficient_Iterative(iband_local,inf_local);
+                Eigen::BiCGSTAB<Eigen::SparseMatrix<double>,Eigen::IncompleteLUT<double>> cg1;
+                sol1=cg1.compute(stiffMatrix).solve(Re1);
                 for (int i = 0; i < numCell; ++i)
                 {
-                    energyDensity[iband_local][inf_local][i]= sol[i] + energyDensity[iband_local][inf_local][i];
+                    energyDensity[iband_local][inf_local][i]= sol1(i) + energyDensity[iband_local][inf_local][i];
                 }
-                delete [] sol;
-
                 auto solve_end = chrono::high_resolution_clock::now();
                 solver1_time += chrono::duration_cast<chrono::microseconds>(solve_end - solve_start);
 
@@ -1221,11 +1208,12 @@ void StaticBTESynthetic::solve_DOM_Iterative
                 auto boundary_end = chrono::high_resolution_clock::now();
                 Boundary_time+=chrono::duration_cast<chrono::microseconds>(boundary_end - boundary_start);
 
+                auto transfer_start = chrono::high_resolution_clock::now();
                 _recover_temperature(iband_local,inf_local);
                 _get_total_energy(iband_local,inf_local);
                 _get_heat_flux(iband_local,inf_local);
 
-                auto transfer_start = chrono::high_resolution_clock::now();
+
                 MPI_Allreduce(totalEnergyLocal, totalEnergy, numCell, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
                 MPI_Allreduce(temperatureLocal, temperature, numCell, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
                 MPI_Allreduce(heatFluxXLocal, heatFluxXGlobal, numCell, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
@@ -1236,16 +1224,15 @@ void StaticBTESynthetic::solve_DOM_Iterative
             }
         }
 
-
         auto set_bound_start=chrono::high_resolution_clock::now();
         _set_bound_ee_1();
         auto set_bound_end=chrono::high_resolution_clock::now();
         set_bound_time+=chrono::duration_cast<chrono::microseconds>(set_bound_end - set_bound_start);
 
+
         auto total_iter_end = chrono::high_resolution_clock::now();
         total_iter_time += chrono::duration_cast<chrono::microseconds>(total_iter_end - total_iter_start);
         MPI_Barrier(MPI_COMM_WORLD);
-
 
         if (_get_magin_check_error(nt, error_temp_limit, error_flux_limit))
         {
@@ -1259,7 +1246,7 @@ void StaticBTESynthetic::solve_DOM_Iterative
             if (worldRank == 0)
                 _print_out();
             if (worldRank == 0)
-                cout << "error increases for 10 times, maybe the solution can not converge. Try limiter or 1 st order" << endl;
+                cout << "error increases for 10 times, maybe the solution can not converge. Try \"-1\" in limiter" << endl;
             MPI_Barrier(MPI_COMM_WORLD);
         }
         if (nt % 1 == 0)
@@ -1268,13 +1255,12 @@ void StaticBTESynthetic::solve_DOM_Iterative
                 _print_out();
         }
 
-
         if (worldRank == 0){
 
             cout << "  Time taken by inner loop: " << 1.0 * total_iter_time.count() / 1000 << " milliseconds" << endl;
             cout << "  Time taken by gradient 1: " << 1.0 * get_gradient_time.count() / 1000 << " milliseconds" << endl;
             cout << "  Time taken by BTE Re: " << 1.0 * get_Re_time.count() / 1000 << " milliseconds" << endl;
-            cout << "  Time taken by BTE solver: " << 1.0 * solver1_time.count() / 1000 << " milliseconds" << endl;
+            cout << "  Time taken by BTE solver: " << 1.0 * solver1_time.count() /1000  << " milliseconds" << endl;
             cout << "  Time taken by Boundary: " << 1.0 * Boundary_time.count() / 1000 << " milliseconds"
             << " " << 1.0 * set_bound_time.count() / 1000 << " milliseconds" << endl;
             cout << "  Time taken by set_vertex: " << 1.0 * set_vertex_time.count() / 1000 << " milliseconds" << endl;
@@ -1284,6 +1270,7 @@ void StaticBTESynthetic::solve_DOM_Iterative
             cout << "  Time taken by transfer: " << 1.0 * trasfer1_time.count() / 1000 << " milliseconds"<< endl;
             cout << "----------------------------------------------------------------------------------" << endl;
         }
+
         if(worldRank == 0)
         {
             for (int j = 1; j < numProc ; ++j) {
@@ -1296,6 +1283,7 @@ void StaticBTESynthetic::solve_DOM_Iterative
             MPI_Status status;
             MPI_Recv(&nt,1,MPI_INT,0,10,MPI_COMM_WORLD,&status);
         }
+        //cout<<nt<<endl;
         MPI_Barrier(MPI_COMM_WORLD);
     }
 
@@ -1324,6 +1312,7 @@ void StaticBTESynthetic::solve_DOM_Iterative
     _delete_matrix("Iterative");
 
     _delete_cell_matrix();
+
 
  }
 
@@ -1523,18 +1512,15 @@ double error_temp_limit, double error_flux_limit)
 void StaticBTESynthetic::solve_DOM_firstorder_Iterative
 (int Use_Backup, int Num_Max_Iter, int Use_Limiter,
  double error_temp_limit, double error_flux_limit)
+
  {
 
-     _set_matrix("Iterative");
+
+    _set_matrix("Iterative");
     errorIncreaseTime=0;
     _set_initial(Use_Backup);
-    for (int inf_local = 0; inf_local < numDirectionLocal; inf_local++) {
-        for (int iband_local = 0; iband_local < numBandLocal; ++iband_local) {
-            _get_coefficient_Iterative(iband_local, inf_local);
-        }
-    }
-     //_set_bound_ee_1();
 
+    //_set_bound_ee_1();
 
     auto total_iter_time = chrono::microseconds(0);
     auto get_gradient_time = chrono::microseconds(0);
@@ -1556,16 +1542,17 @@ void StaticBTESynthetic::solve_DOM_firstorder_Iterative
             int inf = ((inf_local) * numProc + worldRank) % numDirection;
             int iband = iband_local * (ceil(double(numProc) / double(numDirection))) + worldRank / numDirection;
             MPI_Allgather(eboundLocal + iband_local * numBound * 2,
-                  numBound * 2,
-                  MPI_DOUBLE,
-                  (ebound + numBound * 2 * (inf - worldRank % numDirection)) + numDirection * numBound * 2 * (iband - worldRank / numDirection),
-                  numBound * 2,
-                  MPI_DOUBLE,
-                  MPI_COMM_WORLD);
+                          numBound * 2,
+                          MPI_DOUBLE,
+                          (ebound + numBound * 2 * (inf - worldRank % numDirection)) + numDirection * numBound * 2 * (iband - worldRank / numDirection),
+                          numBound * 2,
+                          MPI_DOUBLE,
+                          MPI_COMM_WORLD);
         }
     }
     _set_bound_ee_1();
- for (int nt = 0; nt < Num_Max_Iter; ++nt)
+
+    for (int nt = 0; nt < Num_Max_Iter; ++nt)
     {
         total_iter_time = chrono::microseconds(0);
         get_gradient_time = chrono::microseconds(0);
@@ -1579,27 +1566,26 @@ void StaticBTESynthetic::solve_DOM_firstorder_Iterative
         macro_iter_time = chrono::microseconds(0);
         trasfer1_time = chrono::microseconds(0);
 
-
         auto total_iter_start = chrono::high_resolution_clock::now();
         copy();
         for (int inf_local = 0; inf_local < numDirectionLocal; inf_local++)
         {
             for (int iband_local = 0; iband_local < numBandLocal; ++iband_local)
             {
-
                 auto get_Re_start =chrono::high_resolution_clock::now();
                 _get_Re_firstorder(iband_local,inf_local);
                 auto get_Re_end =chrono::high_resolution_clock::now();
                 get_Re_time+=chrono::duration_cast<chrono::microseconds>(get_Re_end - get_Re_start);
 
                 auto solve_start = chrono::high_resolution_clock::now();
-                double *sol = _solve_matrix((int*)csrRowPtr[iband_local][inf_local], (int*)csrColInd[iband_local][inf_local], csrVal[iband_local][inf_local], Re,numCell);
+
+                _get_coefficient_Iterative(iband_local,inf_local);
+                Eigen::BiCGSTAB<Eigen::SparseMatrix<double>,Eigen::IncompleteLUT<double>> cg1;
+                sol1=cg1.compute(stiffMatrix).solve(Re1);
                 for (int i = 0; i < numCell; ++i)
                 {
-                    energyDensity[iband_local][inf_local][i]= sol[i];
+                    energyDensity[iband_local][inf_local][i]= sol1(i) ;
                 }
-                delete [] sol;
-
                 auto solve_end = chrono::high_resolution_clock::now();
                 solver1_time += chrono::duration_cast<chrono::microseconds>(solve_end - solve_start);
 
@@ -1608,11 +1594,12 @@ void StaticBTESynthetic::solve_DOM_firstorder_Iterative
                 auto boundary_end = chrono::high_resolution_clock::now();
                 Boundary_time+=chrono::duration_cast<chrono::microseconds>(boundary_end - boundary_start);
 
+                auto transfer_start = chrono::high_resolution_clock::now();
                 _recover_temperature(iband_local,inf_local);
                 _get_total_energy(iband_local,inf_local);
                 _get_heat_flux(iband_local,inf_local);
 
-                auto transfer_start = chrono::high_resolution_clock::now();
+
                 MPI_Allreduce(totalEnergyLocal, totalEnergy, numCell, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
                 MPI_Allreduce(temperatureLocal, temperature, numCell, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
                 MPI_Allreduce(heatFluxXLocal, heatFluxXGlobal, numCell, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
@@ -1623,16 +1610,15 @@ void StaticBTESynthetic::solve_DOM_firstorder_Iterative
             }
         }
 
-
         auto set_bound_start=chrono::high_resolution_clock::now();
         _set_bound_ee_1();
         auto set_bound_end=chrono::high_resolution_clock::now();
         set_bound_time+=chrono::duration_cast<chrono::microseconds>(set_bound_end - set_bound_start);
 
+
         auto total_iter_end = chrono::high_resolution_clock::now();
         total_iter_time += chrono::duration_cast<chrono::microseconds>(total_iter_end - total_iter_start);
         MPI_Barrier(MPI_COMM_WORLD);
-
 
         if (_get_magin_check_error(nt, error_temp_limit, error_flux_limit))
         {
@@ -1646,7 +1632,7 @@ void StaticBTESynthetic::solve_DOM_firstorder_Iterative
             if (worldRank == 0)
                 _print_out();
             if (worldRank == 0)
-                cout << "error increases for 10 times, maybe the solution can not converge. Try limiter or 1 st order" << endl;
+                cout << "error increases for 10 times, maybe the solution can not converge. Try \"-1\" in limiter" << endl;
             MPI_Barrier(MPI_COMM_WORLD);
         }
         if (nt % 1 == 0)
@@ -1655,13 +1641,12 @@ void StaticBTESynthetic::solve_DOM_firstorder_Iterative
                 _print_out();
         }
 
-
         if (worldRank == 0){
 
             cout << "  Time taken by inner loop: " << 1.0 * total_iter_time.count() / 1000 << " milliseconds" << endl;
             cout << "  Time taken by gradient 1: " << 1.0 * get_gradient_time.count() / 1000 << " milliseconds" << endl;
             cout << "  Time taken by BTE Re: " << 1.0 * get_Re_time.count() / 1000 << " milliseconds" << endl;
-            cout << "  Time taken by BTE solver: " << 1.0 * solver1_time.count() / 1000 << " milliseconds" << endl;
+            cout << "  Time taken by BTE solver: " << 1.0 * solver1_time.count() /1000  << " milliseconds" << endl;
             cout << "  Time taken by Boundary: " << 1.0 * Boundary_time.count() / 1000 << " milliseconds"
             << " " << 1.0 * set_bound_time.count() / 1000 << " milliseconds" << endl;
             cout << "  Time taken by set_vertex: " << 1.0 * set_vertex_time.count() / 1000 << " milliseconds" << endl;
@@ -1671,6 +1656,7 @@ void StaticBTESynthetic::solve_DOM_firstorder_Iterative
             cout << "  Time taken by transfer: " << 1.0 * trasfer1_time.count() / 1000 << " milliseconds"<< endl;
             cout << "----------------------------------------------------------------------------------" << endl;
         }
+
         if(worldRank == 0)
         {
             for (int j = 1; j < numProc ; ++j) {
@@ -1683,6 +1669,7 @@ void StaticBTESynthetic::solve_DOM_firstorder_Iterative
             MPI_Status status;
             MPI_Recv(&nt,1,MPI_INT,0,10,MPI_COMM_WORLD,&status);
         }
+        //cout<<nt<<endl;
         MPI_Barrier(MPI_COMM_WORLD);
     }
 
@@ -1709,6 +1696,7 @@ void StaticBTESynthetic::solve_DOM_firstorder_Iterative
         cout << "Time taken by iteration: " << duration.count() * 0.001 << " milliseconds" << endl;
 #endif
     _delete_matrix("Iterative");
+
 
 
  }

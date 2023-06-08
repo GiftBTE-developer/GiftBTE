@@ -702,7 +702,7 @@ void StaticBTESynthetic::_set_matrix(const std::string& Matrix_type) {
     else if (Matrix_type=="Iterative")
     {
         stiffMatrix.resize(numCell, numCell);
-        csrRowPtr=new unsigned int **[numBandLocal];
+        /*csrRowPtr=new unsigned int **[numBandLocal];
         csrColInd=new unsigned int **[numBandLocal];
         csrVal=new double **[numBandLocal];
 
@@ -715,7 +715,7 @@ void StaticBTESynthetic::_set_matrix(const std::string& Matrix_type) {
                 csrColInd[i][j] = new unsigned int[7 * numCell + 1];
                 csrVal[i][j] = new double[7 * numCell + 1];
             }
-        }
+        }*/
 
         //csrRowPtr_macro= new unsigned int[numCell + 1];
         //csrColInd_macro = new unsigned int[7 * numCell + 1];
@@ -733,7 +733,7 @@ void StaticBTESynthetic::_delete_matrix(const string &Matrix_type) const {
     }
     else if (Matrix_type=="Iterative")
     {
-        for (int i = 0; i < numBandLocal; ++i) {
+        /*for (int i = 0; i < numBandLocal; ++i) {
 
             for (int j = 0; j < numDirectionLocal; ++j) {
                 delete []   csrRowPtr[i][j];
@@ -751,8 +751,8 @@ void StaticBTESynthetic::_delete_matrix(const string &Matrix_type) const {
         //delete []   csrRowPtr_macro;
        // delete []   csrColInd_macro;
        // delete []  csrVal_macro;
+    }*/
     }
-
 
 
 }
@@ -2703,13 +2703,13 @@ void StaticBTESynthetic::_marco_solution()
     }
 };
 
-void StaticBTESynthetic::_get_coefficient_Iterative(int iband_local, int inf_local) const {
+void StaticBTESynthetic::_get_coefficient_Iterative(int iband_local, int inf_local)
+{
     int inf = ((inf_local) * numProc + worldRank) % numDirection;
     int iband = iband_local * (ceil(double(numProc) / double(numDirection))) + worldRank / numDirection;
 
-    int csrRowPtr_iter = 0, csrColInd_iter = 0, csrVal_iter = 0;
-    csrRowPtr[iband_local][inf_local][0] = 0;
-    csrRowPtr_iter++;
+    std::vector<Tri> tripletList;
+
     vector<pair<int, double>> compressed_Ke;
 
     for (int ie = 0; ie < numCell; ++ie)
@@ -2752,15 +2752,14 @@ void StaticBTESynthetic::_get_coefficient_Iterative(int iband_local, int inf_loc
         sort(compressed_Ke.begin(), compressed_Ke.end());
 
         for (int j = 0; j < compressed_Ke.size(); ++j) {
-            csrColInd[iband_local][inf_local][csrColInd_iter++] = compressed_Ke[j].first;
-            //cout<< compressed_Ke[num].first<<" ";
-            csrVal[iband_local][inf_local][csrVal_iter++] = compressed_Ke[j].second;
+            tripletList.push_back(Tri(ie, compressed_Ke[j].first, compressed_Ke[j].second));
         }
-        csrRowPtr[iband_local][inf_local][csrRowPtr_iter] = csrRowPtr[iband_local][inf_local][csrRowPtr_iter - 1] + compressed_Ke.size();
-        csrRowPtr_iter++;
     }
+    stiffMatrix.setFromTriplets(tripletList.begin(), tripletList.end());
+    //cg[iband_local][inf_local].analyzePattern(stiffMatrix);
+    //cg[iband_local][inf_local].factorize(stiffMatrix);
     //cout<<"finish: "<<iband_local<<" "<<inf_local<<endl;
-}
+};
 
 void StaticBTESynthetic::_get_coefficient_macro_Iterative() const {
     int csrRowPtr_iter = 0, csrColInd_iter = 0, csrVal_iter = 0;
