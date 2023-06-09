@@ -40,32 +40,32 @@ int main(int argc, char **argv)
     cout << "Bind solver rank " << world_rank << " to device " << device_id << "." << endl;
 #endif
 
-    string Name_Mesh_Type;
-    string Name_Heat_Type; //yufei adding
-    string Name_Mesh_File;
-    string Name_Band_File;
-    string Name_Bc_File;
-    string Name_Heat_File;
-    string Name_multiscale_File;
-    double L_x = 0;
-    double L_y = 0;
-    double L_z = 0;
-    int Dimension_Geometry;
-    string Order;
-    string Method;
-    string Matrix_solver;
-    int Num_Max_Iter;
-    int Angle_method;
-    int Dimension_Material;
-    int Num_Phi;
-    int Num_Theta;
-    double error_temp_limit;
-    double error_flux_limit;
-    bool Use_Backup;
-    double Uniform_heat;
-    double DeltaT;
-    double TotalT;
-    int Istransinet;
+    string Name_Mesh_Type; //necessary
+    string Name_Heat_Type; //yufei adding not necessary
+    string Name_Mesh_File; //necessary
+    string Name_Band_File; //necessary
+    string Name_Bc_File; //necessary
+    string Name_Heat_File; //not necessary
+    string Name_multiscale_File; //not necessary
+    double L_x = 0; //necessary
+    double L_y = 0; //necessary
+    double L_z = 0; //necessary
+    int Dimension_Geometry; //necessary
+    string Order = "2"; //not necessary
+    string Method = "DOM"; //not necessary
+    string Matrix_solver = "LU"; //not necessary
+    int Num_Max_Iter=10000; //not necessary
+    int Angle_method=2; //not necessary
+    int Dimension_Material=3; //necessary
+    int Num_Phi=4; //not necessary
+    int Num_Theta=4; //not necessary
+    double error_temp_limit=1e-5;  //not necessary
+    double error_flux_limit=1e-3;  //not necessary
+    bool Use_Backup=false;
+    double Uniform_heat=0; //not necessary
+    double DeltaT; //necessary for transient
+    double TotalT; //necessary for transient
+    int Istransinet; //necessary for transient
 
     ifstream fin_const1("input/CONTROL");
     if (!fin_const1.is_open())
