@@ -2497,7 +2497,7 @@ void StaticBTESynthetic::_get_total_energy(int iband_local, int inf_local) const
     for (int ie = 0; ie < numCell; ++ie)
     {
         totalEnergyLocal[ie] += energyDensity[iband_local][inf_local][ie] * modeWeight[matter[ie]][iband][inf] / capacityBulk[matter[ie]];
-        cout<<capacityBulk[matter[ie]]<<endl;
+        
     }
 }
 
