@@ -1,10 +1,8 @@
-cmake-build*/
-bin/
+/cmake-build*/
+/bin/
 !bin/input/
 !bin/BTE_CPU
+!bin/input/in*
 /lib/
-.idea/
-<<<<<<< HEAD
+/.idea/
 Temp*
-=======
->>>>>>> 5d8f1e650707a78132d208727504a6c21f9d761f

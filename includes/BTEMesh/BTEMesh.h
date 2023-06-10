@@ -26,6 +26,7 @@ public:
     double L_z;
     std::vector<Cell> Elements;
     std::vector<Point> Nodes;
+    std::vector<Point> Heatnodes; //yufei:add Heatnodes here
     std::vector<Boundary> Boundaries;
     std::vector<int> Boundnodes;
     std::vector<std::vector<int>> Boundnodes_cell;
@@ -35,7 +36,7 @@ public:
     std::vector<std::vector<int>> Boundaryindex;
 
     BTEMesh() = default;
-    BTEMesh(int Dimension_Geometry,std::ifstream& inFile, double L_x, double L_y , double L_z,BTEBand * bands, BTEBoundaryCondition *bcs,std::string mesh_type);
+    BTEMesh(int Dimension_Geometry,std::ifstream& inFile, double L_x, double L_y , double L_z,BTEBand * bands, BTEBoundaryCondition *bcs,std::string mesh_type); 
     //BTEMesh(const BTEMesh& mesh) = delete;
     BTEMesh(int Dimension_Geometry,double L_x,double L_y,double L_z, std::vector<double> &nodeX,std::vector<double> &nodeY, std::vector<double> &nodeZ, std::vector<std::vector<int>> &volumeElements
             , std::vector<int> &volumeElementIndex, std::vector<std::vector<int>> &boundaryElements, std::vector<int> &boundaryElementIndex) ;
@@ -44,7 +45,7 @@ public:
     void setMeshParams(BTEBand * bands);
     void setMeshParams1(BTEBoundaryCondition *bcs);
 
-    void BTEMesh_heatin( std::ifstream &inHeat,double Uniform_Heat);
+    void BTEMesh_heatin( std::ifstream &inHeat,double Uniform_Heat, std::string heat_type ); //yufei
     ~BTEMesh();
 };
 #endif //STATICBTESOLVER_BTEMESH_H

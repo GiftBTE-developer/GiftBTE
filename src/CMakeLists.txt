@@ -1,5 +1,5 @@
 find_package(MPI REQUIRED)
-find_package(PETSc REQUIRED)
+#find_package(PETSc REQUIRED)
 
 if(USE_GPU)
     find_package(CUDAToolkit REQUIRED)
@@ -7,7 +7,7 @@ if(USE_GPU)
     set_source_files_properties(BTEMain.cpp PROPERTIES LANGUAGE CUDA)   
 endif()
 
-include_directories("${StaticBTESolver_SOURCE_DIR}/includes" "${PETSC_INCLUDES}")
+include_directories("${StaticBTESolver_SOURCE_DIR}/includes" )
 
 add_subdirectory(BTEAngle)
 add_subdirectory(BTEBand)
@@ -16,7 +16,8 @@ add_subdirectory(BTEMesh)
 
 add_subdirectory(StaticBTESynthetic)
 add_subdirectory(StaticFourier)
-add_subdirectory(TransientFourier)
+#add_subdirectory(TransientFourier)
+add_subdirectory(TransientBTE)
 add_subdirectory(Solution)
 add_subdirectory(utility)
 
@@ -27,7 +28,7 @@ else()
 endif()
 
 if(USE_GPU)
-    target_link_libraries(BTE_GPU PUBLIC StaticBTESynthetic MPI::MPI_CXX  "${PETSC_LIBRARIES}")
+    target_link_libraries(BTE_GPU PUBLIC StaticBTESynthetic MPI::MPI_CXX )
 
         if(USE_TIME)
             set_target_properties(BTE_GPU PROPERTIES COMPILE_DEFINITIONS "USE_GPU;USE_TIME")
@@ -36,7 +37,7 @@ if(USE_GPU)
         endif()
 
 else()
-    target_link_libraries(BTE_CPU PUBLIC StaticBTESynthetic StaticFourier TransientFourier Solution MPI::MPI_CXX "${PETSC_LIBRARIES}")
+    target_link_libraries(BTE_CPU PUBLIC StaticBTESynthetic StaticFourier TransientBTE Solution MPI::MPI_CXX)
 
     if(USE_TIME)
         if(USE_MRM)

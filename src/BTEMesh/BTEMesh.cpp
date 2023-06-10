@@ -9,9 +9,10 @@
 #include "BTEBand/BTEBand.h"
 #include "BTEBoundaryCondition/BTEBoundaryCondition.h"
 #include <sstream>
+#include <algorithm> //yufei:for heat source
 using namespace std;
 
-BTEMesh::BTEMesh(int Dimension_Geometry,std::ifstream& inFile, double L_x, double L_y, double L_z, BTEBand *bands, BTEBoundaryCondition *bcs,std::string mesh_type) {
+BTEMesh::BTEMesh(int Dimension_Geometry,std::ifstream& inFile, double L_x, double L_y, double L_z, BTEBand *bands, BTEBoundaryCondition *bcs,std::string mesh_type) { 
     this->Dimension=Dimension_Geometry;
     if (Dimension_Geometry==1)
     {
@@ -73,6 +74,11 @@ BTEMesh::BTEMesh(int Dimension_Geometry,std::ifstream& inFile, double L_x, doubl
                 if (Elements[i].center.x<distribution[j]*L_x&&Elements[i].center.x>distribution[j-1]*L_x)
                 {
                     Elements[i].index=j;
+                    if(j>=bands->geo_matter_index.size())
+                    {
+                        cout<<"Error: some region does not have material, check PHONON and GEOMETRY"<<endl;
+                        exit(0);
+                    }
                     Elements[i].matter=bands->geo_matter_index[j];
                 }
             }
@@ -259,6 +265,11 @@ BTEMesh::BTEMesh(int Dimension_Geometry,std::ifstream& inFile, double L_x, doubl
         //set_index and matter
         for (int i = 0; i <Elements.size()  ; ++i) {
             Elements[i].index=Elements[i].index-1;
+            if(Elements[i].index>=bands->geo_matter_index.size())
+            {
+                cout<<"Error: some region does not have material, check PHONON and GEOMETRY"<<endl;
+                exit(0);
+            }
             Elements[i].matter=bands->geo_matter_index[Elements[i].index];
         }
 
@@ -600,6 +611,11 @@ BTEMesh::BTEMesh(int Dimension_Geometry,std::ifstream& inFile, double L_x, doubl
         //set_index and matter
         for (int i = 0; i <Elements.size()  ; ++i) {
             Elements[i].index=Elements[i].index-1;
+            if(Elements[i].index>=bands->geo_matter_index.size())
+            {
+                cout<<"Error: some region does not have material, check PHONON and GEOMETRY"<<endl;
+                exit(0);
+            }
             Elements[i].matter=bands->geo_matter_index[Elements[i].index];
         }
         //get_volume
@@ -1115,7 +1131,11 @@ void BTEMesh::setMeshParams(BTEBand *bands)
     {
         for (int i = 0; i < Elements.size(); ++i)
         {
-
+            if(Elements[i].index>=bands->geo_matter_index.size())
+            {
+                cout<<"Error: some region does not have material, check PHONON and GEOMETRY"<<endl;
+                exit(0);
+            }
             Elements[i].matter = bands->geo_matter_index[Elements[i].index];
         }
         // get_volume
@@ -1192,7 +1212,11 @@ void BTEMesh::setMeshParams(BTEBand *bands)
     {
         for (int i = 0; i < Elements.size(); ++i)
         {
-
+            if(Elements[i].index>=bands->geo_matter_index.size())
+            {
+                cout<<"Error: some region does not have material, check PHONON and GEOMETRY"<<endl;
+                exit(0);
+            }
             Elements[i].matter = bands->geo_matter_index[Elements[i].index];
         }
 
@@ -1865,7 +1889,7 @@ void BTEMesh::setMeshParams1(BTEBoundaryCondition *bcs)
     }
     // cout<<Element_Faces.size()<<endl;
 }
-void BTEMesh::BTEMesh_heatin(ifstream &inHeat, double Uniform_Heat)
+void BTEMesh::BTEMesh_heatin(ifstream &inHeat, double Uniform_Heat, std::string heat_type) //yufei
 {
     if (!inHeat.is_open())
     {
@@ -1879,29 +1903,296 @@ void BTEMesh::BTEMesh_heatin(ifstream &inHeat, double Uniform_Heat)
     }
     else
     {
-        int num_of_matter;
-        inHeat >> num_of_matter;
-        vector<int> index(num_of_matter);
-        vector<double> heatsource(num_of_matter);
-        string str;
-        getline(inHeat, str);
-        for (int i = 0; i < num_of_matter; ++i)
-        {
-            inHeat >> index[i] >> heatsource[i];
-        }
-        for (int i = 0; i < Elements.size(); ++i)
-        {
-            if (Elements[i].index > num_of_matter)
+        cout<<"**************************"<<endl;
+        cout<<"Begin to read heat source file !"<<endl;
+
+        if (heat_type == "REGION"){
+            int num_of_matter;
+            inHeat >> num_of_matter;
+            vector<int> index(num_of_matter);
+            vector<double> heatsource(num_of_matter);
+            string str;
+            getline(inHeat, str);
+            for (int i = 0; i < num_of_matter; ++i)
             {
-                cout << "wrong heat file";
-                exit(0);
+                inHeat >> index[i] >> heatsource[i];
             }
+            for (int i = 0; i < Elements.size(); ++i)
+            {
+                if (Elements[i].index > num_of_matter)
+                {
+                    cout << "Wrong heat file !";
+                    exit(0);
+                }
 
-            Elements[i].heat_source = heatsource[Elements[i].index];
-           // cout<<Elements[i].heat_source<<endl;
+                Elements[i].heat_source = heatsource[Elements[i].index];
+            }
+            cout<<"Successfully read from REGION heat file !"<<endl;
         }
-       // cout<<endl;
 
+
+        if (heat_type == "COORDINATE"){
+                    //yufei: for 1D mesh
+            if (Dimension==1) {
+                    string line;
+                    string strmesh;
+                    int numheatnode=0;
+                    while(getline(inHeat, strmesh)){  // 
+                        if(strmesh.find("Nodes:")>0  // 
+                        && strmesh.find("Nodes:")<strmesh.length()){ // 
+                            //yufei: extract the number of heatnodes:
+                            int flag = 0;
+                            for (int i = 0; i<strmesh.length(); i++){
+                                if (strmesh[i]>='0' && strmesh[i]<='9'){
+                                    numheatnode = numheatnode * 10 + strmesh[i] - '0';
+                                    flag = 1;
+                                }
+                                if (flag == 1 && (strmesh[i]<'0'||strmesh[i]>'9')){
+                                    break;
+                                }
+                            }
+                            break;
+                        }
+                    }
+
+                    cout<<"Number of heat nodes: "<<numheatnode<<endl;
+                    this->Heatnodes.resize(numheatnode); 
+                    for (int i = 0; i < numheatnode; i++) {
+                        getline(inHeat, strmesh);
+                        stringstream sss; 
+                        sss.str(strmesh);  
+                        string coord_x, coord_heat;
+                        sss >> coord_x >> coord_heat; 
+                        Heatnodes[i].x = strtod(coord_x.c_str(), NULL) * L_x; 
+                        Heatnodes[i].y = 0;  
+                        Heatnodes[i].z = 0;
+                        Heatnodes[i].heat = strtod(coord_heat.c_str(), NULL);  
+                        //cout << "Heatnodes" << Heatnodes[i].x << " " <<  Heatnodes[i].y << " " << Heatnodes[i].z << " " << Heatnodes[i].heat << endl;
+                    }
+
+                    //yufei: test whether heatnode is consistent with node of mesh
+                    double distances[Heatnodes.size()]={0.0};
+                    double selectMindistance[2][2]={0.0}; //yufei:this is to store the min distance and heat, for 1D, consider 2 nearest neibour
+                    for (int i=0; i<Nodes.size(); i++){    
+                        int k=0;
+                        for (int j=0 ;j<Heatnodes.size(); j++){
+                            if (Nodes[i].x==Heatnodes[j].x){
+                                Nodes[i].heat=Heatnodes[j].heat;
+                                k=1; 
+                                break; 
+                            }
+                        }
+                        //yufei: if cannot find the same mesh, calculate the distance
+                        if (k==0){
+                            for (int j=0 ;j<Heatnodes.size(); j++){ 
+                                distances[j] = get_distance(Heatnodes[j],Nodes[i]);
+                                //cout << "distance" << distances[j] << endl;
+                            } 
+                            // yufei: find the nearest 2 heatnode
+                            for (int numNearest = 0; numNearest<2; numNearest++){
+                                int minPosition = min_element(distances,distances+Heatnodes.size()) - distances;
+                                selectMindistance[numNearest][0] = 1/distances[minPosition]; 
+                                selectMindistance[numNearest][1] = Heatnodes[minPosition].heat;
+                                distances[minPosition]=1000;
+                                //cout << "selectMindinstace" << selectMindistance[numNearest][0] << " " << selectMindistance[numNearest][1] << endl;
+                            }
+                            // calculate heat of the node
+                            double totalRevDistance = 0;
+                            for (int numNearest = 0; numNearest<2; numNearest++){
+                                Nodes[i].heat += selectMindistance[numNearest][0]*selectMindistance[numNearest][1];
+                                totalRevDistance += selectMindistance[numNearest][0];
+                                //cout<< "TotalRevDistance" << totalRevDistance << endl;
+                            }
+                            Nodes[i].heat = Nodes[i].heat/totalRevDistance;
+                        }
+                    }
+
+                //yufei: for 1D mesh, vertex = 2
+                    for (int i=0; i<Elements.size(); i++){
+                            Elements[i].heat_source=(Nodes[Elements[i].vertexes[0]].heat + Nodes[Elements[i].vertexes[1]].heat)/2;
+                    }
+                    cout<<"Successfully read from COORDINATE heat file !"<<endl;
+                }
+
+
+                //yufei: for 2D mesh
+            if (Dimension==2) {
+                    string line;
+                    string strmesh;
+                    int numheatnode=0;
+                    while(getline(inHeat, strmesh)){  // 
+                        if(strmesh.find("Nodes:")>0  // 
+                        && strmesh.find("Nodes:")<strmesh.length()){ // 
+                            //yufei: extract the number of heatnodes:
+                            int flag = 0;
+                            for (int i = 0; i<strmesh.length(); i++){
+                                if (strmesh[i]>='0' && strmesh[i]<='9'){
+                                    numheatnode = numheatnode * 10 + strmesh[i] - '0';
+                                    flag = 1;
+                                }
+                                if (flag == 1 && (strmesh[i]<'0'||strmesh[i]>'9')){
+                                    break;
+                                }
+                            }
+                            break;
+                        }
+                    }
+
+                    cout<<"Number of heat nodes: "<<numheatnode<<endl;
+                    this->Heatnodes.resize(numheatnode); 
+                    for (int i = 0; i < numheatnode; i++) {
+                        getline(inHeat, strmesh);
+                        stringstream sss; 
+                        sss.str(strmesh);  
+                        string coord_x, coord_y, coord_heat;
+                        sss >> coord_x >> coord_y >> coord_heat; 
+                        Heatnodes[i].x = strtod(coord_x.c_str(), NULL) * L_x; 
+                        Heatnodes[i].y = strtod(coord_y.c_str(), NULL) * L_y;  
+                        Heatnodes[i].z = 0;
+                        Heatnodes[i].heat = strtod(coord_heat.c_str(), NULL); 
+                    }
+
+                    //yufei: test whether heatnode is consistent with node of mesh
+                    double distances[Heatnodes.size()]={0.0};
+                    double selectMindistance[4][2]={0.0}; //yufei:this is to store the min distance and heat, for 2D, consider 4 nearest neibour
+                    for (int i=0; i<Nodes.size(); i++){    
+                        int k=0;
+                        for (int j=0 ;j<Heatnodes.size(); j++){
+                            if (Nodes[i].x==Heatnodes[j].x && Nodes[i].y==Heatnodes[j].y){
+                                Nodes[i].heat=Heatnodes[j].heat;
+                                k=1; 
+                                break; 
+                            }
+                        }
+                        //yufei: if cannot find the same mesh, calculate the distance
+                        if (k==0){
+                            for (int j=0 ;j<Heatnodes.size(); j++){ 
+                                distances[j] = get_distance(Heatnodes[j],Nodes[i]);
+                            } 
+                            // yufei: find the nearest 4 heatnode
+                            for (int numNearest = 0; numNearest<4; numNearest++){
+                                int minPosition = min_element(distances,distances+Heatnodes.size()) - distances;
+                                selectMindistance[numNearest][0] = 1/distances[minPosition]; 
+                                selectMindistance[numNearest][1] = Heatnodes[minPosition].heat;
+                                distances[minPosition]=1000;
+                            }
+                            // calculate heat of the node
+                            double totalRevDistance = 0;
+                            for (int numNearest = 0; numNearest<4; numNearest++){
+                                Nodes[i].heat += selectMindistance[numNearest][0]*selectMindistance[numNearest][1];
+                                totalRevDistance += selectMindistance[numNearest][0];
+                            }
+                            Nodes[i].heat = Nodes[i].heat/totalRevDistance;
+                        }
+                    }
+
+                //yufei: for 2D mesh, vertex = 3 & 4
+                    for (int i=0; i<Elements.size(); i++){
+                        if (Elements[i].vertexes.size()==3){
+                            Elements[i].heat_source=(Nodes[Elements[i].vertexes[0]].heat + Nodes[Elements[i].vertexes[1]].heat + Nodes[Elements[i].vertexes[2]].heat)/3;
+                        }
+                        if (Elements[i].vertexes.size()==4){
+                            Elements[i].heat_source=(Nodes[Elements[i].vertexes[0]].heat + Nodes[Elements[i].vertexes[1]].heat + Nodes[Elements[i].vertexes[2]].heat + Nodes[Elements[i].vertexes[3]].heat)/4;
+                        }
+                    }
+                    cout<<"Successfully read from COORDINATE heat file !"<<endl;
+                }
+
+
+                //yufei: for 3D mesh
+                if (Dimension==3) {
+                    string line;
+                    string strmesh;
+                    int numheatnode=0;
+                    while(getline(inHeat, strmesh)){  // 
+                        if(strmesh.find("Nodes:")>0  // 
+                        && strmesh.find("Nodes:")<strmesh.length()){ // 
+                            //yufei: extract the number of heatnodes:
+                            int flag = 0;
+                            for (int i = 0; i<strmesh.length(); i++){
+                                if (strmesh[i]>='0' && strmesh[i]<='9'){
+                                    numheatnode = numheatnode * 10 + strmesh[i] - '0';
+                                    flag = 1;
+                                }
+                                if (flag == 1 && (strmesh[i]<'0'||strmesh[i]>'9')){
+                                    break;
+                                }
+                            }
+                            break;
+                        }
+                    }
+
+                    cout<<"Number of heat nodes: "<<numheatnode<<endl;
+                    this->Heatnodes.resize(numheatnode); 
+                    for (int i = 0; i < numheatnode; i++) {
+                        getline(inHeat, strmesh);
+                        stringstream sss; 
+                        sss.str(strmesh);  
+                        string coord_x, coord_y, coord_z, coord_heat;
+                        sss >> coord_x >> coord_y >> coord_z >> coord_heat; 
+                        Heatnodes[i].x = strtod(coord_x.c_str(), NULL) * L_x; 
+                        Heatnodes[i].y = strtod(coord_y.c_str(), NULL) * L_y;  
+                        Heatnodes[i].z = strtod(coord_z.c_str(), NULL) * L_z;;
+                        Heatnodes[i].heat = strtod(coord_heat.c_str(), NULL);  
+                        //cout << "Heatnodes" << Heatnodes[i].x << " " <<  Heatnodes[i].y << " " << Heatnodes[i].z << " " << Heatnodes[i].heat << endl;
+                    }
+
+                    //yufei: test whether heatnode is consistent with node of mesh
+                    double distances[Heatnodes.size()]={0.0};
+                    double selectMindistance[8][2]={0.0}; //yufei:this is to store the min distance and heat, for 3D, consider 8 nearest neibour
+                    for (int i=0; i<Nodes.size(); i++){    
+                        int k=0;
+                        for (int j=0 ;j<Heatnodes.size(); j++){
+                            if (Nodes[i].x==Heatnodes[j].x && Nodes[i].y==Heatnodes[j].y && Nodes[i].z==Heatnodes[j].z){
+                                Nodes[i].heat=Heatnodes[j].heat;
+                                k=1; 
+                                break; 
+                            }
+                        }
+                        //yufei: if cannot find the same mesh, calculate the distance
+                        if (k==0){
+                            for (int j=0 ;j<Heatnodes.size(); j++){ 
+                                distances[j] = get_distance(Heatnodes[j],Nodes[i]);
+                                //cout << "distance" << distances[j] << endl;
+                            } 
+                            // yufei: find the nearest 8 heatnode
+                            for (int numNearest = 0; numNearest<8; numNearest++){
+                                int minPosition = min_element(distances,distances+Heatnodes.size()) - distances;
+                                selectMindistance[numNearest][0] = 1/distances[minPosition]; 
+                                selectMindistance[numNearest][1] = Heatnodes[minPosition].heat;
+                                distances[minPosition]=1000;
+                                //cout << "selectMindinstace" << selectMindistance[numNearest][0] << " " << selectMindistance[numNearest][1] << endl;
+                            }
+                            // calculate heat of the node
+                            double totalRevDistance = 0;
+                            for (int numNearest = 0; numNearest<8; numNearest++){
+                                Nodes[i].heat += selectMindistance[numNearest][0]*selectMindistance[numNearest][1];
+                                totalRevDistance += selectMindistance[numNearest][0];
+                               // cout<< "TotalRevDistance" << totalRevDistance << endl;
+                            }
+                            Nodes[i].heat = Nodes[i].heat/totalRevDistance;
+                        }
+                    }
+
+                //yufei: for 3D mesh, vertex = 4 & 5 & 6 & 8
+                    for (int i=0; i<Elements.size(); i++){
+                        if (Elements[i].vertexes.size()==4){
+                            Elements[i].heat_source=(Nodes[Elements[i].vertexes[0]].heat + Nodes[Elements[i].vertexes[1]].heat + Nodes[Elements[i].vertexes[2]].heat + Nodes[Elements[i].vertexes[3]].heat)/4;
+                        }
+                        if (Elements[i].vertexes.size()==5){
+                            Elements[i].heat_source=(Nodes[Elements[i].vertexes[0]].heat + Nodes[Elements[i].vertexes[1]].heat + Nodes[Elements[i].vertexes[2]].heat + Nodes[Elements[i].vertexes[3]].heat + Nodes[Elements[i].vertexes[4]].heat)/5;
+                        }
+                        if (Elements[i].vertexes.size()==6){
+                            Elements[i].heat_source=(Nodes[Elements[i].vertexes[0]].heat + Nodes[Elements[i].vertexes[1]].heat + Nodes[Elements[i].vertexes[2]].heat + Nodes[Elements[i].vertexes[3]].heat + Nodes[Elements[i].vertexes[4]].heat + Nodes[Elements[i].vertexes[5]].heat)/6;
+                        }
+                        if (Elements[i].vertexes.size()==8){
+                            Elements[i].heat_source=(Nodes[Elements[i].vertexes[0]].heat + Nodes[Elements[i].vertexes[1]].heat + Nodes[Elements[i].vertexes[2]].heat + Nodes[Elements[i].vertexes[3]].heat + Nodes[Elements[i].vertexes[4]].heat + Nodes[Elements[i].vertexes[5]].heat + Nodes[Elements[i].vertexes[6]].heat + Nodes[Elements[i].vertexes[7]].heat)/8;
+                        }
+                    }
+                    cout<<"Successfully read from COORDINATE heat file !"<<endl;
+                }
+        }
+        cout<<"**************************"<<endl;
     }
 }
 BTEMesh::~BTEMesh()

@@ -16,7 +16,8 @@ int main(int argc, char **argv)
 {
 
 #ifndef USE_GPU
-    PetscInitialize(nullptr, nullptr, (char *)nullptr, nullptr);
+    //PetscInitialize(nullptr, nullptr, (char *)nullptr, nullptr);
+    MPI_Init(&argc,&argv);
     int num_proc, world_rank;
     MPI_Comm_size(MPI_COMM_WORLD, &num_proc);
     MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
@@ -39,33 +40,37 @@ int main(int argc, char **argv)
     cout << "Bind solver rank " << world_rank << " to device " << device_id << "." << endl;
 #endif
 
-    string Name_Mesh_Type;
-    string Name_Mesh_File;
-    string Name_Band_File;
-    string Name_Bc_File;
-    string Name_Heat_File;
-    string Name_multiscale_File;
-    double L_x = 0;
-    double L_y = 0;
-    double L_z = 0;
-    int Dimension_Geometry;
-    string Order;
-    string Method;
-    string Matrix_solver;
-    int Num_Max_Iter;
-    int Angle_method;
-    int Dimension_Material;
-    int Num_Phi;
-    int Num_Theta;
-    double error_temp_limit;
-    double error_flux_limit;
-    bool Use_Backup;
-    double Uniform_heat;
+    string Name_Mesh_Type; //necessary
+    string Name_Heat_Type; //yufei adding not necessary
+    string Name_Mesh_File; //necessary
+    string Name_Band_File; //necessary
+    string Name_Bc_File; //necessary
+    string Name_Heat_File; //not necessary
+    string Name_multiscale_File; //not necessary
+    double L_x = 0; //necessary
+    double L_y = 0; //necessary
+    double L_z = 0; //necessary
+    int Dimension_Geometry=-1; //necessary
+    string Order = "2"; //not necessary
+    string Method = "DOM"; //not necessary
+    string Matrix_solver = "LU"; //not necessary
+    int Num_Max_Iter=10000; //not necessary
+    int Angle_method=2; //not necessary
+    int Dimension_Material=3; //not necessary
+    int Num_Phi=4; //not necessary
+    int Num_Theta=4; //not necessary
+    double error_temp_limit=1e-5;  //not necessary
+    double error_flux_limit=1e-3;  //not necessary
+    bool Use_Backup=false;
+    double Uniform_heat=0; //not necessary
+    double DeltaT=-1; //necessary for transient
+    double TotalT=-1; //necessary for transient
+    int IsTransient=0; //not necessary
 
     ifstream fin_const1("input/CONTROL");
     if (!fin_const1.is_open())
     {
-        cout << "need CONTROL" << endl;
+        cout << "Error: need CONTROL" << endl;
         exit(0);
     }
     else
@@ -74,6 +79,10 @@ int main(int argc, char **argv)
         char new_line;
         while(getline(fin_const1,str))
         {
+            if(str.find("Transient")>=0 && str.find("Transient") < str.length())
+            {
+                fin_const1 >> IsTransient;
+            }
             if(str.find("Order") >= 0 && str.find("Order") < str.length())
             {
                 fin_const1 >> Order ;
@@ -102,15 +111,27 @@ int main(int argc, char **argv)
             {
                 fin_const1 >> Name_multiscale_File ;
             }
+            if(str.find("DeltaTime") >= 0 && str.find("DeltaTime") < str.length())
+            {
+                fin_const1 >> DeltaT ;
+            }
+            if(str.find("TotalTime") >= 0 && str.find("TotalTime") < str.length())
+            {
+                fin_const1 >> TotalT ;
+            }
         }
 
     }
     fin_const1.close();
-
+    if(IsTransient==1&&(TotalT==-1||DeltaT==-1))
+    {
+        cout<<"Error: Please provide DeltaTime and TotalTime for transient solver"<<endl;
+        exit(0);
+    }
     ifstream fin_const2("input/GEOMETRY");
     if (!fin_const2.is_open())
     {
-        cout << "need GEOMETRY" << endl;
+        cout << "Error: need GEOMETRY" << endl;
         exit(0);
     }
     else
@@ -151,15 +172,37 @@ int main(int argc, char **argv)
             {
                 fin_const2 >> Name_Mesh_File;
             }
+            if(str.find("HeatType") >= 0 && str.find("HeatType") < str.length())
+            {
+                fin_const2 >> Name_Heat_Type;
+            } // yufei adding
             if(str.find("HeatFile") >= 0 && str.find("HeatFile") < str.length())
             {
                 fin_const2 >> Name_Heat_File;
             }
         }
-
     }
     fin_const2.close();
 
+    if(Dimension_Geometry==-1)
+    {
+        cout<<"Error: Please provide DimensionGeometry"<<endl;
+        exit(0);
+    } else if(Dimension_Geometry==1&&L_x==0)
+    {
+        cout<<"Error: Please provide Lx for one dimensional problem"<<endl;
+        exit(0);
+    }
+    else if(Dimension_Geometry==2&&(L_x==0||L_y==0))
+    {
+        cout<<"Error: Please provide Lx and Ly for two dimensional problem"<<endl;
+        exit(0);
+    }
+    else if(Dimension_Geometry==3&&(L_x==0||L_y==0||L_z==0))
+    {
+        cout<<"Error: Please provide Lx, Ly and Lz for two dimensional problem"<<endl;
+        exit(0);
+    }
 
 
     ifstream inputangle("input/PHONON");
@@ -169,9 +212,7 @@ int main(int argc, char **argv)
         if(str.find("Dimension_Material") >= 0 && str.find("Dimension_Material") < str.length())
         {
             inputangle >> Dimension_Material;
-            cout<<endl;
         }
-
         if(str.find("Angle_method") >= 0 && str.find("Angle_method") < str.length())
         {
             inputangle >> Angle_method;
@@ -210,7 +251,7 @@ int main(int argc, char **argv)
     ifstream geofile1(Name_Mesh_File);
     DistributeMesh *distributeMesh;
     distributeMesh=new DistributeMesh(Dimension_Geometry, geofile1, L_x, L_y, L_z,
-                                  Name_Mesh_Type,bands,bcs,heatfile, Uniform_heat);
+                                  Name_Mesh_Type,bands,bcs,heatfile, Uniform_heat, Name_Heat_Type);  //yufei
     geofile.close();
     heatfile.close();
 
@@ -223,13 +264,19 @@ int main(int argc, char **argv)
 
     SolutionAll solutionAll(distributeMesh,bcs,bands,angles,num_proc,world_rank);
     solutionAll._set_initial(distributeMesh,bands,angles);
-    solutionAll._Fourier_Solver(distributeMesh,bcs,bands,num_proc,world_rank);
-    MPI_Barrier(MPI_COMM_WORLD);
-    distributeMesh->_build_BTEMesh(Dimension_Geometry, L_x, L_y, L_z,bands,bcs,heatfile, Uniform_heat,Name_multiscale_File);
-    MPI_Barrier(MPI_COMM_WORLD);
-    solutionAll._BTE_Solver(distributeMesh,bcs,bands,angles,num_proc,world_rank,Use_Backup,
-                            Num_Max_Iter,Order,Method,Matrix_solver,error_temp_limit,error_flux_limit);
-    solutionAll._print_out(distributeMesh);
+    if(IsTransient != 1)
+    {
+        solutionAll._Fourier_Solver(distributeMesh,bcs,bands,num_proc,world_rank);
+        MPI_Barrier(MPI_COMM_WORLD);
+        distributeMesh->_build_BTEMesh(Dimension_Geometry, L_x, L_y, L_z,bands,bcs,heatfile, Uniform_heat,Name_multiscale_File);
+        MPI_Barrier(MPI_COMM_WORLD);
+        solutionAll._BTE_Solver(distributeMesh,bcs,bands,angles,num_proc,world_rank,Use_Backup,
+                                Num_Max_Iter,Order,Method,Matrix_solver,error_temp_limit,error_flux_limit);
+        solutionAll._print_out(distributeMesh);
+    } else
+    {
+        solutionAll._Transient_BTE_Solver(distributeMesh,bcs,bands,angles,num_proc,world_rank,Use_Backup,Order,error_temp_limit,error_flux_limit,DeltaT,TotalT);
+    }
 
 
 //StaticFourier fourierStatic(mesh, bcs, bands,num_proc, world_rank);

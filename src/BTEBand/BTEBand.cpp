@@ -18,12 +18,27 @@ BTEBand::BTEBand(ifstream &inFile, int Dimension_Material)
         cout << "DEBUG: band file not open" << endl;
         exit(1);
     }
+    string str;
     string line;
+    int Num_Matter=0;
+    while(getline(inFile, str))
+    {
+        if(str.find("Number of matter") >= 0 && str.find("Number of matter") < str.length())
+        {
+            inFile >> Num_Matter;
+        }
+
+        if(str.find("Number of bands") >= 0 && str.find("Number of bands") < str.length())
+        {
+            inFile >> nband;
+        }
+    }
+    if (Num_Matter==0||nband==0)
+    {
+        cout<<"Error: please provide Number of matter and Number of bands"<<endl;
+    }
+
     char new_line;
-    int Num_Matter;
-    inFile >> Num_Matter >> new_line;
-    getline(inFile, line);
-    inFile >> nband >> new_line;
     bands.resize(Num_Matter);
     bands.resize(nband);
     for (int i = 0; i < nband; ++i)
@@ -36,11 +51,13 @@ BTEBand::BTEBand(ifstream &inFile, int Dimension_Material)
     }
     kappabulk.resize(Num_Matter);
     capacitybulk.resize(Num_Matter);
+    inFile.close();
+    inFile.open("input/PHONON");
     for (int i = 0; i < Num_Matter; ++i)
     {
         while (getline(inFile, line))
         {
-            if (line.find("Matter") > 0 && line.find("Matter") < line.length())
+            if (line.find("Matter") >= 0 && line.find("Matter") < line.length())
             {
 
                 if (line.find("DATABASE") > 0 && line.find("DATABASE") < line.length())
@@ -271,7 +288,7 @@ BTEBand::BTEBand(ifstream &inFile, int Dimension_Material)
                     ifstream omega(File_omega);
                     if (!omega.is_open())
                     {
-                        cout << "DEBUG: band file not open" << endl;
+                        cout << "Error: band file not open" << endl;
                         exit(1);
                     }
                     int ioo=0;
@@ -375,7 +392,7 @@ BTEBand::BTEBand(ifstream &inFile, int Dimension_Material)
                     ifstream wfinal(File_wfinal);
                     if (!wfinal.is_open())
                     {
-                        cout << "DEBUG: band file not open" << endl;
+                        cout << "Error: band file not open" << endl;
                         exit(1);
                     }
                     int iww=0;
@@ -708,7 +725,6 @@ BTEBand::BTEBand(ifstream &inFile, int Dimension_Material)
         }
     }
 
-
     /*getline(inFile, line);
     getline(inFile, line);
     bands.resize(Num_Matter);
@@ -756,10 +772,27 @@ BTEBand::BTEBand(ifstream &inFile, int Dimension_Material)
                 kappabulk[i] += bands[j].heat_capacity[i] * bands[j].group_velocity[i] * bands[j].group_velocity[i] * bands[j].relaxation_time[i] / 3;
             capacitybulk[i]+=bands[j].heat_capacity[i];
         }
+        if(isnan(kappabulk[i]))
+        {
+            cout<<"Error: mistake in phonon properties, nan"<<endl;
+            exit(0);
+        }
+        double sumL=0;
+        double sumheat=0;
+        for (int j = 0; j < nband; ++j) {
+            sumL+= bands[j].lattice_ratio[i];
+            sumheat+=bands[j].heat_ratio[i];
+        }
+        if(abs(sumL-1.0)>1e-6||abs(sumL-1.0)>1e-6)
+        {
+            cout<<"Error: mistake in phonon properties, enegy conservation does not obey"<<endl;
+            exit(0);
+        }
     }
+
     while (getline(inFile, line))
     {
-        if (line.find("Geometry") > 0 && line.find("Geometry") < line.length())
+        if (line.find("Geometry") >= 0 && line.find("Geometry") < line.length())
         {
             while (getline(inFile, line))
             {
@@ -770,7 +803,12 @@ BTEBand::BTEBand(ifstream &inFile, int Dimension_Material)
                 stringstream ss(line);
                 int a, b;
                 ss >> a >> b;
+                if(abs(b)>100)
+                {
+                    break;
+                }
                 geo_matter_index.push_back(b);
+
             }
         }
     }

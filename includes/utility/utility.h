@@ -12,9 +12,10 @@
 #include <vector>
 #include <iostream>
 #include "mpi.h"
+#include "sstream"
 
 #ifndef USE_GPU
-#include <petscksp.h>
+//#include <petscksp.h>
 #endif
 
 #define PI M_PI
@@ -57,6 +58,7 @@ public:
     double x = 0;
     double y = 0;
     double z = 0;
+    double heat = 0; //yufei adding
     std::vector<int> cells;
     Point &operator=(const Point &rhs) = default;
     explicit Point(double xx = 0, double yy = 0, double zz = 0) : x{xx}, y{yy}, z{zz} {}

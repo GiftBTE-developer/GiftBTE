@@ -1,0 +1,22 @@
+Transient:
+0
+Order://1:first order; 2:second order; 2limit: limited second order
+2
+Method:// Synthetic or DOM
+Synthetic
+MatrixSolver:// LU or Iterative
+LU
+NumMaxIter:
+100000
+ErrorTempLimit:
+1e-6
+ErrorFluxLimit:
+1e-2
+Multiscale:
+none
+DeltaTime:
+1e-14
+TotalTime:
+1e-10
+
+

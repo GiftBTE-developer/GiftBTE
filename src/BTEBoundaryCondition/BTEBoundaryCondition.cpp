@@ -8,7 +8,7 @@
 using namespace std;
 BTEBoundaryCondition::BTEBoundaryCondition(ifstream& inFile,BTEBand *bands) {
     if (!inFile.is_open()) {
-        cout << "DEfBUG: BC file not open" << endl;
+        cout << "Error: BC file not open" << endl;
         exit(1);
     }
     int num;
@@ -36,7 +36,7 @@ BTEBoundaryCondition::BTEBoundaryCondition(ifstream& inFile,BTEBand *bands) {
         {
             ifstream Ininterface(boundaryConditions[i].Name_Interface_file);
             if (!Ininterface.is_open()) {
-                cout << "DEBUG: interface file not open" << endl;
+                cout << "Error: interface file not open" << endl;
                 exit(1);
             }
             while(getline(Ininterface, line)){
@@ -58,7 +58,7 @@ BTEBoundaryCondition::BTEBoundaryCondition(ifstream& inFile,BTEBand *bands) {
                     }
                     if (trans.trans.size()!=bands->bands.size())
                     {
-                        cout<<"mismatch band vs interface"<<endl;
+                        cout<<"Error: mismatch band vs interface"<<endl;
                     }
                     boundaryConditions[i].matter_trans.push_back(trans);
                 }

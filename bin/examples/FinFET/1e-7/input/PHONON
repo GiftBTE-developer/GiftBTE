@@ -1,0 +1,25 @@
+Number of matter=
+2
+Number of bands=
+15
+
+# Matter 1: ALAMODE
+input/materials/Si/tau300K_pure.dat
+
+# Matter 2: ALAMODE
+input/materials/Si/tau300K_pure.dat
+
+
+# Geometry: #geo index - matter index start from 0
+0 0
+1 0
+2 0
+
+Dimension_Material:
+3
+Angle_method: //1:CADOM,2:GaussDOM
+2
+Ntheta:
+2
+Nphi:
+4

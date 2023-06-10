@@ -1,0 +1,7 @@
+4 #number of boundaries
+
+#boundary indexs #boundary condition:1:thermalization #temperature//31:leftandright,32:topandbottm
+0 -4 1 input/interface1.dat
+1 2 1 input/interface1.dat
+2 2 1 input/interface1.dat
+3 -1 0 input/interface1.dat

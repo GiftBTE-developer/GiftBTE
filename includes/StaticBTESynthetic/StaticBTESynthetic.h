@@ -183,7 +183,7 @@ public:
     void _get_coefficient(int iband_local, int inf_local);
     void _get_coefficient_macro();
 
-    void _get_coefficient_Iterative(int iband_local, int inf_local) const;
+    void _get_coefficient_Iterative(int iband_local, int inf_local);
     void _get_coefficient_macro_Iterative() const;
 
     void _get_Re(int iband_local, int inf_local);

@@ -558,7 +558,7 @@ StaticBTESynthetic::StaticBTESynthetic(BTEMesh *mesh, BTEBoundaryCondition *bcs,
     capacityBulk=new double [numofMatter];
     for (int i = 0; i < numofMatter; ++i) {
         kappaBulk[i]=bands->kappabulk[i];
-        capacityBulk[i]=bands->kappabulk[i];
+        capacityBulk[i]=bands->capacitybulk[i];
         //cout<<kappaBulk[i]<<endl;
     }
 
@@ -702,7 +702,7 @@ void StaticBTESynthetic::_set_matrix(const std::string& Matrix_type) {
     else if (Matrix_type=="Iterative")
     {
         stiffMatrix.resize(numCell, numCell);
-        csrRowPtr=new unsigned int **[numBandLocal];
+        /*csrRowPtr=new unsigned int **[numBandLocal];
         csrColInd=new unsigned int **[numBandLocal];
         csrVal=new double **[numBandLocal];
 
@@ -715,7 +715,7 @@ void StaticBTESynthetic::_set_matrix(const std::string& Matrix_type) {
                 csrColInd[i][j] = new unsigned int[7 * numCell + 1];
                 csrVal[i][j] = new double[7 * numCell + 1];
             }
-        }
+        }*/
 
         //csrRowPtr_macro= new unsigned int[numCell + 1];
         //csrColInd_macro = new unsigned int[7 * numCell + 1];
@@ -733,7 +733,7 @@ void StaticBTESynthetic::_delete_matrix(const string &Matrix_type) const {
     }
     else if (Matrix_type=="Iterative")
     {
-        for (int i = 0; i < numBandLocal; ++i) {
+        /*for (int i = 0; i < numBandLocal; ++i) {
 
             for (int j = 0; j < numDirectionLocal; ++j) {
                 delete []   csrRowPtr[i][j];
@@ -751,8 +751,8 @@ void StaticBTESynthetic::_delete_matrix(const string &Matrix_type) const {
         //delete []   csrRowPtr_macro;
        // delete []   csrColInd_macro;
        // delete []  csrVal_macro;
+    }*/
     }
-
 
 
 }
@@ -1459,6 +1459,7 @@ void StaticBTESynthetic::_get_Re(int iband_local, int inf_local)
                   relaxationTime[matter[ie]][iband][inf];
         Re[ie] -= energyDensity[iband_local][inf_local][ie];
 
+
     }
 
     for (int ib = 0; ib < numBound; ++ib) {
@@ -1475,6 +1476,13 @@ void StaticBTESynthetic::_get_Re(int iband_local, int inf_local)
                     double temp = relaxationTime[matter[ie]][iband][inf] *
                                   elementFaceArea[jface + ie * 6] / elementVolume[ie] * dotproduct;
                     Re[ie] -= temp * ebound[iband * numDirection * numBound * 2 + inf * numBound * 2 + ib * 2 + icell];
+                    if(isnan(Re[ie]))
+                    {
+                        cout<<ebound[iband * numDirection * numBound * 2 + inf * numBound * 2 + ib * 2 + icell]<<endl;
+
+                        cout<<Re[ie]<<endl;
+                         }
+
                 }
             }
         }
@@ -1508,11 +1516,22 @@ void StaticBTESynthetic::_get_bound_ee(int iband_local, int inf_local) const
                     double e = (energyDensity[iband_local][inf_local][ie] + (ax * gradientX[ie] + ay * gradientY[ie] + az * gradientZ[ie]) * limit[ie]);
                     eboundLocal[iband_local * numBound * 2 + ib * 2 + icell] = e;
                     ebound[iband * numDirection * numBound * 2 + inf * numBound * 2 + ib * 2 + icell] = e;
+                    if(isnan(e))
+                    {
+                        cout<<e<<endl;
+                    }
                 }
             }
         }
 
     }
+    /*MPI_Allgather(eboundLocal + iband_local * numBound * 2,
+                  numBound * 2,
+                  MPI_DOUBLE,
+                  (ebound + numBound * 2 * (inf - worldRank % numDirection)) + numDirection * numBound * 2 * (iband - worldRank / numDirection),
+                  numBound * 2,
+                  MPI_DOUBLE,
+                  MPI_COMM_WORLD);*/
 }
 
 void StaticBTESynthetic::_set_vertex_energydensity(int iband_local, int inf_local) const
@@ -2478,6 +2497,7 @@ void StaticBTESynthetic::_get_total_energy(int iband_local, int inf_local) const
     for (int ie = 0; ie < numCell; ++ie)
     {
         totalEnergyLocal[ie] += energyDensity[iband_local][inf_local][ie] * modeWeight[matter[ie]][iband][inf] / capacityBulk[matter[ie]];
+        cout<<capacityBulk[matter[ie]]<<endl;
     }
 }
 
@@ -2587,24 +2607,30 @@ bool StaticBTESynthetic::_get_magin_check_error(int nt, double error_temp_limit,
 
 void StaticBTESynthetic::_print_out() const
 {
-    ofstream output("Tempcell.dat");
+    ofstream output("TempLattice.dat");
     for (int i = 0; i < numCell; ++i)
     {
         output << elementCenterX[i] << " " << elementCenterY[i] << " " << elementCenterZ[i] << " " << temperature[i] << endl;
     }
     output.close();
-    ofstream output1("Tempcell1.dat");
+    ofstream output1("Temperature.dat");
+    for (int i = 0; i < numCell; ++i)
+    {
+        output1 << elementCenterX[i] << " " << elementCenterY[i] << " " << elementCenterZ[i] << " " << totalEnergy[i] << endl;
+    }
+    output1.close();
+    /*ofstream output1("Tempcell1.dat");
     for (int i = 0; i < numCell; ++i)
     {
         output1 << elementCenterX[i] << " " << elementCenterY[i] << " " << elementCenterZ[i] << " " << temperature1[i] << endl;
     }
-    output1.close();
-    ofstream output2("HeatSource.dat");
+    output1.close();*/
+    /*ofstream output2("HeatSource.dat");
     for (int i = 0; i < numCell; ++i)
     {
         output2 << elementCenterX[i] << " " << elementCenterY[i] << " " << elementCenterZ[i] << " " << elementHeatSource[i] << endl;
     }
-    output2.close();
+    output2.close();*/
     ofstream outputheat("HeatFlux.dat");
     for (int i = 0; i < numCell; ++i)
     {
@@ -2623,6 +2649,7 @@ void StaticBTESynthetic::copy() const
     }
     for (int i = 0; i < numCell; ++i)
     {
+        totalEnergyLocal[i]=0;
         temperatureLocal[i] = 0;
         heatFluxXLocal[i] = 0;
         heatFluxYLocal[i] = 0;
@@ -2684,13 +2711,13 @@ void StaticBTESynthetic::_marco_solution()
     }
 };
 
-void StaticBTESynthetic::_get_coefficient_Iterative(int iband_local, int inf_local) const {
+void StaticBTESynthetic::_get_coefficient_Iterative(int iband_local, int inf_local)
+{
     int inf = ((inf_local) * numProc + worldRank) % numDirection;
     int iband = iband_local * (ceil(double(numProc) / double(numDirection))) + worldRank / numDirection;
 
-    int csrRowPtr_iter = 0, csrColInd_iter = 0, csrVal_iter = 0;
-    csrRowPtr[iband_local][inf_local][0] = 0;
-    csrRowPtr_iter++;
+    std::vector<Tri> tripletList;
+
     vector<pair<int, double>> compressed_Ke;
 
     for (int ie = 0; ie < numCell; ++ie)
@@ -2733,15 +2760,14 @@ void StaticBTESynthetic::_get_coefficient_Iterative(int iband_local, int inf_loc
         sort(compressed_Ke.begin(), compressed_Ke.end());
 
         for (int j = 0; j < compressed_Ke.size(); ++j) {
-            csrColInd[iband_local][inf_local][csrColInd_iter++] = compressed_Ke[j].first;
-            //cout<< compressed_Ke[num].first<<" ";
-            csrVal[iband_local][inf_local][csrVal_iter++] = compressed_Ke[j].second;
+            tripletList.push_back(Tri(ie, compressed_Ke[j].first, compressed_Ke[j].second));
         }
-        csrRowPtr[iband_local][inf_local][csrRowPtr_iter] = csrRowPtr[iband_local][inf_local][csrRowPtr_iter - 1] + compressed_Ke.size();
-        csrRowPtr_iter++;
     }
+    stiffMatrix.setFromTriplets(tripletList.begin(), tripletList.end());
+    //cg[iband_local][inf_local].analyzePattern(stiffMatrix);
+    //cg[iband_local][inf_local].factorize(stiffMatrix);
     //cout<<"finish: "<<iband_local<<" "<<inf_local<<endl;
-}
+};
 
 void StaticBTESynthetic::_get_coefficient_macro_Iterative() const {
     int csrRowPtr_iter = 0, csrColInd_iter = 0, csrVal_iter = 0;

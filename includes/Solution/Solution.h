@@ -7,6 +7,7 @@
 #include "utility/utility.h"
 #include "StaticBTESynthetic/StaticBTESynthetic.h"
 #include "StaticFourier/StaticFourier.h"
+#include "TransientBTE/transient.h"
 #include "BTEMesh/Distribute.h"
 
 class Solution{
@@ -45,7 +46,8 @@ public:
 
     void _BTE_Solver(DistributeMesh *mesh, BTEBoundaryCondition *bcs, BTEBand *bands, BTEAngle *angles, int num_proc, int world_rank
                      ,int Use_Backup, int Num_Max_Iter, string Order, string Method, string Matrix_solver, double error_temp_limit, double error_flux_limit) const;
-
+    void _Transient_BTE_Solver(DistributeMesh *mesh, BTEBoundaryCondition *bcs, BTEBand *bands, BTEAngle *angles, int num_proc, int world_rank,
+                               int Use_Backup, string Order, double error_temp_limit, double error_flux_limit, double deltaT, double totalT);
 
     void _set_initial(DistributeMesh *mesh,BTEBand *bands, BTEAngle *angles);
     void _update_bound(int is, DistributeMesh *mesh,BTEBand *bands, BTEAngle *angles);
@@ -53,6 +55,7 @@ public:
     void _get_solver(int is, DistributeMesh *mesh, BTEBoundaryCondition *bcs, BTEBand *bands, BTEAngle *angles, int num_proc, int world_rank,int Use_Backup, int Num_Max_Iter, int Use_Sythetic, int Use_Limiter, double error_temp_limit, double error_flux_limit);
     void _solve(DistributeMesh *mesh, BTEBoundaryCondition *bcs, BTEBand *bands, BTEAngle *angles, int num_proc, int world_rank,int Use_Backup, int Num_Max_Iter, int Use_Sythetic, int Use_Limiter, double error_temp_limit, double error_flux_limit);
     void _transfer_solution(DistributeMesh *mesh);
+
     //void _get_convergent();
     ~SolutionAll();
 };
