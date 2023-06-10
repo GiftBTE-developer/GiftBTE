@@ -17,7 +17,7 @@ ReadIn::ReadIn(int Dimension_Geometry, std::ifstream &inFile, double L_x, double
         MSH(Dimension_Geometry,inFile,L_x,L_y,L_z);
     } else
     {
-        cout<<"no this mesh type"<<endl;
+        cout<<"Error: does not support this mesh type"<<endl;
         exit(0);
     }
 }
@@ -26,7 +26,7 @@ void ReadIn::OneD(int Dimension_Geometry, std::ifstream &inFile, double L_x, dou
     if (Dimension_Geometry==1)
     {
         if (!inFile.is_open()) {
-            std::cout << "DEBUG: Mesh file not open" << std::endl;
+            std::cout << "Error: Mesh file not open" << std::endl;
             exit(1);
 
         }
@@ -107,7 +107,7 @@ void ReadIn::OneD(int Dimension_Geometry, std::ifstream &inFile, double L_x, dou
     }
     else
     {
-        cout<<"oneD is only for one dimensional mesh"<<endl;
+        cout<<"Error: oneD is only for one dimensional mesh"<<endl;
         exit(0);
     }
 
@@ -118,7 +118,7 @@ void ReadIn::COMSOL(int Dimension_Geometry, std::ifstream &inFile, double L_x, d
     {
         if (!inFile.is_open())
         {
-            cout << "DEBUG: Mesh file not open" << endl;
+            cout << "Error: Mesh file not open" << endl;
             exit(1);
         }
         string line;
@@ -149,7 +149,7 @@ void ReadIn::COMSOL(int Dimension_Geometry, std::ifstream &inFile, double L_x, d
         // vector<vector<int>> Boundaryindex;
         if (!inFile.is_open())
         {
-            cout << "DEBUG: Mesh file not open" << endl;
+            cout << "Error: Mesh file not open" << endl;
             exit(1);
         }
 
@@ -171,7 +171,7 @@ void ReadIn::COMSOL(int Dimension_Geometry, std::ifstream &inFile, double L_x, d
             }
             if(dim!=Dimension_Geometry)
             {
-                cout<<"please check the dimension is correct or not"<<endl;
+                cout<<"Error: please check the dimension is correct or not"<<endl;
                 exit(1);
             }
             int numnode;
@@ -298,14 +298,18 @@ void ReadIn::COMSOL(int Dimension_Geometry, std::ifstream &inFile, double L_x, d
             }
         } else
         {
-            cout<<"mesh file format error"<<endl;
+            cout<<"Error: mesh file format error"<<endl;
             exit(1);
         }
 
     }
     else if (Dimension_Geometry == 3)
     {
-
+        if (!inFile.is_open())
+        {
+            cout << "Error: Mesh file not open" << endl;
+            exit(1);
+        }
         std::string strmesh;
         getline(inFile,strmesh);
         if (strmesh.find("COMSOL") > 0 && strmesh.find("COMSOL") < strmesh.length())
@@ -321,7 +325,7 @@ void ReadIn::COMSOL(int Dimension_Geometry, std::ifstream &inFile, double L_x, d
             }
             if(dim!=Dimension_Geometry)
             {
-                cout<<"please check the dimension is correct or not"<<endl;
+                cout<<"Error: please check the dimension is correct or not"<<endl;
                 exit(1);
             }
             int numnode;
@@ -368,8 +372,6 @@ void ReadIn::COMSOL(int Dimension_Geometry, std::ifstream &inFile, double L_x, d
                         sss.str(strmesh);
                         int three;
                         sss >> three >> nameoftype;
-                        // nameoftype = strmesh.substr(2, strmesh.find(" "));
-                        // cout << nameoftype << endl;
                         break;
                     }
                 }
@@ -545,12 +547,12 @@ void ReadIn::COMSOL(int Dimension_Geometry, std::ifstream &inFile, double L_x, d
             }
         } else
         {
-            cout<<"mesh file format error"<<endl;
+            cout<<"Error: mesh file format error"<<endl;
             exit(1);
         }
         if(volumeElements.size()==0)
         {
-            cout<<"no element,please check the dimension is correct or not"<<endl;
+            cout<<"Error: no element, please check the dimension is correct or not"<<endl;
             exit(1);
         }
     }
@@ -660,7 +662,7 @@ void ReadIn::MSH(int Dimension_Geometry, ifstream &inFile, double L_x, double L_
                             }
                             if(dim==3)
                             {
-                                cout<<"find three dimensional element,please check the dimension is correct or not"<<endl;
+                                cout<<"Error: find three dimensional element,please check the dimension is correct or not"<<endl;
                                 exit(1);
                             }
                         }
@@ -673,7 +675,7 @@ void ReadIn::MSH(int Dimension_Geometry, ifstream &inFile, double L_x, double L_
             }
         } else
         {
-            cout<<"mesh file format error"<<endl;
+            cout<<"Error: mesh file format error"<<endl;
             exit(1);
         }
 
@@ -813,7 +815,7 @@ void ReadIn::MSH(int Dimension_Geometry, ifstream &inFile, double L_x, double L_
                             }
                         }
                     }
-                    cout<<"node ok"<<endl;
+                    //cout<<"node ok"<<endl;
                     //numnode = stoi(strmesh.substr(0, strmesh.find(" ")));
                     break;
                 }
@@ -821,12 +823,12 @@ void ReadIn::MSH(int Dimension_Geometry, ifstream &inFile, double L_x, double L_
             }
         } else
         {
-            cout<<"mesh file format error"<<endl;
+            cout<<"Error: mesh file format error"<<endl;
             exit(1);
         }
         if(volumeElements.size()==0)
         {
-            cout<<"no element,please check the dimension is correct or not"<<endl;
+            cout<<"Error: no element,please check the dimension is correct or not"<<endl;
             exit(1);
         }
 

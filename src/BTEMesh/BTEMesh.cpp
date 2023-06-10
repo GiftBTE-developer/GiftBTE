@@ -74,6 +74,11 @@ BTEMesh::BTEMesh(int Dimension_Geometry,std::ifstream& inFile, double L_x, doubl
                 if (Elements[i].center.x<distribution[j]*L_x&&Elements[i].center.x>distribution[j-1]*L_x)
                 {
                     Elements[i].index=j;
+                    if(j>=bands->geo_matter_index.size())
+                    {
+                        cout<<"Error: some region does not have material, check PHONON and GEOMETRY"<<endl;
+                        exit(0);
+                    }
                     Elements[i].matter=bands->geo_matter_index[j];
                 }
             }
@@ -260,6 +265,11 @@ BTEMesh::BTEMesh(int Dimension_Geometry,std::ifstream& inFile, double L_x, doubl
         //set_index and matter
         for (int i = 0; i <Elements.size()  ; ++i) {
             Elements[i].index=Elements[i].index-1;
+            if(Elements[i].index>=bands->geo_matter_index.size())
+            {
+                cout<<"Error: some region does not have material, check PHONON and GEOMETRY"<<endl;
+                exit(0);
+            }
             Elements[i].matter=bands->geo_matter_index[Elements[i].index];
         }
 
@@ -601,6 +611,11 @@ BTEMesh::BTEMesh(int Dimension_Geometry,std::ifstream& inFile, double L_x, doubl
         //set_index and matter
         for (int i = 0; i <Elements.size()  ; ++i) {
             Elements[i].index=Elements[i].index-1;
+            if(Elements[i].index>=bands->geo_matter_index.size())
+            {
+                cout<<"Error: some region does not have material, check PHONON and GEOMETRY"<<endl;
+                exit(0);
+            }
             Elements[i].matter=bands->geo_matter_index[Elements[i].index];
         }
         //get_volume
@@ -1116,7 +1131,11 @@ void BTEMesh::setMeshParams(BTEBand *bands)
     {
         for (int i = 0; i < Elements.size(); ++i)
         {
-
+            if(Elements[i].index>=bands->geo_matter_index.size())
+            {
+                cout<<"Error: some region does not have material, check PHONON and GEOMETRY"<<endl;
+                exit(0);
+            }
             Elements[i].matter = bands->geo_matter_index[Elements[i].index];
         }
         // get_volume
@@ -1193,7 +1212,11 @@ void BTEMesh::setMeshParams(BTEBand *bands)
     {
         for (int i = 0; i < Elements.size(); ++i)
         {
-
+            if(Elements[i].index>=bands->geo_matter_index.size())
+            {
+                cout<<"Error: some region does not have material, check PHONON and GEOMETRY"<<endl;
+                exit(0);
+            }
             Elements[i].matter = bands->geo_matter_index[Elements[i].index];
         }
 

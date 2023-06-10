@@ -50,27 +50,27 @@ int main(int argc, char **argv)
     double L_x = 0; //necessary
     double L_y = 0; //necessary
     double L_z = 0; //necessary
-    int Dimension_Geometry; //necessary
+    int Dimension_Geometry=-1; //necessary
     string Order = "2"; //not necessary
     string Method = "DOM"; //not necessary
     string Matrix_solver = "LU"; //not necessary
     int Num_Max_Iter=10000; //not necessary
     int Angle_method=2; //not necessary
-    int Dimension_Material=3; //necessary
+    int Dimension_Material=3; //not necessary
     int Num_Phi=4; //not necessary
     int Num_Theta=4; //not necessary
     double error_temp_limit=1e-5;  //not necessary
     double error_flux_limit=1e-3;  //not necessary
     bool Use_Backup=false;
     double Uniform_heat=0; //not necessary
-    double DeltaT; //necessary for transient
-    double TotalT; //necessary for transient
-    int Istransinet; //necessary for transient
+    double DeltaT=-1; //necessary for transient
+    double TotalT=-1; //necessary for transient
+    int IsTransient=0; //not necessary
 
     ifstream fin_const1("input/CONTROL");
     if (!fin_const1.is_open())
     {
-        cout << "need CONTROL" << endl;
+        cout << "Error: need CONTROL" << endl;
         exit(0);
     }
     else
@@ -81,7 +81,7 @@ int main(int argc, char **argv)
         {
             if(str.find("Transient")>=0 && str.find("Transient") < str.length())
             {
-                fin_const1>>Istransinet;
+                fin_const1 >> IsTransient;
             }
             if(str.find("Order") >= 0 && str.find("Order") < str.length())
             {
@@ -123,11 +123,15 @@ int main(int argc, char **argv)
 
     }
     fin_const1.close();
-
+    if(IsTransient==1&&(TotalT==-1||DeltaT==-1))
+    {
+        cout<<"Error: Please provide DeltaTime and TotalTime for transient solver"<<endl;
+        exit(0);
+    }
     ifstream fin_const2("input/GEOMETRY");
     if (!fin_const2.is_open())
     {
-        cout << "need GEOMETRY" << endl;
+        cout << "Error: need GEOMETRY" << endl;
         exit(0);
     }
     else
@@ -180,6 +184,25 @@ int main(int argc, char **argv)
     }
     fin_const2.close();
 
+    if(Dimension_Geometry==-1)
+    {
+        cout<<"Error: Please provide DimensionGeometry"<<endl;
+        exit(0);
+    } else if(Dimension_Geometry==1&&L_x==0)
+    {
+        cout<<"Error: Please provide Lx for one dimensional problem"<<endl;
+        exit(0);
+    }
+    else if(Dimension_Geometry==2&&(L_x==0||L_y==0))
+    {
+        cout<<"Error: Please provide Lx and Ly for two dimensional problem"<<endl;
+        exit(0);
+    }
+    else if(Dimension_Geometry==3&&(L_x==0||L_y==0||L_z==0))
+    {
+        cout<<"Error: Please provide Lx, Ly and Lz for two dimensional problem"<<endl;
+        exit(0);
+    }
 
 
     ifstream inputangle("input/PHONON");
@@ -189,9 +212,7 @@ int main(int argc, char **argv)
         if(str.find("Dimension_Material") >= 0 && str.find("Dimension_Material") < str.length())
         {
             inputangle >> Dimension_Material;
-            cout<<endl;
         }
-
         if(str.find("Angle_method") >= 0 && str.find("Angle_method") < str.length())
         {
             inputangle >> Angle_method;
@@ -243,7 +264,7 @@ int main(int argc, char **argv)
 
     SolutionAll solutionAll(distributeMesh,bcs,bands,angles,num_proc,world_rank);
     solutionAll._set_initial(distributeMesh,bands,angles);
-    if(Istransinet!=1)
+    if(IsTransient != 1)
     {
         solutionAll._Fourier_Solver(distributeMesh,bcs,bands,num_proc,world_rank);
         MPI_Barrier(MPI_COMM_WORLD);

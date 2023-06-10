@@ -558,7 +558,7 @@ StaticBTESynthetic::StaticBTESynthetic(BTEMesh *mesh, BTEBoundaryCondition *bcs,
     capacityBulk=new double [numofMatter];
     for (int i = 0; i < numofMatter; ++i) {
         kappaBulk[i]=bands->kappabulk[i];
-        capacityBulk[i]=bands->kappabulk[i];
+        capacityBulk[i]=bands->capacitybulk[i];
         //cout<<kappaBulk[i]<<endl;
     }
 
@@ -2497,6 +2497,7 @@ void StaticBTESynthetic::_get_total_energy(int iband_local, int inf_local) const
     for (int ie = 0; ie < numCell; ++ie)
     {
         totalEnergyLocal[ie] += energyDensity[iband_local][inf_local][ie] * modeWeight[matter[ie]][iband][inf] / capacityBulk[matter[ie]];
+        cout<<capacityBulk[matter[ie]]<<endl;
     }
 }
 
@@ -2606,24 +2607,30 @@ bool StaticBTESynthetic::_get_magin_check_error(int nt, double error_temp_limit,
 
 void StaticBTESynthetic::_print_out() const
 {
-    ofstream output("Tempcell.dat");
+    ofstream output("TempLattice.dat");
     for (int i = 0; i < numCell; ++i)
     {
         output << elementCenterX[i] << " " << elementCenterY[i] << " " << elementCenterZ[i] << " " << temperature[i] << endl;
     }
     output.close();
-    ofstream output1("Tempcell1.dat");
+    ofstream output1("Temperature.dat");
+    for (int i = 0; i < numCell; ++i)
+    {
+        output1 << elementCenterX[i] << " " << elementCenterY[i] << " " << elementCenterZ[i] << " " << totalEnergy[i] << endl;
+    }
+    output1.close();
+    /*ofstream output1("Tempcell1.dat");
     for (int i = 0; i < numCell; ++i)
     {
         output1 << elementCenterX[i] << " " << elementCenterY[i] << " " << elementCenterZ[i] << " " << temperature1[i] << endl;
     }
-    output1.close();
-    ofstream output2("HeatSource.dat");
+    output1.close();*/
+    /*ofstream output2("HeatSource.dat");
     for (int i = 0; i < numCell; ++i)
     {
         output2 << elementCenterX[i] << " " << elementCenterY[i] << " " << elementCenterZ[i] << " " << elementHeatSource[i] << endl;
     }
-    output2.close();
+    output2.close();*/
     ofstream outputheat("HeatFlux.dat");
     for (int i = 0; i < numCell; ++i)
     {
@@ -2642,6 +2649,7 @@ void StaticBTESynthetic::copy() const
     }
     for (int i = 0; i < numCell; ++i)
     {
+        totalEnergyLocal[i]=0;
         temperatureLocal[i] = 0;
         heatFluxXLocal[i] = 0;
         heatFluxYLocal[i] = 0;

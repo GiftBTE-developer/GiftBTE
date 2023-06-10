@@ -126,14 +126,14 @@ void SolutionAll::_set_initial(DistributeMesh *mesh,BTEBand *bands, BTEAngle *an
 
 void SolutionAll::_print_out(DistributeMesh *mesh)
 {
-    ofstream output("Tempcell_all.dat");
+    ofstream output("Temperature.dat");
     for (int i = 0; i < mesh->volumeElementsFourier.size(); ++i) {
         output<<mesh->FourierMeshes.Elements[i].center.x<<" "<<mesh->FourierMeshes.Elements[i].center.y
         <<" "<<mesh->FourierMeshes.Elements[i].center.z<<" "<<solution.Temperature[i]<<endl;
     }
     output.close();
 
-    ofstream outputheat("HeatFlux_all.dat");
+    ofstream outputheat("HeatFlux.dat");
 
     for (int i = 0; i < mesh->volumeElementsFourier.size(); ++i)
     {
@@ -155,8 +155,8 @@ void SolutionAll::_print_out(DistributeMesh *mesh)
         sumA+=mesh->FourierMeshes.Elements[i].volume;
     }
     //cout<<"======================================heat flux ave====================="<<endl;
-    ofstream outave("aveHeat");
-    outave<<sumHx/sumA<<"   "<<sumHy/sumA<<"   "<<sumHz/sumA<<endl;
+    //ofstream outave("aveHeat");
+    //outave<<sumHx/sumA<<"   "<<sumHy/sumA<<"   "<<sumHz/sumA<<endl;
     //cout<<"========================================================================"<<endl;
 
     ofstream outputVTK("Result.vtk");
@@ -405,7 +405,7 @@ void SolutionAll::_BTE_Solver(DistributeMesh *mesh, BTEBoundaryCondition *bcs, B
     }
 
     for (int i = 0; i < mesh->volumeElementsBTE.size(); ++i) {
-        solution.Temperature[mesh->elementProjection[i]]=solver.temperature[i];
+        solution.Temperature[mesh->elementProjection[i]]=solver.totalEnergy[i];
         solution.heatFluxX[mesh->elementProjection[i]]=solver.heatFluxXGlobal[i];
         solution.heatFluxY[mesh->elementProjection[i]]=solver.heatFluxYGlobal[i];
         solution.heatFluxZ[mesh->elementProjection[i]]=solver.heatFluxZGlobal[i];

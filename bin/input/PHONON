@@ -8,13 +8,11 @@ Matter 2: ShengBTE =
 input/materials/Ge/ShengBTEFile
 Geometry: #geo index - matter index start from 0 =
 0 0
-1 0
-2 0
 Dimension_Material:
 3
 Angle_method: //1:CADOM,2:GaussDOM
 2
 Ntheta:
-4
+1
 Nphi:
-4
+1
