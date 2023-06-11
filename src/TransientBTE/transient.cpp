@@ -176,12 +176,18 @@ Transient::~Transient() {
 
 }
 Transient::Transient(BTEMesh *mesh, BTEBoundaryCondition *bcs, BTEBand *bands, BTEAngle *angles, int num_proc,
-                     int world_rank,double deltaT,double totalT) {
+                     int world_rank,double deltaT,double totalT,
+                     int use_TDTR,double pulse_time,double repetition_frequency,double modulation_frequency,double xy_r) {
     this->deltaT=deltaT;
     this->totalT=totalT;
     this->numProc = num_proc;
     this->worldRank = world_rank;
 
+    this->use_TDTR=use_TDTR;
+    this->pulse_time=pulse_time;
+    this->repetition_frequency=repetition_frequency;
+    this->modulation_frequency=modulation_frequency;
+    this->xy_r=xy_r;
     //this->mesh=mesh;
     //this->angles=angles;
     //this->bcs=bcs;
@@ -1222,54 +1228,29 @@ void Transient::_get_explicit_Re(int itime, int spatial_order, int Use_limiter,i
         }
         //equlibrium
         Re[ie] -= temperatureOld[ie] * heatCapacity[matter[ie]][iband][inf]/relaxationTime[matter[ie]][iband][inf];
-        //if(ie==0)  cout<<ie<<"  req "<<temperatureOld[ie]* heatCapacity[matter[ie]][iband][inf]/relaxationTime[matter[ie]][iband][inf]<<endl;
-        //heatsource
-        //Re[ie] -= elementHeatSource[ie] * heatRatio[matter[ie]][iband][inf];
-
-        //TDTR_heatsorce
-        /*double rr = pow(elementCenterX[ie] ,2) + pow(elementCenterY[ie]  - 1e-5,2);
-        double RR = 2e-6;
-        double heatindex = 0;
-        double heatratio = exp(-2*rr/pow(RR,2));
-        // if (elementFaceCenterY[ie] == max_y) cout<<ie<<"  "<<elementFaceCenterX[ie]<<"  "<<elementFaceCenterY[ie]<< "  "<<max_y<<"   "<< pow(rr, 0.5)<<"   "<<2*RR <<"  "<<elementHeatSource[ie] <<endl;
-        //cout<< pow(rr, 0.5)<<"  "<<2*RR<<endl;
-        if (pow(rr, 0.5) <= 2*RR)
+        //TDTR_heatsource
+        if(use_TDTR==1)
         {
-            if (elementCenterY[ie] >9e-6)
+            double heatindex=0;
+            int times=pulse_time/deltaTime;
+            int new_itime=itime/times;
+            int tt=1.0/repetition_frequency*1e-6/deltaTime;
+            int numheat = (new_itime)/tt;
+            int checkheat = (new_itime)-numheat*tt;
+            double interg = 1.0;
+            double TT=1.0/(tt*(repetition_frequency/modulation_frequency)*deltaTime);
+            if (checkheat>1)
             {
-                rr=pow(elementCenterX[ie] ,2) + pow(elementCenterY[ie]- 1e-5,2);
-                //cout<<"ie"<<ie<< "  "<<elementCenterY[ie]<<"   "<<max_y<<endl;
-                int times=(1e-12)/(deltaTime);
-                int new_itime=itime/times;
-
-                int tt=12500;
-                int numheat = (new_itime)/tt;
-                int checkheat = (new_itime)-numheat*tt;
-                double interg = 1.0;
-                double TT=1.0/(tt*8*deltaTime);//2e8;
-                if (checkheat>1)
-                {
-                    heatindex = 0;
-                }
-                else
-                {
-                    //double deltaTime=1e-14;
-                    interg = interg+(double)(new_itime);
-                    heatindex = sin(interg*deltaTime*2*PI*TT)+1;
-                }
-                //cout<<"sin   "<<sin(interg*deltaTime*2*PI*TT)<<"   "<<interg*deltaTime*2*PI*TT<<" deltaTime  "<<deltaTime   <<endl;
-                //cout<<"ie   "<<ie<<"    itime  "<<itime<<"inf"<<inf<<"iband"<<iband<<"checkheat:   "<<checkheat<<"   numheat :"<<numheat<<" heatindex: "<<heatindex<<endl;
-                //cout<<ie<<" heatindex  "<<heatindex<<"  heatratio  "<<heatratio<<" elementHeatSource "<<elementHeatSource[ie]<<"  heatRatio "<<heatRatio[matter[ie]][iband][inf]<<"modeWeight[matter[ie]][iband][inf] "<<modeWeight[matter[ie]][iband][inf] <<endl;
-                //cout<<"inf"<<inf<<"iband"<<iband<<"re  "<<heatindex * heatratio  * heatRatio[matter[ie]][iband][inf] *modeWeight[matter[ie]][iband][inf] * elementHeatSource[ie]<<endl;
+                heatindex = 0;
             }
+            else
+            {
+                interg = interg+(double)(new_itime);
+                heatindex = sin(interg*deltaTime*2*PI*TT)+1;
+            }
+            double h =  heatindex *  heatRatio[matter[ie]][iband][inf]    * elementHeatSource[ie];
+            Re[ie] -= h;
         }
-        double h =heatindex * heatratio  * heatRatio[matter[ie]][iband][inf]    * elementHeatSource[ie];//*  modeWeight[matter[ie]][iband][inf]
-        //cout<<h<<"  heatratio  "<<heatratio<<endl;
-        // heatsources[ie] = heatindex * heatratio * elementHeatSource[ie]  * elementVolume[ie];
-        if (ie==309){
-            //cout<<ie<<"   "<<heatindex<<"   "<<heatratio<<"  "<<elementHeatSource[ie]<<"   "<<heatRatio[matter[ie]][iband][inf]<<endl;
-        }
-        Re[ie] -= h;*/
 
     }
     for (int ib = 0; ib < numBound; ++ib) {
