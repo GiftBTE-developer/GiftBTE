@@ -1,0 +1,16 @@
+DimensionGeometry=
+2
+Lx=
+5e-6
+Ly=
+5e-6
+Lz=
+5e-6
+UniformHeat=
+0
+BCFile=
+input/inputbc_2D_porous.dat
+MeshType=//1D or COMSOL
+GMSH
+MeshFile=
+input/gms2685.msh
