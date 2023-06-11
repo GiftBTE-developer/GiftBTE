@@ -1,0 +1,20 @@
+Number of matter=
+1
+Number of bands=
+1
+# Matter 1: 
+2677 39.9E-12 1.627E6 1 1 
+
+
+# Geometry: #geo index - matter index start from 0
+0 0
+
+
+Dimension_Material:
+3
+Angle_method: //1:CADOM,2:GaussDOM
+2
+Ntheta:
+2
+Nphi:
+2
