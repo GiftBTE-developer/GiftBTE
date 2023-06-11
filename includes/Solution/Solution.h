@@ -47,7 +47,7 @@ public:
     void _BTE_Solver(DistributeMesh *mesh, BTEBoundaryCondition *bcs, BTEBand *bands, BTEAngle *angles, int num_proc, int world_rank
                      ,int Use_Backup, int Num_Max_Iter, string Order, string Method, string Matrix_solver, double error_temp_limit, double error_flux_limit) const;
     void _Transient_BTE_Solver(DistributeMesh *mesh, BTEBoundaryCondition *bcs, BTEBand *bands, BTEAngle *angles, int num_proc, int world_rank,
-                               int Use_Backup, string Order, double error_temp_limit, double error_flux_limit, double deltaT, double totalT);
+                               int Use_Backup, string Order, double error_temp_limit, double error_flux_limit, double deltaT, double totalT ,int use_TDTR,double pulse_time,double repetition_frequency,double modulation_frequency,double xy_r);
 
     void _set_initial(DistributeMesh *mesh,BTEBand *bands, BTEAngle *angles);
     void _update_bound(int is, DistributeMesh *mesh,BTEBand *bands, BTEAngle *angles);

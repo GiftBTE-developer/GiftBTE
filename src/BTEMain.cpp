@@ -67,6 +67,13 @@ int main(int argc, char **argv)
     double TotalT=-1; //necessary for transient
     int IsTransient=0; //not necessary
 
+    //for TDTR case
+    int use_TDTR=0;  //not necessary
+    double repetition_frequency=0;//necessary for transient TDTR
+    double modulation_frequency=0;//necessary for transient TDTR
+    double xy_r=0;//necessary for transient TDTR
+    double pulse_time=0;//necessary for transient TDTR
+
     ifstream fin_const1("input/CONTROL");
     if (!fin_const1.is_open())
     {
@@ -118,6 +125,27 @@ int main(int argc, char **argv)
             if(str.find("TotalTime") >= 0 && str.find("TotalTime") < str.length())
             {
                 fin_const1 >> TotalT ;
+            }
+            //TDTR
+            if(str.find("use_TDTR") >= 0 && str.find("use_TDTR") < str.length())
+            {
+                fin_const1 >> use_TDTR; cout<<"use_TDTR "<<use_TDTR<<endl;
+            }
+            if(str.find("pulse_time") >= 0 && str.find("pulse_time") < str.length())
+            {
+                fin_const1 >> pulse_time;cout<<"pulse_time "<<pulse_time<<endl;
+            }
+            if(str.find("repetition_frequency") >= 0 && str.find("repetition_frequency") < str.length())
+            {
+                fin_const1 >> repetition_frequency;cout<<"repetition_frequency "<<repetition_frequency<<endl;
+            }
+            if(str.find("modulation_frequency") >= 0 && str.find("modulation_frequency") < str.length())
+            {
+                fin_const1 >> modulation_frequency;cout<<"modulation_frequency "<<modulation_frequency<<endl;
+            }
+            if(str.find("radius_0f_top_xy_plane") >= 0 && str.find("radius_0f_top_xy_plane") < str.length())
+            {
+                fin_const1 >> xy_r;cout<<"xy_r "<<xy_r<<endl;
             }
         }
 
@@ -275,7 +303,8 @@ int main(int argc, char **argv)
         solutionAll._print_out(distributeMesh);
     } else
     {
-        solutionAll._Transient_BTE_Solver(distributeMesh,bcs,bands,angles,num_proc,world_rank,Use_Backup,Order,error_temp_limit,error_flux_limit,DeltaT,TotalT);
+        solutionAll._Transient_BTE_Solver(distributeMesh,bcs,bands,angles,num_proc,world_rank,Use_Backup,Order,error_temp_limit,error_flux_limit,DeltaT,TotalT
+                ,use_TDTR,pulse_time,repetition_frequency,modulation_frequency,xy_r);
     }
 
 
