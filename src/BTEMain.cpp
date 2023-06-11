@@ -127,23 +127,23 @@ int main(int argc, char **argv)
                 fin_const1 >> TotalT ;
             }
             //TDTR
-            if(str.find("use_TDTR") >= 0 && str.find("use_TDTR") < str.length())
+            if(str.find("UseTDTR") >= 0 && str.find("UseTDTR") < str.length())
             {
                 fin_const1 >> use_TDTR; cout<<"use_TDTR "<<use_TDTR<<endl;
             }
-            if(str.find("pulse_time") >= 0 && str.find("pulse_time") < str.length())
+            if(str.find("PulseTime") >= 0 && str.find("PulseTime") < str.length())
             {
                 fin_const1 >> pulse_time;cout<<"pulse_time "<<pulse_time<<endl;
             }
-            if(str.find("repetition_frequency") >= 0 && str.find("repetition_frequency") < str.length())
+            if(str.find("RepetitionFrequency") >= 0 && str.find("RepetitionFrequency") < str.length())
             {
                 fin_const1 >> repetition_frequency;cout<<"repetition_frequency "<<repetition_frequency<<endl;
             }
-            if(str.find("modulation_frequency") >= 0 && str.find("modulation_frequency") < str.length())
+            if(str.find("ModulationFrequency") >= 0 && str.find("ModulationFrequency") < str.length())
             {
                 fin_const1 >> modulation_frequency;cout<<"modulation_frequency "<<modulation_frequency<<endl;
             }
-            if(str.find("radius_0f_top_xy_plane") >= 0 && str.find("radius_0f_top_xy_plane") < str.length())
+            if(str.find("RadiusOfTopXTPlane") >= 0 && str.find("RadiusOfTopXTPlane") < str.length())
             {
                 fin_const1 >> xy_r;cout<<"xy_r "<<xy_r<<endl;
             }
