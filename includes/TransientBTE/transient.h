@@ -25,6 +25,12 @@ using namespace std;
 class Transient
         {
         public:
+            int use_TDTR;
+            double repetition_frequency;
+            double modulation_frequency;
+            double xy_r;
+            double pulse_time;
+
             double deltaT;
             double totalT;
             double L_x;
@@ -160,7 +166,8 @@ class Transient
             double *Re;
 
 
-            Transient(BTEMesh *mesh, BTEBoundaryCondition *bcs, BTEBand *bands, BTEAngle *angles, int num_proc, int world_rank,double deltaT,double totalT);
+            Transient(BTEMesh *mesh, BTEBoundaryCondition *bcs, BTEBand *bands, BTEAngle *angles, int num_proc, int world_rank,double deltaT,double totalT,
+                      int use_TDTR,double pulse_time,double repetition_frequency,double modulation_frequency,double xy_r);
 
             void _set_initial(int Use_Backup) const;
 
@@ -190,7 +197,7 @@ class Transient
             void _get_gradient_larger(int Use_limiter, int iband_local, int inf_local) const;
 
 
-            void solve(int Use_Backup, double error_temp_limit, double error_flux_limit,double deltaT,double totalT);
+            void solve(int Use_Backup, double error_temp_limit, double error_flux_limit,double deltaT,double totalT,int use_TDTR,double pulse_time,double repetition_frequency,double modulation_frequency,double xy_r);
 
             void solve_first_order(int Use_Backup, int Use_Limiter, double error_temp_limit, double error_flux_limit,double deltaT,double totalT);
 
