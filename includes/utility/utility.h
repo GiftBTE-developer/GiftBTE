@@ -59,6 +59,7 @@ public:
     double y = 0;
     double z = 0;
     double heat = 0; //yufei adding
+    double initialtemp = 0; //jiaxuan
     std::vector<int> cells;
     Point &operator=(const Point &rhs) = default;
     explicit Point(double xx = 0, double yy = 0, double zz = 0) : x{xx}, y{yy}, z{zz} {}
@@ -102,6 +103,7 @@ public:
     int index;
     int matter;
     double heat_source;
+    double initial_temperature;//jiaxuan
     std::vector<Face> faces;
     std::vector<int> vertexes;
     Point center;
