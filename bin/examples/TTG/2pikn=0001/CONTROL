@@ -18,6 +18,8 @@ DeltaTime:
 5e-11
 TotalTime:
 3e-5
+InitialTemperature:
+input/initial_temperature.txt
 use_TDTR:
 0
 pulse_time:
