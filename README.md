@@ -146,4 +146,4 @@ $ cd 1D
 $ cd 1e-6
 $ mpirun -np 4 ../../../../BTE_CPU
 
-# More details relates to the User mannual can be found in https://sjtu.feishu.cn/docx/GzB2dXQfaozenFxEtP4cQEJOnKb
+# More details can be found in https://sjtu.feishu.cn/docx/GzB2dXQfaozenFxEtP4cQEJOnKb
