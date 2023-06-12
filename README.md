@@ -60,7 +60,7 @@ Shanghai Jiao Tong University
 China
 
 # Download
-You can also download the package from the git repository as:
+You can download the package from the git repository as:
  https://github.com/Gift-BTE-developer/Gift-BTE.git
 
 If you choose the GitHub version, please use the ‘master’ branch.
@@ -69,23 +69,69 @@ If you choose the GitHub version, please use the ‘master’ branch.
 ## Requirement
 - C++ compiler (gcc is recommended)
 - Cmake
-- MPI library
+- MPI library (openmpi is recommended)
+-  Linux environment is recommended
 
 ## Install and compile
 ### Step 1. Install all required packages
-All packages are widely used packages. The installation of these packages can be easily found in web. Linux environment is suggessted.
+All packages are widely used packages. The installation of these packages can be easily found in web.
 
-Ensure the C++ compiler is installed 
+#### Ensure that the C++ compiler is installed 
 
-Typing in command line
+Type in command line
 
-g++ -v
+![屏幕快照 2023-06-12 上午11 00 30](https://github.com/Gift-BTE-developer/Gift-BTE/assets/50352151/57fff5eb-bdf3-4e3e-8284-8b4685ab8950)
 
-when output 
+when output the version of gcc like:
 
-gcc version x.x.x
+![屏幕快照 2023-06-12 上午11 01 09](https://github.com/Gift-BTE-developer/Gift-BTE/assets/50352151/17aec67a-ebe0-4d38-9d28-7943da401bd4)
+
+#### Ensure that the MPI library is installed 
+
+Type in command line
+
+![屏幕快照 2023-06-12 上午11 02 57](https://github.com/Gift-BTE-developer/Gift-BTE/assets/50352151/1f6d6c3a-41f2-4709-9e31-225361221bc1)
+
+when output the folder of mpirun like
+
+![屏幕快照 2023-06-12 上午11 03 30](https://github.com/Gift-BTE-developer/Gift-BTE/assets/50352151/dbdc40a0-437e-42f4-9fba-640599be3a3d)
+
+#### Ensure that the Cmake is intalled 
+
+Type in command line
+
+![屏幕快照 2023-06-12 上午11 04 59](https://github.com/Gift-BTE-developer/Gift-BTE/assets/50352151/5b961d6b-b7f7-4d22-828a-0318b2e2ef80)
+
+when output the folder of cmake like
+
+![屏幕快照 2023-06-12 上午11 05 03](https://github.com/Gift-BTE-developer/Gift-BTE/assets/50352151/07e2a9a2-0212-483b-9b4d-914a14d3440a)
 
 ### Step 2. Download source
 
+You can download the package from the git repository as:
+ https://github.com/Gift-BTE-developer/Gift-BTE.git
+ 
+Or directly clone the repository by git (may need installation)
+
+- Git clone https://github.com/Gift-BTE-developer/Gift-BTE.git
+
+- Git Checkout master
+
+
+
 ### Step 3. Build by CMake
 
+Type in the command line under the Gift-BTE folder
+
+cmake3 -B cpu-build -S. -DCMAKE_BUILD_TYPE=Release
+
+![屏幕快照 2023-06-12 上午11 10 21](https://github.com/Gift-BTE-developer/Gift-BTE/assets/50352151/4f2baef9-7820-46c8-8094-50accf27e9f5)
+
+Output in command line
+
+![屏幕快照 2023-06-12 上午11 11 27](https://github.com/Gift-BTE-developer/Gift-BTE/assets/50352151/f173f3c0-b5f6-480f-b862-ecb27c88cdd8)
+
+Common error: 
+
+- C++ compiler not found: the C++ compiler is not installed 
+- MPI not found: the MPI library is not installed 
