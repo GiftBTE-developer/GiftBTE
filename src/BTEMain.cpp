@@ -47,6 +47,7 @@ int main(int argc, char **argv)
     string Name_Bc_File; //necessary
     string Name_Heat_File; //not necessary
     string Name_multiscale_File; //not necessary
+    string Name_InitialTemp_File; //jiaxuan adding not necessary
     double L_x = 0; //necessary
     double L_y = 0; //necessary
     double L_z = 0; //necessary
@@ -125,6 +126,10 @@ int main(int argc, char **argv)
             if(str.find("TotalTime") >= 0 && str.find("TotalTime") < str.length())
             {
                 fin_const1 >> TotalT ;
+            }
+            if(str.find("InitialTemperature") >= 0 && str.find("InitialTemperature") < str.length())
+            {
+                fin_const1 >> Name_InitialTemp_File ;//jiaxuan
             }
             //TDTR
             if(str.find("UseTDTR") >= 0 && str.find("UseTDTR") < str.length())
@@ -272,6 +277,7 @@ int main(int argc, char **argv)
 
     ifstream geofile(Name_Mesh_File);
     ifstream heatfile(Name_Heat_File);
+    ifstream initialtempfile(Name_InitialTemp_File);//jiaxuan
     //mesh = new BTEMesh(Dimension_Geometry, geofile, L_x, L_y, L_z, bands, bcs, "default");
     //mesh->setMeshParams(bands);
     //mesh->setMeshParams1(bcs);
@@ -279,9 +285,10 @@ int main(int argc, char **argv)
     ifstream geofile1(Name_Mesh_File);
     DistributeMesh *distributeMesh;
     distributeMesh=new DistributeMesh(Dimension_Geometry, geofile1, L_x, L_y, L_z,
-                                  Name_Mesh_Type,bands,bcs,heatfile, Uniform_heat, Name_Heat_Type);  //yufei
+                                  Name_Mesh_Type,bands,bcs,heatfile, Uniform_heat, Name_Heat_Type,initialtempfile);  //yufei jiaxuan
     geofile.close();
     heatfile.close();
+    initialtempfile.close();//jiaxuan
 
 
 
