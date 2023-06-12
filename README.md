@@ -23,3 +23,21 @@ Gift-BTE is a powerful tool designed to investigate submicron heat conduction. A
 ## Links
 - Documentation: https://sjtu.feishu.cn/docx/GzB2dXQfaozenFxEtP4cQEJOnKb
 - Git repository: https://github.com/Gift-BTE-developer/Gift-BTE.git
+
+## License
+This software is distributed under the GNU General Public License v3.0 license. See the LICENSE.txt file for license rights and limitations.
+
+## How to cite Gift-BTE
+Please cite the following article when you use Gift-BTE 
+Yue Hu, Yongxing Shen, Hua Bao,
+Ultra-efficient and parameter-free computation of submicron thermal transport with phonon Boltzmann transport equation,
+Fundamental Research,
+2022,
+,
+ISSN 2667-3258,
+https://doi.org/10.1016/j.fmre.2022.06.007.
+(https://www.sciencedirect.com/science/article/pii/S2667325822002758)
+
+Issues & Bug report
+- If you find a bug or issue related to Gift-BTE, please report it at [Github Issues](https://github.com/Gift-BTE-developer/Gift-BTE/issues)
+- Other questions and suggestions can be posted on the Github Disccusions [Github Disccusions](https://github.com/Gift-BTE-developer/Gift-BTE/discussions)
