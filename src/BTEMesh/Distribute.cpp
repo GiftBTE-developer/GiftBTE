@@ -8,7 +8,7 @@
 #include <fstream>
 DistributeMesh::DistributeMesh(int Dimension_Geometry, std::ifstream &inFile, double L_x, double L_y, double L_z,
                                std::string mesh_type,BTEBand * bands, BTEBoundaryCondition *bcs,
-                               std::ifstream &inHeat,double Uniform_Heat, std::string heat_type) {  //yufei
+                               std::ifstream &inHeat,double Uniform_Heat, std::string heat_type,std::ifstream &initialTemp) {  //yufei jiaxaun
 
     ReadIn readIn(Dimension_Geometry, inFile, L_x, L_y, L_z, mesh_type);
     nodeXFourier=readIn.nodeX;
@@ -24,6 +24,7 @@ DistributeMesh::DistributeMesh(int Dimension_Geometry, std::ifstream &inFile, do
     Fouriermesh1.setMeshParams(bands);
     Fouriermesh1.setMeshParams1(bcs);
     Fouriermesh1.BTEMesh_heatin(inHeat, Uniform_Heat, heat_type); //yufei
+    Fouriermesh1.BTEMesh_initialTemp(initialTemp);//jiaxuan
     FourierMeshes=Fouriermesh1;
 
 
@@ -196,6 +197,7 @@ void DistributeMesh::_build_BTEMesh(int Dimension_Geometry,double L_x, double L_
     BTEmesh1.setMeshParams1(&bcs1);
     for (int i = 0; i < BTEmesh1.Elements.size(); ++i) {
         BTEmesh1.Elements[i].heat_source=FourierMeshes.Elements[elementProjection[i]].heat_source;
+        BTEmesh1.Elements[i].initial_temperature=FourierMeshes.Elements[elementProjection[i]].initial_temperature;//jiaxuan
     }
     //BTEmesh1.BTEMesh_heatin(inHeat, Uniform_Heat);
     BTEMeshes=BTEmesh1;
