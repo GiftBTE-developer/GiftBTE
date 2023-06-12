@@ -38,6 +38,20 @@ ISSN 2667-3258,
 https://doi.org/10.1016/j.fmre.2022.06.007.
 (https://www.sciencedirect.com/science/article/pii/S2667325822002758)
 
-Issues & Bug report
+##Issues & Bug report
 - If you find a bug or issue related to Gift-BTE, please report it at [Github Issues](https://github.com/Gift-BTE-developer/Gift-BTE/issues)
 - Other questions and suggestions can be posted on the Github Disccusions [Github Disccusions](https://github.com/Gift-BTE-developer/Gift-BTE/discussions)
+
+## Acknowledgment
+This project is/was partially supported by the following projects:
+ 
+- National Key R \& D Project from Ministery of Science and Technology of China (Grant No. 2022YFA1203100)
+- National Natural Science Foundation of China (Grant No. 52122606)
+
+## Contributors & Contact
+Gift-BTE developers in TPEC Lab (Contact: Gift-BTE@outlook.com)
+TPEC Lab: https://sites.ji.sjtu.edu.cn/hua-bao/
+Global Institute of Future Technology (GIFT)
+Shanghai Jiao Tong University
+China
+ 
