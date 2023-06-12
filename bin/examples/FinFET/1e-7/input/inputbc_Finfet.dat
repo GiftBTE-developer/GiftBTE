@@ -3,20 +3,20 @@
 #boundary indexs #boundary condition:1:thermalization #temperature//31:leftandright,32:topandbottm//periodic: give -index-1 for example, if "0" boundary is connected to 3 boundary set second term as "-4", detT and 0, means you want set the temperature differece as detT for periodic bound; 0 and 0 means no temperature difference, do not set other value if you do not need temperature difference
 0 3 0
 1 2 0
-2 1 0
+2 1 300
 3 3 0
 4 2 0
 5 3 0
-7 1 0
+7 1 300
 8 2 0
 9 2 0
 10 2 0
-11 1 0
+11 1 300
 13 2 0
 14 2 0
-15 1 0
-17 1 0
-18 1 0
+15 1 300
+17 1 300
+18 1 300
 19 3 0
 20 2 0
 
