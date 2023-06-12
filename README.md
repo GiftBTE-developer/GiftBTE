@@ -13,7 +13,7 @@ Gift-BTE is a powerful tool designed to investigate submicron heat conduction. A
 
 ### Application
 - Computing thermal conductivity of nanostructures such as nano-porous media, superlattice, nanowires, nano-composite
-- Predicting temperature rise in semiconductor devices
-- Simulating pump-probe experiments
+- Predicting temperature rise in transistors
+- Simulating laser heating process
 - Other submicron heat conduction problems
 
