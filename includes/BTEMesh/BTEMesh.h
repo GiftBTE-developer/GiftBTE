@@ -27,6 +27,7 @@ public:
     std::vector<Cell> Elements;
     std::vector<Point> Nodes;
     std::vector<Point> Heatnodes; //yufei:add Heatnodes here
+    std::vector<Point> Tempnodes; //jiaxuan: for initial temperature
     std::vector<Boundary> Boundaries;
     std::vector<int> Boundnodes;
     std::vector<std::vector<int>> Boundnodes_cell;
@@ -46,6 +47,7 @@ public:
     void setMeshParams1(BTEBoundaryCondition *bcs);
 
     void BTEMesh_heatin( std::ifstream &inHeat,double Uniform_Heat, std::string heat_type ); //yufei
+    void BTEMesh_initialTemp( std::ifstream &initialTemp); //jiaxuan
     ~BTEMesh();
 };
 #endif //STATICBTESOLVER_BTEMESH_H
