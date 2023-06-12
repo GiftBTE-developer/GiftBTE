@@ -78,7 +78,8 @@ SolutionAll::SolutionAll(DistributeMesh *mesh, BTEBoundaryCondition *bcs, BTEBan
 void SolutionAll::_set_initial(DistributeMesh *mesh,BTEBand *bands, BTEAngle *angles) {
 
     for (int j = 0; j < solution.numCell; ++j) {
-        solution.Temperature[j]=0;
+        //solution.Temperature[j]=0;
+        solution.Temperature[j]=mesh->FourierMeshes.Elements[j].initial_temperature;//jiaxuan: for both steady and transient state
                 solution.heatFluxX[j]=0;
         solution.heatFluxY[j]=0;
         solution.heatFluxZ[j]=0;
