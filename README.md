@@ -60,10 +60,32 @@ Shanghai Jiao Tong University
 China
 
 # Download
-You can download the latest and previous versions of Gift-BTE at
- https://bte.sjtu.edu.cn/
- 
 You can also download the package from the git repository as:
  https://github.com/Gift-BTE-developer/Gift-BTE.git
 
 If you choose the GitHub version, please use the ‘master’ branch.
+
+# Installation
+## Requirement
+- C++ compiler (gcc is recommended)
+- Cmake
+- MPI library
+
+## Install and compile
+### Step 1. Install all required packages
+All packages are widely used packages. The installation of these packages can be easily found in web. Linux environment is suggessted.
+
+Ensure the C++ compiler is installed 
+
+Typing in command line
+
+g++ -v
+
+when output 
+
+gcc version x.x.x
+
+### Step 2. Download source
+
+### Step 3. Build by CMake
+
