@@ -136,3 +136,14 @@ Common error:
 
 - C++ compiler not found: the C++ compiler is not installed 
 - MPI not found: the MPI library is not installed 
+
+### Step 4. Run example
+Gift-BTE provides many examples under bin/examples. One can choose an example to test. For example: 
+$ cd bin
+$ cd examples
+$ cd cross-plane
+$ cd 1D
+$ cd 1e-6
+$ mpirun -np 4 ../../../../BTE_CPU
+
+# More details relates to the User mannual can be found in https://sjtu.feishu.cn/docx/GzB2dXQfaozenFxEtP4cQEJOnKb
