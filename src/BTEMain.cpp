@@ -148,7 +148,7 @@ int main(int argc, char **argv)
             {
                 fin_const1 >> modulation_frequency;cout<<"modulation_frequency "<<modulation_frequency<<endl;
             }
-            if(str.find("RadiusOfTopXTPlane") >= 0 && str.find("RadiusOfTopXTPlane") < str.length())
+            if(str.find("RadiusOfTopXYPlane") >= 0 && str.find("RadiusOfTopXYPlane") < str.length())
             {
                 fin_const1 >> xy_r;cout<<"xy_r "<<xy_r<<endl;
             }
