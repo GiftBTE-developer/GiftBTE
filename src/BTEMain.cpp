@@ -67,7 +67,7 @@ int main(int argc, char **argv)
     double DeltaT=-1; //necessary for transient
     double TotalT=-1; //necessary for transient
     int IsTransient=0; //not necessary
-
+    double Tref=300;
     //for TDTR case
     int use_TDTR=0;  //not necessary
     double repetition_frequency=0;//necessary for transient TDTR
@@ -102,6 +102,10 @@ int main(int argc, char **argv)
             if(str.find("MatrixSolver") >= 0 && str.find("MatrixSolver") < str.length())
             {
                 fin_const1 >> Matrix_solver;
+            }
+            if(str.find("Tref") >= 0 && str.find("Tref")< str.length())
+            {
+                fin_const1>>Tref;
             }
             if(str.find("NumMaxIter") >= 0 && str.find("NumMaxIter") < str.length())
             {
@@ -285,7 +289,7 @@ int main(int argc, char **argv)
     ifstream geofile1(Name_Mesh_File);
     DistributeMesh *distributeMesh;
     distributeMesh=new DistributeMesh(Dimension_Geometry, geofile1, L_x, L_y, L_z,
-                                  Name_Mesh_Type,bands,bcs,heatfile, Uniform_heat, Name_Heat_Type,initialtempfile);  //yufei jiaxuan
+                                  Name_Mesh_Type,bands,bcs,heatfile, Uniform_heat, Name_Heat_Type,initialtempfile,Tref);  //yufei jiaxuan
     geofile.close();
     heatfile.close();
     initialtempfile.close();//jiaxuan

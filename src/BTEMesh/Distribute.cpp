@@ -8,7 +8,7 @@
 #include <fstream>
 DistributeMesh::DistributeMesh(int Dimension_Geometry, std::ifstream &inFile, double L_x, double L_y, double L_z,
                                std::string mesh_type,BTEBand * bands, BTEBoundaryCondition *bcs,
-                               std::ifstream &inHeat,double Uniform_Heat, std::string heat_type,std::ifstream &initialTemp) {  //yufei jiaxaun
+                               std::ifstream &inHeat,double Uniform_Heat, std::string heat_type,std::ifstream &initialTemp,double Tref) {  //yufei jiaxaun
 
     ReadIn readIn(Dimension_Geometry, inFile, L_x, L_y, L_z, mesh_type);
     nodeXFourier=readIn.nodeX;
@@ -24,7 +24,7 @@ DistributeMesh::DistributeMesh(int Dimension_Geometry, std::ifstream &inFile, do
     Fouriermesh1.setMeshParams(bands);
     Fouriermesh1.setMeshParams1(bcs);
     Fouriermesh1.BTEMesh_heatin(inHeat, Uniform_Heat, heat_type); //yufei
-    Fouriermesh1.BTEMesh_initialTemp(initialTemp);//jiaxuan
+    Fouriermesh1.BTEMesh_initialTemp(initialTemp,Tref);//jiaxuan
     FourierMeshes=Fouriermesh1;
 
 

@@ -37,7 +37,7 @@ public:
     std::vector<BTEMesh> mesh;
 
     DistributeMesh(int Dimension_Geometry, std::ifstream &inFile, double L_x, double L_y, double L_z,string mesh_type,
-                   BTEBand * bands, BTEBoundaryCondition *bcs, std::ifstream &inHeat,double Uniform_Heat, string heat_type,std::ifstream &initialTemp); //yufei jiaxuan
+                   BTEBand * bands, BTEBoundaryCondition *bcs, std::ifstream &inHeat,double Uniform_Heat, string heat_type,std::ifstream &initialTemp,double Tref); //yufei jiaxuan
     void _build_BTEMesh(int Dimension_Geometry,double L_x, double L_y, double L_z,BTEBand * bands, BTEBoundaryCondition *bcs, std::ifstream &inHeat,double Uniform_Heat,std::string mesh_solver_file);
     ~DistributeMesh();
 };

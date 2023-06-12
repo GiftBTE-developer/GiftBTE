@@ -1889,7 +1889,7 @@ void BTEMesh::setMeshParams1(BTEBoundaryCondition *bcs)
     }
     // cout<<Element_Faces.size()<<endl;
 }
-void BTEMesh::BTEMesh_initialTemp(ifstream &initialTemp)//jiaxuan
+void BTEMesh::BTEMesh_initialTemp(ifstream &initialTemp,double Tref)//jiaxuan
 {
     if (!initialTemp.is_open())
     {
@@ -1897,7 +1897,7 @@ void BTEMesh::BTEMesh_initialTemp(ifstream &initialTemp)//jiaxuan
         {
             for (int j = 0; j < Elements[i].faces.size(); ++j)
             {
-                Elements[i].initial_temperature = 0;
+                Elements[i].initial_temperature = Tref;
             }
         }
     }

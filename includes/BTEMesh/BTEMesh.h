@@ -47,7 +47,7 @@ public:
     void setMeshParams1(BTEBoundaryCondition *bcs);
 
     void BTEMesh_heatin( std::ifstream &inHeat,double Uniform_Heat, std::string heat_type ); //yufei
-    void BTEMesh_initialTemp( std::ifstream &initialTemp); //jiaxuan
+    void BTEMesh_initialTemp( std::ifstream &initialTemp,double Tref); //jiaxuan
     ~BTEMesh();
 };
 #endif //STATICBTESOLVER_BTEMESH_H
