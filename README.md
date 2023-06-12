@@ -17,3 +17,5 @@ Gift-BTE is a powerful tool designed to investigate submicron heat conduction. A
 - Simulating laser heating process
 - Other submicron heat conduction problems
 
+## Workflow
+![method-figure1](https://github.com/Gift-BTE-developer/Gift-BTE/assets/133620758/86174800-9b5c-4b00-9fab-a4643f14727f)
