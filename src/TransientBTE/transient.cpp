@@ -585,7 +585,7 @@ Transient::Transient(BTEMesh *mesh, BTEBoundaryCondition *bcs, BTEBand *bands, B
 
 void Transient::_set_initial(int Use_Backup) const {
     for (int i = 0; i < numCell; ++i) {
-        temperature[i]= 0;//cos(2*PI/L_x*elementCenterX[i]);
+        //temperature[i]= 0;//cos(2*PI/L_x*elementCenterX[i]);
     }
     for (int iband_local = 0; iband_local < numBandLocal; iband_local++)
     {
