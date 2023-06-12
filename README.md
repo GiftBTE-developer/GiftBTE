@@ -50,8 +50,20 @@ This project is/was partially supported by the following projects:
 
 ## Contributors & Contact
 Gift-BTE developers in TPEC Lab (Contact: Gift-BTE@outlook.com)
+
 TPEC Lab: https://sites.ji.sjtu.edu.cn/hua-bao/
+
 Global Institute of Future Technology (GIFT)
+
 Shanghai Jiao Tong University
+
 China
+
+# Download
+You can download the latest and previous versions of Gift-BTE at
+ https://bte.sjtu.edu.cn/
  
+You can also download the package from the git repository as:
+ https://github.com/Gift-BTE-developer/Gift-BTE.git
+
+If you choose the GitHub version, please use the ‘master’ branch.
