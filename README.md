@@ -129,7 +129,8 @@ cmake3 -B cpu-build -S. -DCMAKE_BUILD_TYPE=Release
 
 Output in command line
 
-![屏幕快照 2023-06-12 上午11 11 27](https://github.com/Gift-BTE-developer/Gift-BTE/assets/50352151/f173f3c0-b5f6-480f-b862-ecb27c88cdd8)
+![屏幕快照 2023-06-12 上午11 15 07](https://github.com/Gift-BTE-developer/Gift-BTE/assets/50352151/46b6867f-b4c5-4416-8481-08bc565b6f4f)
+
 
 Common error: 
 
