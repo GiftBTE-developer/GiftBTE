@@ -1889,6 +1889,260 @@ void BTEMesh::setMeshParams1(BTEBoundaryCondition *bcs)
     }
     // cout<<Element_Faces.size()<<endl;
 }
+void BTEMesh::BTEMesh_initialTemp(ifstream &initialTemp)//jiaxuan
+{
+    if (!initialTemp.is_open())
+    {
+        for (int i = 0; i < Elements.size(); ++i)
+        {
+            for (int j = 0; j < Elements[i].faces.size(); ++j)
+            {
+                Elements[i].initial_temperature = 0;
+            }
+        }
+    }
+    else
+    {
+        cout<<"**************************"<<endl;
+        cout<<"Begin to read initial temperature file !"<<endl;
+        if (Dimension==1) {
+            string line;
+            string strmesh;
+            int numtempnode=0;
+            while(getline(initialTemp, strmesh)){  //
+                if(strmesh.find("Nodes:")>0  //
+                   && strmesh.find("Nodes:")<strmesh.length()){ //
+                    int flag = 0;
+                    for (int i = 0; i<strmesh.length(); i++){
+                        if (strmesh[i]>='0' && strmesh[i]<='9'){
+                            numtempnode = numtempnode * 10 + strmesh[i] - '0';
+                            flag = 1;
+                        }
+                        if (flag == 1 && (strmesh[i]<'0'||strmesh[i]>'9')){
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+
+            cout<<"Number of initial temperature nodes: "<<numtempnode<<endl;
+            this->Tempnodes.resize(numtempnode);
+            for (int i = 0; i < numtempnode; i++) {
+                getline(initialTemp, strmesh);
+                stringstream sss;
+                sss.str(strmesh);
+                string coord_x, coord_temp;
+                sss >> coord_x >> coord_temp;
+                Tempnodes[i].x = strtod(coord_x.c_str(), NULL) * L_x;
+                Tempnodes[i].y = 0;
+                Tempnodes[i].z = 0;
+                Tempnodes[i].initialtemp = strtod(coord_temp.c_str(), NULL);
+            }
+
+            double distances[Tempnodes.size()]={0.0};
+            double selectMindistance[2][2]={0.0};
+            for (int i=0; i<Nodes.size(); i++){
+                int k=0;
+                for (int j=0 ;j<Tempnodes.size(); j++){
+                    if (Nodes[i].x==Tempnodes[j].x){
+                        Nodes[i].initialtemp=Tempnodes[j].initialtemp;
+                        k=1;
+                        break;
+                    }
+                }
+
+                if (k==0){
+                    for (int j=0 ;j<Tempnodes.size(); j++){
+                        distances[j] = get_distance(Tempnodes[j],Nodes[i]);
+                    }
+                    for (int numNearest = 0; numNearest<2; numNearest++){
+                        int minPosition = min_element(distances,distances+Tempnodes.size()) - distances;
+                        selectMindistance[numNearest][0] = 1/distances[minPosition];
+                        selectMindistance[numNearest][1] = Tempnodes[minPosition].initialtemp;
+                        distances[minPosition]=1000;
+                    }
+                    double totalRevDistance = 0;
+                    for (int numNearest = 0; numNearest<2; numNearest++){
+                        Nodes[i].initialtemp += selectMindistance[numNearest][0]*selectMindistance[numNearest][1];
+                        totalRevDistance += selectMindistance[numNearest][0];
+                    }
+                    Nodes[i].initialtemp = Nodes[i].initialtemp/totalRevDistance;
+                }
+            }
+
+            for (int i=0; i<Elements.size(); i++){
+                Elements[i].initial_temperature=(Nodes[Elements[i].vertexes[0]].initialtemp + Nodes[Elements[i].vertexes[1]].initialtemp)/2;
+            }
+            cout<<"Successfully read from COORDINATE initial temperature file !"<<endl;
+        }
+
+        if (Dimension==2) {
+            string line;
+            string strmesh;
+            int numtempnode=0;
+            while(getline(initialTemp, strmesh)){  //
+                if(strmesh.find("Nodes:")>0  //
+                   && strmesh.find("Nodes:")<strmesh.length()){ //
+                    int flag = 0;
+                    for (int i = 0; i<strmesh.length(); i++){
+                        if (strmesh[i]>='0' && strmesh[i]<='9'){
+                            numtempnode = numtempnode * 10 + strmesh[i] - '0';
+                            flag = 1;
+                        }
+                        if (flag == 1 && (strmesh[i]<'0'||strmesh[i]>'9')){
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+            cout<<"Number of initial temperature nodes: "<<numtempnode<<endl;
+
+            this->Tempnodes.resize(numtempnode);
+            for (int i = 0; i < numtempnode; i++) {
+                getline(initialTemp, strmesh);
+                stringstream sss;
+                sss.str(strmesh);
+                string coord_x, coord_y, coord_temp;
+                sss >> coord_x >> coord_y >> coord_temp;
+                Tempnodes[i].x = strtod(coord_x.c_str(), NULL) * L_x;
+                Tempnodes[i].y = strtod(coord_y.c_str(), NULL) * L_y;
+                Tempnodes[i].z = 0;
+                Tempnodes[i].initialtemp = strtod(coord_temp.c_str(), NULL);
+            }
+
+            double distances[Tempnodes.size()]={0.0};
+            double selectMindistance[4][2]={0.0};
+            for (int i=0; i<Nodes.size(); i++){
+                int k=0;
+                for (int j=0 ;j<Tempnodes.size(); j++){
+                    if (Nodes[i].x==Tempnodes[j].x && Nodes[i].y==Tempnodes[j].y){
+                        Nodes[i].initialtemp=Tempnodes[j].initialtemp;
+                        k=1;
+                        break;
+                    }
+                }
+                if (k==0){
+                    for (int j=0 ;j<Tempnodes.size(); j++){
+                        distances[j] = get_distance(Tempnodes[j],Nodes[i]);
+                    }
+                    for (int numNearest = 0; numNearest<4; numNearest++){
+                        int minPosition = min_element(distances,distances+Tempnodes.size()) - distances;
+                        selectMindistance[numNearest][0] = 1/distances[minPosition];
+                        selectMindistance[numNearest][1] = Tempnodes[minPosition].initialtemp;
+                        distances[minPosition]=1000;
+                    }
+                    // calculate initial temperature of the node
+                    double totalRevDistance = 0;
+                    for (int numNearest = 0; numNearest<4; numNearest++){
+                        Nodes[i].initialtemp += selectMindistance[numNearest][0]*selectMindistance[numNearest][1];
+                        totalRevDistance += selectMindistance[numNearest][0];
+                    }
+                    Nodes[i].initialtemp = Nodes[i].initialtemp/totalRevDistance;
+                }
+            }
+
+            //jiaxuan: set Elements[i].initial_temperature
+            for (int i=0; i<Elements.size(); i++){
+                if (Elements[i].vertexes.size()==3){
+                    Elements[i].initial_temperature=(Nodes[Elements[i].vertexes[0]].initialtemp + Nodes[Elements[i].vertexes[1]].initialtemp + Nodes[Elements[i].vertexes[2]].initialtemp)/3;
+                }
+                if (Elements[i].vertexes.size()==4){
+                    Elements[i].initial_temperature=(Nodes[Elements[i].vertexes[0]].initialtemp + Nodes[Elements[i].vertexes[1]].initialtemp + Nodes[Elements[i].vertexes[2]].initialtemp + Nodes[Elements[i].vertexes[3]].initialtemp)/4;
+                }
+                //cout<<Elements[i].center.x<<" "<<Elements[i].center.y<<" "<<Elements[i].initial_temperature<<endl;
+            }
+            cout<<"Successfully read from COORDINATE initial temperature file !"<<endl;
+        }
+
+        if (Dimension==3) {
+            string line;
+            string strmesh;
+            int numtempnode=0;
+            while(getline(initialTemp, strmesh)){  //
+                if(strmesh.find("Nodes:")>0  //
+                   && strmesh.find("Nodes:")<strmesh.length()){ //
+                    int flag = 0;
+                    for (int i = 0; i<strmesh.length(); i++){
+                        if (strmesh[i]>='0' && strmesh[i]<='9'){
+                            numtempnode = numtempnode * 10 + strmesh[i] - '0';
+                            flag = 1;
+                        }
+                        if (flag == 1 && (strmesh[i]<'0'||strmesh[i]>'9')){
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+
+            cout<<"Number of initial temperature nodes: "<<numtempnode<<endl;
+            this->Tempnodes.resize(numtempnode);
+            for (int i = 0; i < numtempnode; i++) {
+                getline(initialTemp, strmesh);
+                stringstream sss;
+                sss.str(strmesh);
+                string coord_x, coord_y, coord_z, coord_temp;
+                sss >> coord_x >> coord_y >> coord_z >> coord_temp;
+                Tempnodes[i].x = strtod(coord_x.c_str(), NULL) * L_x;
+                Tempnodes[i].y = strtod(coord_y.c_str(), NULL) * L_y;
+                Tempnodes[i].z = strtod(coord_z.c_str(), NULL) * L_z;;
+                Tempnodes[i].initialtemp = strtod(coord_temp.c_str(), NULL);
+            }
+
+            double distances[Tempnodes.size()]={0.0};
+            double selectMindistance[8][2]={0.0};
+            for (int i=0; i<Nodes.size(); i++){
+                int k=0;
+                for (int j=0 ;j<Tempnodes.size(); j++){
+                    if (Nodes[i].x==Tempnodes[j].x && Nodes[i].y==Tempnodes[j].y && Nodes[i].z==Tempnodes[j].z){
+                        Nodes[i].initialtemp=Tempnodes[j].initialtemp;
+                        k=1;
+                        break;
+                    }
+                }
+
+                if (k==0){
+                    for (int j=0 ;j<Tempnodes.size(); j++){
+                        distances[j] = get_distance(Tempnodes[j],Nodes[i]);
+                    }
+                    for (int numNearest = 0; numNearest<8; numNearest++){
+                        int minPosition = min_element(distances,distances+Tempnodes.size()) - distances;
+                        selectMindistance[numNearest][0] = 1/distances[minPosition];
+                        selectMindistance[numNearest][1] = Tempnodes[minPosition].initialtemp;
+                        distances[minPosition]=1000;
+                    }
+                    double totalRevDistance = 0;
+                    for (int numNearest = 0; numNearest<8; numNearest++){
+                        Nodes[i].initialtemp += selectMindistance[numNearest][0]*selectMindistance[numNearest][1];
+                        totalRevDistance += selectMindistance[numNearest][0];
+                    }
+                    Nodes[i].initialtemp = Nodes[i].initialtemp/totalRevDistance;
+                }
+            }
+
+            for (int i=0; i<Elements.size(); i++){
+                if (Elements[i].vertexes.size()==4){
+                    Elements[i].initial_temperature=(Nodes[Elements[i].vertexes[0]].initialtemp + Nodes[Elements[i].vertexes[1]].initialtemp + Nodes[Elements[i].vertexes[2]].initialtemp + Nodes[Elements[i].vertexes[3]].initialtemp)/4;
+                }
+                if (Elements[i].vertexes.size()==5){
+                    Elements[i].initial_temperature=(Nodes[Elements[i].vertexes[0]].initialtemp + Nodes[Elements[i].vertexes[1]].initialtemp + Nodes[Elements[i].vertexes[2]].initialtemp + Nodes[Elements[i].vertexes[3]].initialtemp + Nodes[Elements[i].vertexes[4]].initialtemp)/5;
+                }
+                if (Elements[i].vertexes.size()==6){
+                    Elements[i].initial_temperature=(Nodes[Elements[i].vertexes[0]].initialtemp + Nodes[Elements[i].vertexes[1]].initialtemp + Nodes[Elements[i].vertexes[2]].initialtemp + Nodes[Elements[i].vertexes[3]].initialtemp + Nodes[Elements[i].vertexes[4]].initialtemp + Nodes[Elements[i].vertexes[5]].initialtemp)/6;
+                }
+                if (Elements[i].vertexes.size()==8){
+                    Elements[i].initial_temperature=(Nodes[Elements[i].vertexes[0]].initialtemp + Nodes[Elements[i].vertexes[1]].initialtemp + Nodes[Elements[i].vertexes[2]].initialtemp + Nodes[Elements[i].vertexes[3]].initialtemp + Nodes[Elements[i].vertexes[4]].initialtemp + Nodes[Elements[i].vertexes[5]].initialtemp + Nodes[Elements[i].vertexes[6]].initialtemp + Nodes[Elements[i].vertexes[7]].initialtemp)/8;
+                }
+            }
+            cout<<"Successfully read from COORDINATE initial temperature file !"<<endl;
+        }
+
+        cout<<"**************************"<<endl;
+    }
+
+}
 void BTEMesh::BTEMesh_heatin(ifstream &inHeat, double Uniform_Heat, std::string heat_type) //yufei
 {
     if (!inHeat.is_open())
