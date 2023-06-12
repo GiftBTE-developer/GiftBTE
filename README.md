@@ -96,7 +96,7 @@ when output the folder of mpirun like
 
 ![屏幕快照 2023-06-12 上午11 03 30](https://github.com/Gift-BTE-developer/Gift-BTE/assets/50352151/dbdc40a0-437e-42f4-9fba-640599be3a3d)
 
-#### Ensure that the Cmake is intalled 
+#### Ensure that the Cmake is installed 
 
 Type in command line
 
