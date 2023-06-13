@@ -600,11 +600,11 @@ BTEBand::BTEBand(ifstream &inFile, int Dimension_Material)
                         allkappa+=bands[j].heat_capacity[i]*bands[j].group_velocity[i]*bands[j].group_velocity[i]*bands[j].relaxation_time[i];
                         allheat+=bands[j].heat_capacity[i];
                     }
-                    cout<<endl;
+                    //cout<<endl;
 
                     for (int j = 0; j < nband; ++j)
                     {
-                        cout<<"Material #"<< i <<" band #"<< j << " " <<bands[j].group_velocity[i]<<" "<<bands[j].relaxation_time[i]<<" "<<bands[j].heat_capacity[i]<<" "<<bands[j].heat_capacity[i]*bands[j].relaxation_time[i]*bands[j].group_velocity[i]*bands[j].group_velocity[i]<<endl;
+                        //cout<<"Material #"<< i <<" band #"<< j << " " <<bands[j].group_velocity[i]<<" "<<bands[j].relaxation_time[i]<<" "<<bands[j].heat_capacity[i]<<" "<<bands[j].heat_capacity[i]*bands[j].relaxation_time[i]*bands[j].group_velocity[i]*bands[j].group_velocity[i]<<endl;
                     }
                 }
                 else if (line.find("ALAMODE") > 0 && line.find("ALAMODE") < line.length())
@@ -703,7 +703,7 @@ BTEBand::BTEBand(ifstream &inFile, int Dimension_Material)
                                 allkappa+=bands[j].heat_capacity[i]*bands[j].group_velocity[i]*bands[j].group_velocity[i]*bands[j].relaxation_time[i];
                                 allheat+=bands[j].heat_capacity[i];
                             }
-                            cout<<endl;
+                            //cout<<endl;
                         }
 
                     }
@@ -720,7 +720,7 @@ BTEBand::BTEBand(ifstream &inFile, int Dimension_Material)
                     break;
                 }
                 break;
-                cout<<endl;
+                //cout<<endl;
             }
         }
     }
@@ -818,5 +818,5 @@ BTEBand::BTEBand(ifstream &inFile, int Dimension_Material)
 //     cout << "析构函数被调用" << endl;
 // }
 BTEBand::~BTEBand(){
-    cout << "BTEBand析构函数被调用" << endl;
+    //cout << "BTEBand析构函数被调用" << endl;
 }
