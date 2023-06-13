@@ -1903,8 +1903,8 @@ void BTEMesh::BTEMesh_initialTemp(ifstream &initialTemp,double Tref)//jiaxuan
     }
     else
     {
-        cout<<"**************************"<<endl;
-        cout<<"Begin to read initial temperature file !"<<endl;
+        //cout<<"**************************"<<endl;
+        //cout<<"Begin to read initial temperature file !"<<endl;
         if (Dimension==1) {
             string line;
             string strmesh;
@@ -1974,7 +1974,7 @@ void BTEMesh::BTEMesh_initialTemp(ifstream &initialTemp,double Tref)//jiaxuan
             for (int i=0; i<Elements.size(); i++){
                 Elements[i].initial_temperature=(Nodes[Elements[i].vertexes[0]].initialtemp + Nodes[Elements[i].vertexes[1]].initialtemp)/2;
             }
-            cout<<"Successfully read from COORDINATE initial temperature file !"<<endl;
+            //cout<<"Successfully read from COORDINATE initial temperature file !"<<endl;
         }
 
         if (Dimension==2) {
@@ -2053,7 +2053,7 @@ void BTEMesh::BTEMesh_initialTemp(ifstream &initialTemp,double Tref)//jiaxuan
                 }
                 //cout<<Elements[i].center.x<<" "<<Elements[i].center.y<<" "<<Elements[i].initial_temperature<<endl;
             }
-            cout<<"Successfully read from COORDINATE initial temperature file !"<<endl;
+            //cout<<"Successfully read from COORDINATE initial temperature file !"<<endl;
         }
 
         if (Dimension==3) {
@@ -2136,10 +2136,10 @@ void BTEMesh::BTEMesh_initialTemp(ifstream &initialTemp,double Tref)//jiaxuan
                     Elements[i].initial_temperature=(Nodes[Elements[i].vertexes[0]].initialtemp + Nodes[Elements[i].vertexes[1]].initialtemp + Nodes[Elements[i].vertexes[2]].initialtemp + Nodes[Elements[i].vertexes[3]].initialtemp + Nodes[Elements[i].vertexes[4]].initialtemp + Nodes[Elements[i].vertexes[5]].initialtemp + Nodes[Elements[i].vertexes[6]].initialtemp + Nodes[Elements[i].vertexes[7]].initialtemp)/8;
                 }
             }
-            cout<<"Successfully read from COORDINATE initial temperature file !"<<endl;
+            //cout<<"Successfully read from COORDINATE initial temperature file !"<<endl;
         }
 
-        cout<<"**************************"<<endl;
+        //cout<<"**************************"<<endl;
     }
 
 }
@@ -2157,8 +2157,8 @@ void BTEMesh::BTEMesh_heatin(ifstream &inHeat, double Uniform_Heat, std::string 
     }
     else
     {
-        cout<<"**************************"<<endl;
-        cout<<"Begin to read heat source file !"<<endl;
+        //cout<<"**************************"<<endl;
+        //cout<<"Begin to read heat source file !"<<endl;
 
         if (heat_type == "REGION"){
             int num_of_matter;
@@ -2181,7 +2181,7 @@ void BTEMesh::BTEMesh_heatin(ifstream &inHeat, double Uniform_Heat, std::string 
 
                 Elements[i].heat_source = heatsource[Elements[i].index];
             }
-            cout<<"Successfully read from REGION heat file !"<<endl;
+            //cout<<"Successfully read from REGION heat file !"<<endl;
         }
 
 
@@ -2265,7 +2265,7 @@ void BTEMesh::BTEMesh_heatin(ifstream &inHeat, double Uniform_Heat, std::string 
                     for (int i=0; i<Elements.size(); i++){
                             Elements[i].heat_source=(Nodes[Elements[i].vertexes[0]].heat + Nodes[Elements[i].vertexes[1]].heat)/2;
                     }
-                    cout<<"Successfully read from COORDINATE heat file !"<<endl;
+                    //cout<<"Successfully read from COORDINATE heat file !"<<endl;
                 }
 
 
@@ -2349,7 +2349,7 @@ void BTEMesh::BTEMesh_heatin(ifstream &inHeat, double Uniform_Heat, std::string 
                             Elements[i].heat_source=(Nodes[Elements[i].vertexes[0]].heat + Nodes[Elements[i].vertexes[1]].heat + Nodes[Elements[i].vertexes[2]].heat + Nodes[Elements[i].vertexes[3]].heat)/4;
                         }
                     }
-                    cout<<"Successfully read from COORDINATE heat file !"<<endl;
+                    //cout<<"Successfully read from COORDINATE heat file !"<<endl;
                 }
 
 
@@ -2443,10 +2443,10 @@ void BTEMesh::BTEMesh_heatin(ifstream &inHeat, double Uniform_Heat, std::string 
                             Elements[i].heat_source=(Nodes[Elements[i].vertexes[0]].heat + Nodes[Elements[i].vertexes[1]].heat + Nodes[Elements[i].vertexes[2]].heat + Nodes[Elements[i].vertexes[3]].heat + Nodes[Elements[i].vertexes[4]].heat + Nodes[Elements[i].vertexes[5]].heat + Nodes[Elements[i].vertexes[6]].heat + Nodes[Elements[i].vertexes[7]].heat)/8;
                         }
                     }
-                    cout<<"Successfully read from COORDINATE heat file !"<<endl;
+                    //cout<<"Successfully read from COORDINATE heat file !"<<endl;
                 }
         }
-        cout<<"**************************"<<endl;
+        //cout<<"**************************"<<endl;
     }
 }
 BTEMesh::~BTEMesh()
