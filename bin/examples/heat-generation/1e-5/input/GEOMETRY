@@ -1,0 +1,21 @@
+DimensionGeometry=
+2
+Lx=
+1e-5
+Ly=
+1e-5
+Lz=
+1e-5
+UniformHeat=
+1e15
+BCFile=
+input/inputbc_2D.dat
+MeshType=//1D or COMSOL
+COMSOL
+MeshFile=
+input/2D_100_100.mphtxt
+HeatType=//REGION or COORDINATE
+REGION
+HeatFile=
+none
+
