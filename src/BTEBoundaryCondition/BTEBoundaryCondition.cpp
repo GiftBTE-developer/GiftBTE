@@ -69,5 +69,5 @@ BTEBoundaryCondition::BTEBoundaryCondition(ifstream& inFile,BTEBand *bands) {
     }
 }
 BTEBoundaryCondition::~BTEBoundaryCondition(){
-    cout<<"~BTEBoundaryCondition is activated!!"<<endl;
+    //cout<<"~BTEBoundaryCondition is activated!!"<<endl;
 }
