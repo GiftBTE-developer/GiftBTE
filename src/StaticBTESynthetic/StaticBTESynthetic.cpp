@@ -211,7 +211,7 @@ StaticBTESynthetic::~StaticBTESynthetic()
     delete [] directionY;
     delete [] directionZ;
 
-    cout << "~StaticBTESynthetic is activated !!" << endl;
+    //cout << "~StaticBTESynthetic is activated !!" << endl;
 #ifdef USE_GPU
 
 #else
@@ -274,12 +274,12 @@ StaticBTESynthetic::StaticBTESynthetic(BTEMesh *mesh, BTEBoundaryCondition *bcs,
         {
             numCellLocalList[i]=  numCell / num_proc+1;
             if(world_rank==0)
-            cout<<numCellLocalList[i]<<endl;
+            //cout<<numCellLocalList[i]<<endl;
         } else
         {
             numCellLocalList[i]=  numCell / num_proc;
             if(world_rank==0)
-            cout<<numCellLocalList[i]<<endl;
+            //cout<<numCellLocalList[i]<<endl;
         }
     }
     startCellList=new int [num_proc];
@@ -288,12 +288,12 @@ StaticBTESynthetic::StaticBTESynthetic(BTEMesh *mesh, BTEBoundaryCondition *bcs,
         {
             startCellList[i]=  (numCell / num_proc+1)*i;
             if(world_rank==0)
-            cout<<startCellList[i]<<endl;
+            //cout<<startCellList[i]<<endl;
         } else
         {
             startCellList[i]=(numCell / num_proc+1)*(numCell % num_proc)+(numCell / num_proc)*(i-numCell % num_proc);
             if(world_rank==0)
-            cout<<startCellList[i]<<endl;
+            //cout<<startCellList[i]<<endl;
         }
     }
 
@@ -832,7 +832,7 @@ void StaticBTESynthetic::_get_coefficient(int iband_local, int inf_local)
     stiffMatrix.setFromTriplets(tripletList.begin(), tripletList.end());
     cg[iband_local][inf_local].analyzePattern(stiffMatrix);
     cg[iband_local][inf_local].factorize(stiffMatrix);
-    cout<<"finish: "<<iband_local<<" "<<inf_local<<endl;
+    //cout<<"finish: "<<iband_local<<" "<<inf_local<<endl;
 };
 
 void StaticBTESynthetic::_get_coefficient_macro()
