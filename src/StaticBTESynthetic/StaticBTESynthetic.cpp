@@ -273,12 +273,12 @@ StaticBTESynthetic::StaticBTESynthetic(BTEMesh *mesh, BTEBoundaryCondition *bcs,
         if(i<numCell % num_proc)
         {
             numCellLocalList[i]=  numCell / num_proc+1;
-            if(world_rank==0)
+            //if(world_rank==0)
             //cout<<numCellLocalList[i]<<endl;
         } else
         {
             numCellLocalList[i]=  numCell / num_proc;
-            if(world_rank==0)
+            //if(world_rank==0)
             //cout<<numCellLocalList[i]<<endl;
         }
     }
@@ -287,12 +287,12 @@ StaticBTESynthetic::StaticBTESynthetic(BTEMesh *mesh, BTEBoundaryCondition *bcs,
         if(i<numCell % num_proc)
         {
             startCellList[i]=  (numCell / num_proc+1)*i;
-            if(world_rank==0)
+            //if(world_rank==0)
             //cout<<startCellList[i]<<endl;
         } else
         {
             startCellList[i]=(numCell / num_proc+1)*(numCell % num_proc)+(numCell / num_proc)*(i-numCell % num_proc);
-            if(world_rank==0)
+            //if(world_rank==0)
             //cout<<startCellList[i]<<endl;
         }
     }
