@@ -190,5 +190,5 @@ BTEAngle::BTEAngle(int ntheta, int nphi, int Dimension_material, int Angle_metho
 }
 BTEAngle::~BTEAngle()
 {
-    cout << "BTEAngle析构函数被调用" << endl;
+    //cout << "BTEAngle析构函数被调用" << endl;
 }
