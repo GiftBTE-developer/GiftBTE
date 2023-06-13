@@ -110,12 +110,13 @@ when output the folder of cmake like
 
 You can download the package from the git repository as:
  https://github.com/Gift-BTE-developer/Gift-BTE.git
+ - $ unzip Gift-BTE-master.zip
  
 Or directly clone the repository by git (may need installation)
 
-- Git clone https://github.com/Gift-BTE-developer/Gift-BTE.git
+- $ Git clone https://github.com/Gift-BTE-developer/Gift-BTE.git
 
-- Git Checkout master
+- $ Git Checkout master
 
 
 
