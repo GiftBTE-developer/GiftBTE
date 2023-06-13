@@ -124,9 +124,13 @@ Or directly clone the repository by git (may need installation)
 Type in the command line under the Gift-BTE folder
 
 $ cd Gift-BTE
+
 $ cmake -B cpu-build -S.  -DCMAKE_BUILD_TYPE=Release
+
 $ cp cpu-build
+
 $ make
+
 Output in command line
 
 ![屏幕快照 2023-06-12 上午11 15 07](https://github.com/Gift-BTE-developer/Gift-BTE/assets/50352151/46b6867f-b4c5-4416-8481-08bc565b6f4f)
