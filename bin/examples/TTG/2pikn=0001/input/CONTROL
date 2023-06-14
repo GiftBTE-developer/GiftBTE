@@ -1,0 +1,34 @@
+Transient:
+1
+Order://1:first order; 2:second order; 2limit: limited second order
+2
+Method:// Synthetic or DOM
+Synthetic
+MatrixSolver:// LU or Iterative
+LU
+NumMaxIter:
+100000
+ErrorTempLimit:
+1E-14
+ErrorFluxLimit:
+1E-14
+Multiscale:
+none
+DeltaTime:
+5e-11
+TotalTime:
+3e-5
+InitialTemperature:
+input/initial_temperature.txt
+use_TDTR:
+0
+pulse_time:
+0
+repetition_frequency:
+0
+modulation_frequency:
+0
+radius_0f_top_xy_plane:
+0
+
+
