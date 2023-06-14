@@ -328,6 +328,10 @@ int main(int argc, char **argv)
     StaticBTESolver solver(mesh, bcs, bands, angles, num_proc, world_rank, Num_Theta, Num_Phi);
     solver.solve(Use_Backup, Num_Max_Iter, Use_Sythetic, Use_Limiter, error_temp_limit, error_flux_limit);
 #endif
+    if (world_rank == 0)
+    {
+        cout << "******************************" << endl << "Calculation Finished !" << endl << "******************************" << endl;
+    }
 
     delete bands;
     delete bcs;
