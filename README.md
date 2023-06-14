@@ -22,13 +22,13 @@ GiftBTE is a powerful tool designed to investigate submicron heat conduction. At
 
 ## Links
 - Documentation: https://sjtu.feishu.cn/docx/GzB2dXQfaozenFxEtP4cQEJOnKb
-- Git repository: https://github.com/Gift-BTE-developer/Gift-BTE.git
+- Git repository: https://github.com/GiftBTE-developer/GiftBTE.git
 
 ## License
 This software is distributed under the GNU General Public License v3.0 license. See the LICENSE.txt file for license rights and limitations.
 
-## How to cite Gift-BTE
-Please cite the following article when you use Gift-BTE 
+## How to cite GiftBTE
+Please cite the following article when you use GiftBTE 
 Yue Hu, Yongxing Shen, Hua Bao,
 Ultra-efficient and parameter-free computation of submicron thermal transport with phonon Boltzmann transport equation,
 Fundamental Research,
@@ -39,8 +39,8 @@ https://doi.org/10.1016/j.fmre.2022.06.007.
 (https://www.sciencedirect.com/science/article/pii/S2667325822002758)
 
 ##Issues & Bug report
-- If you find a bug or issue related to Gift-BTE, please report it at [Github Issues](https://github.com/Gift-BTE-developer/Gift-BTE/issues)
-- Other questions and suggestions can be posted on the Github Disccusions [Github Disccusions](https://github.com/Gift-BTE-developer/Gift-BTE/discussions)
+- If you find a bug or issue related to GiftBTE, please report it at [Github Issues](https://github.com/Gift-BTE-developer/Gift-BTE/issues)
+- Other questions and suggestions can be posted on the Github Disccusions [Github Disccusions](https://github.com/GiftBTE-developer/GiftBTE/discussions)
 
 ## Acknowledgment
 This project is/was partially supported by the following projects:
@@ -49,7 +49,7 @@ This project is/was partially supported by the following projects:
 - National Natural Science Foundation of China (Grant No. 52122606)
 
 ## Contributors & Contact
-Gift-BTE developers in TPEC Lab (Contact: Gift-BTE@outlook.com)
+GiftBTE developers in TPEC Lab (Contact: Gift-BTE@outlook.com)
 
 TPEC Lab: https://sites.ji.sjtu.edu.cn/hua-bao/
 
@@ -61,7 +61,7 @@ China
 
 # Download
 You can download the package from the git repository as:
- https://github.com/Gift-BTE-developer/Gift-BTE.git
+ https://github.com/GiftBTE-developer/GiftBTE.git
 
 If you choose the GitHub version, please use the ‘master’ branch.
 
@@ -109,12 +109,12 @@ when output the folder of cmake like
 ### Step 2. Download source
 
 You can download the package from the git repository as:
- https://github.com/Gift-BTE-developer/Gift-BTE.git
- - $ unzip Gift-BTE-master.zip
+ https://github.com/GiftBTE-developer/GiftBTE.git
+ - $ unzip GiftBTE-master.zip
  
 Or directly clone the repository by git (may need installation)
 
-- $ git clone https://github.com/Gift-BTE-developer/Gift-BTE.git
+- $ git clone https://github.com/GiftBTE-developer/GiftBTE.git
 
 - $ git Checkout master
 
@@ -122,9 +122,9 @@ Or directly clone the repository by git (may need installation)
 
 ### Step 3. Build by CMake
 
-Type in the command line under the Gift-BTE folder
+Type in the command line under the GiftBTE folder
 
-- $ cd Gift-BTE
+- $ cd GiftBTE
 
 - $ cmake -B cpu-build -S.  -DCMAKE_BUILD_TYPE=Release
 
@@ -143,7 +143,7 @@ Common error:
 - MPI not found: the MPI library is not installed 
 
 ### Step 4. Run example
-Gift-BTE provides many examples under bin/examples. One can choose an example to test. For example: 
+GiftBTE provides many examples under bin/examples. One can choose an example to test. For example: 
 $ cd bin
 $ cd examples
 $ cd cross-plane
