@@ -699,7 +699,7 @@ void StaticBTESynthetic::_set_matrix(const std::string& Matrix_type) {
         }
 
     }
-    else if (Matrix_type=="Iterative")
+    else if (Matrix_type=="BICGSTAB")
     {
         stiffMatrix.resize(numCell, numCell);
         /*csrRowPtr=new unsigned int **[numBandLocal];
@@ -731,7 +731,7 @@ void StaticBTESynthetic::_delete_matrix(const string &Matrix_type) const {
         }
         delete [] cg;
     }
-    else if (Matrix_type=="Iterative")
+    else if (Matrix_type=="BICGSTAB")
     {
         /*for (int i = 0; i < numBandLocal; ++i) {
 
@@ -832,7 +832,7 @@ void StaticBTESynthetic::_get_coefficient(int iband_local, int inf_local)
     stiffMatrix.setFromTriplets(tripletList.begin(), tripletList.end());
     cg[iband_local][inf_local].analyzePattern(stiffMatrix);
     cg[iband_local][inf_local].factorize(stiffMatrix);
-    cout<<"finish calculate coefficients: "<<iband_local<<" "<<inf_local<<endl;
+    //cout<<"finish calculate coefficients: "<<iband_local<<" "<<inf_local<<endl;
 };
 
 void StaticBTESynthetic::_get_coefficient_macro()
@@ -2766,7 +2766,7 @@ void StaticBTESynthetic::_get_coefficient_Iterative(int iband_local, int inf_loc
     stiffMatrix.setFromTriplets(tripletList.begin(), tripletList.end());
     //cg[iband_local][inf_local].analyzePattern(stiffMatrix);
     //cg[iband_local][inf_local].factorize(stiffMatrix);
-    cout<<"finish calculate coefficients: "<<iband_local<<" "<<inf_local<<endl;
+    //cout<<"finish calculate coefficients: "<<iband_local<<" "<<inf_local<<endl;
 };
 
 void StaticBTESynthetic::_get_coefficient_macro_Iterative() const {

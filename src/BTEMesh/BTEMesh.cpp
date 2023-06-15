@@ -1133,6 +1133,7 @@ void BTEMesh::setMeshParams(BTEBand *bands)
         {
             if(Elements[i].index>=bands->geo_matter_index.size())
             {
+                cout<<Elements[i].index<<" "<<bands->geo_matter_index.size()<<endl;
                 cout<<"Error: some region does not have material, check PHONON and GEOMETRY"<<endl;
                 exit(0);
             }

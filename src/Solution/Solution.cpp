@@ -293,7 +293,7 @@ void SolutionAll::_BTE_Solver(DistributeMesh *mesh, BTEBoundaryCondition *bcs, B
                 solver.solve_firstorder(Use_Backup,Num_Max_Iter,0,error_temp_limit,error_flux_limit);
 
             }
-            else if(Matrix_solver=="Iterative")
+            else if(Matrix_solver=="BICGSTAB")
             {
                 solver.solve_firstorder_Iterative(Use_Backup,Num_Max_Iter,0,error_temp_limit,error_flux_limit);
 
@@ -302,13 +302,13 @@ void SolutionAll::_BTE_Solver(DistributeMesh *mesh, BTEBoundaryCondition *bcs, B
                 cout<<"no this matrix solver"<<endl;
                 exit(1);
             }
-        } else if(Method=="DOM")
+        } else if(Method=="Sequential")
         {
             if(Matrix_solver=="LU")
             {
                 solver.solve_DOM_firstorder(Use_Backup,Num_Max_Iter,0,error_temp_limit,error_flux_limit);
             }
-            else if(Matrix_solver=="Iterative")
+            else if(Matrix_solver=="BICGSTAB")
             {
                 solver.solve_DOM_firstorder_Iterative(Use_Backup,Num_Max_Iter,0,error_temp_limit,error_flux_limit);
             } else
@@ -330,7 +330,7 @@ void SolutionAll::_BTE_Solver(DistributeMesh *mesh, BTEBoundaryCondition *bcs, B
                 solver.solve(Use_Backup,Num_Max_Iter,0,error_temp_limit,error_flux_limit);
 
             }
-            else if(Matrix_solver=="Iterative")
+            else if(Matrix_solver=="BICGSTAB")
             {
                 solver.solve_Iterative(Use_Backup,Num_Max_Iter,0,error_temp_limit,error_flux_limit);
 
@@ -339,14 +339,14 @@ void SolutionAll::_BTE_Solver(DistributeMesh *mesh, BTEBoundaryCondition *bcs, B
                 cout<<"no this matrix solver"<<endl;
                 exit(1);
             }
-        } else if(Method=="DOM")
+        } else if(Method=="Sequential")
         {
             if(Matrix_solver=="LU")
             {
                 solver.solve_DOM(Use_Backup,Num_Max_Iter,0,error_temp_limit,error_flux_limit);
 
             }
-            else if(Matrix_solver=="Iterative")
+            else if(Matrix_solver=="BICGSTAB")
             {
                 solver.solve_DOM_Iterative(Use_Backup,Num_Max_Iter,0,error_temp_limit,error_flux_limit);
 
@@ -369,7 +369,7 @@ void SolutionAll::_BTE_Solver(DistributeMesh *mesh, BTEBoundaryCondition *bcs, B
                 solver.solve(Use_Backup,Num_Max_Iter,1,error_temp_limit,error_flux_limit);
 
             }
-            else if(Matrix_solver=="Iterative")
+            else if(Matrix_solver=="BICGSTAB")
             {
                 solver.solve_Iterative(Use_Backup,Num_Max_Iter,1,error_temp_limit,error_flux_limit);
 
@@ -378,14 +378,14 @@ void SolutionAll::_BTE_Solver(DistributeMesh *mesh, BTEBoundaryCondition *bcs, B
                 cout<<"no this matrix solver"<<endl;
                 exit(1);
             }
-        } else if(Method=="DOM")
+        } else if(Method=="Sequential")
         {
             if(Matrix_solver=="LU")
             {
                 solver.solve_DOM(Use_Backup,Num_Max_Iter,1,error_temp_limit,error_flux_limit);
 
             }
-            else if(Matrix_solver=="Iterative")
+            else if(Matrix_solver=="BICGSTAB")
             {
                 solver.solve_DOM_Iterative(Use_Backup,Num_Max_Iter,1,error_temp_limit,error_flux_limit);
 

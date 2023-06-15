@@ -74,6 +74,7 @@ int main(int argc, char **argv)
     double modulation_frequency=0;//necessary for transient TDTR
     double xy_r=0;//necessary for transient TDTR
     double pulse_time=0;//necessary for transient TDTR
+    string ant="!";
 
     ifstream fin_const1("input/CONTROL");
     if (!fin_const1.is_open())
@@ -87,74 +88,74 @@ int main(int argc, char **argv)
         char new_line;
         while(getline(fin_const1,str))
         {
-            if(str.find("State")>=0 && str.find("State") < str.length())
+            if(str.find("State")>=0 && str.find("State") < str.length() && str.find(ant) == str.npos)
             {
-                fin_const1 >> State;
+                    fin_const1 >> State;
             }
-            if(str.find("Order") >= 0 && str.find("Order") < str.length())
+            if(str.find("Order") >= 0 && str.find("Order") < str.length() && str.find(ant) == str.npos)
             {
                 fin_const1 >> Order ;
             }
-            if(str.find("Method") >= 0 && str.find("Method") < str.length())
+            if(str.find("IterativeScheme") >= 0 && str.find("IterativeScheme") < str.length() && str.find(ant) == str.npos)
             {
                 fin_const1 >> Method ;
             }
-            if(str.find("MatrixSolver") >= 0 && str.find("MatrixSolver") < str.length())
+            if(str.find("MatrixSolver") >= 0 && str.find("MatrixSolver") < str.length() && str.find(ant) == str.npos)
             {
                 fin_const1 >> Matrix_solver;
             }
-            if(str.find("Tref") >= 0 && str.find("Tref")< str.length())
+            if(str.find("Tref") >= 0 && str.find("Tref")< str.length() && str.find(ant) == str.npos)
             {
                 fin_const1>>Tref;
             }
-            if(str.find("NumMaxIter") >= 0 && str.find("NumMaxIter") < str.length())
+            if(str.find("MaxNumIter") >= 0 && str.find("MaxNumIter") < str.length() && str.find(ant) == str.npos)
             {
                 fin_const1 >> Num_Max_Iter;
             }
-            if(str.find("ErrorTempLimit") >= 0 && str.find("ErrorTempLimit") < str.length())
+            if(str.find("ResidualTemp") >= 0 && str.find("ResidualTemp") < str.length() && str.find(ant) == str.npos)
             {
                 fin_const1 >> error_temp_limit ;
             }
-            if(str.find("ErrorFluxLimit") >= 0 && str.find("ErrorFluxLimit") < str.length())
+            if(str.find("ResidualFlux") >= 0 && str.find("ResidualFlux") < str.length() && str.find(ant) == str.npos)
             {
                 fin_const1 >> error_flux_limit ;
             }
-            if(str.find("Multiscale") >= 0 && str.find("Multiscale") < str.length())
+            if(str.find("Multiscale") >= 0 && str.find("Multiscale") < str.length() && str.find(ant) == str.npos)
             {
                 fin_const1 >> Name_multiscale_File ;
             }
-            if(str.find("DeltaTime") >= 0 && str.find("DeltaTime") < str.length())
+            if(str.find("TimeStep") >= 0 && str.find("TimeStep") < str.length() && str.find(ant) == str.npos)
             {
                 fin_const1 >> DeltaT ;
             }
-            if(str.find("TotalTime") >= 0 && str.find("TotalTime") < str.length())
+            if(str.find("TotalTime") >= 0 && str.find("TotalTime") < str.length() && str.find(ant) == str.npos)
             {
                 fin_const1 >> TotalT ;
             }
-            if(str.find("InitialTemperature") >= 0 && str.find("InitialTemperature") < str.length())
+            if(str.find("InitialTemperatureFile") >= 0 && str.find("InitialTemperatureFile") < str.length() && str.find(ant) == str.npos)
             {
                 fin_const1 >> Name_InitialTemp_File ;//jiaxuan
             }
             //TDTR
-            if(str.find("UseTDTR") >= 0 && str.find("UseTDTR") < str.length())
+            if(str.find("IsTDTR") >= 0 && str.find("IsTDTR") < str.length() && str.find(ant) == str.npos)
             {
-                fin_const1 >> use_TDTR; cout<<"use_TDTR "<<use_TDTR<<endl;
+                fin_const1 >> use_TDTR; cout<<"use_TDTR: "<<use_TDTR<<endl;
             }
-            if(str.find("PulseTime") >= 0 && str.find("PulseTime") < str.length())
+            if(str.find("PulseTime") >= 0 && str.find("PulseTime") < str.length() && str.find(ant) == str.npos)
             {
-                fin_const1 >> pulse_time;cout<<"pulse_time "<<pulse_time<<endl;
+                fin_const1 >> pulse_time;cout<<"pulse_time: "<<pulse_time<<endl;
             }
-            if(str.find("RepetitionFrequency") >= 0 && str.find("RepetitionFrequency") < str.length())
+            if(str.find("RepetitionFrequency") >= 0 && str.find("RepetitionFrequency") < str.length() && str.find(ant) == str.npos)
             {
-                fin_const1 >> repetition_frequency;cout<<"repetition_frequency "<<repetition_frequency<<endl;
+                fin_const1 >> repetition_frequency;cout<<"repetition_frequency: "<<repetition_frequency<<endl;
             }
-            if(str.find("ModulationFrequency") >= 0 && str.find("ModulationFrequency") < str.length())
+            if(str.find("ModulationFrequency") >= 0 && str.find("ModulationFrequency") < str.length() && str.find(ant) == str.npos)
             {
-                fin_const1 >> modulation_frequency;cout<<"modulation_frequency "<<modulation_frequency<<endl;
+                fin_const1 >> modulation_frequency;cout<<"modulation_frequency: "<<modulation_frequency<<endl;
             }
-            if(str.find("RadiusOfTopXYPlane") >= 0 && str.find("RadiusOfTopXYPlane") < str.length())
+            if(str.find("RadiusProbe") >= 0 && str.find("RadiusProbe") < str.length() && str.find(ant) == str.npos)
             {
-                fin_const1 >> xy_r;cout<<"xy_r "<<xy_r<<endl;
+                fin_const1 >> xy_r;cout<<"RadiusProbe: "<<xy_r<<endl;
             }
         }
 
@@ -177,43 +178,43 @@ int main(int argc, char **argv)
         char new_line;
         while (getline(fin_const2,str))
         {
-            if(str.find("DimensionGeometry") >= 0 && str.find("DimensionGeometry") < str.length())
+            if(str.find("GeometryDimension") >= 0 && str.find("GeometryDimension") < str.length() && str.find(ant) == str.npos)
             {
                 fin_const2 >> Dimension_Geometry;
             }
-            if(str.find("Lx") >= 0 && str.find("Lx") < str.length())
+            if(str.find("ScaleX") >= 0 && str.find("ScaleX") < str.length() && str.find(ant) == str.npos)
             {
                 fin_const2 >> L_x ;
             }
-            if(str.find("Ly") >= 0 && str.find("Ly") < str.length())
+            if(str.find("ScaleY") >= 0 && str.find("ScaleY") < str.length() && str.find(ant) == str.npos)
             {
                 fin_const2 >> L_y;
             }
-            if(str.find("Lz") >= 0 && str.find("Lz") < str.length())
+            if(str.find("ScaleZ") >= 0 && str.find("ScaleZ") < str.length() && str.find(ant) == str.npos)
             {
                 fin_const2 >> L_z ;
             }
-            if(str.find("UniformHeat") >= 0 && str.find("UniformHeat") < str.length())
+            if(str.find("UniformHeat") >= 0 && str.find("UniformHeat") < str.length() && str.find(ant) == str.npos)
             {
                 fin_const2 >> Uniform_heat;
             }
-            if(str.find("BCFile") >= 0 && str.find("BCFile") < str.length())
+            if(str.find("BCFile") >= 0 && str.find("BCFile") < str.length() && str.find(ant) == str.npos)
             {
                 fin_const2 >> Name_Bc_File;
             }
-            if(str.find("MeshType") >= 0 && str.find("MeshType") < str.length())
+            if(str.find("MeshType") >= 0 && str.find("MeshType") < str.length() && str.find(ant) == str.npos)
             {
                 fin_const2 >> Name_Mesh_Type;
             }
-            if(str.find("MeshFile") >= 0 && str.find("MeshFile") < str.length())
+            if(str.find("MeshFile") >= 0 && str.find("MeshFile") < str.length() && str.find(ant) == str.npos)
             {
                 fin_const2 >> Name_Mesh_File;
             }
-            if(str.find("HeatType") >= 0 && str.find("HeatType") < str.length())
+            if(str.find("HeatFileType") >= 0 && str.find("HeatFileType") < str.length() && str.find(ant) == str.npos)
             {
                 fin_const2 >> Name_Heat_Type;
             } // yufei adding
-            if(str.find("HeatFile") >= 0 && str.find("HeatFile") < str.length())
+            if(str.find("HeatFile") >= 0 && str.find("HeatFile") < str.length() && str.find(ant) == str.npos)
             {
                 fin_const2 >> Name_Heat_File;
             }
@@ -246,19 +247,19 @@ int main(int argc, char **argv)
     string str;
     while(getline(inputangle, str))
     {
-        if(str.find("Dimension_Material") >= 0 && str.find("Dimension_Material") < str.length())
+        if(str.find("MaterialDimension") >= 0 && str.find("MaterialDimension") < str.length() && str.find(ant) == str.npos)
         {
             inputangle >> Dimension_Material;
         }
-        if(str.find("Angle_method") >= 0 && str.find("Angle_method") < str.length())
+        if(str.find("Angle_method") >= 0 && str.find("Angle_method") < str.length() && str.find(ant) == str.npos)
         {
             inputangle >> Angle_method;
         }
-        if(str.find("Ntheta") >= 0 && str.find("Ntheta") < str.length())
+        if(str.find("Ntheta") >= 0 && str.find("Ntheta") < str.length() && str.find(ant) == str.npos)
         {
             inputangle >> Num_Theta;
         }
-        if(str.find("Nphi") >= 0 && str.find("Nphi") < str.length())
+        if(str.find("Nphi") >= 0 && str.find("Nphi") < str.length() && str.find(ant) == str.npos)
         {
             inputangle >> Num_Phi;
         }
