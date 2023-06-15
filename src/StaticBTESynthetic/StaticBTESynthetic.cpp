@@ -2701,7 +2701,7 @@ void StaticBTESynthetic::_marco_solution()
         }
         if(worldRank==0)
         {
-            cout<<"internal error: "<<internalerror<<endl;
+            cout<<"internal residual: "<<internalerror<<endl;
         }
 
 
