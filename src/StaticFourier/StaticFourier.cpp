@@ -952,7 +952,7 @@ void  StaticFourier::_solve() {
         {_print_out();}
 
         if(worldRank==0)
-        std::cout<<"iterations residual  "<<error<<std::endl;
+        std::cout<<"iterations residual: "<<error<<std::endl;
     }
 
 
