@@ -87,7 +87,7 @@ int main(int argc, char **argv)
         char new_line;
         while(getline(fin_const1,str))
         {
-            if(str.find("Transient")>=0 && str.find("Transient") < str.length())
+            if(str.find("State")>=0 && str.find("State") < str.length())
             {
                 fin_const1 >> IsTransient;
             }
