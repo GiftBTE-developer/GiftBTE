@@ -167,7 +167,7 @@ Transient::~Transient() {
     delete [] directionY;
     delete [] directionZ;
 
-    cout << "~StaticBTESynthetic is activated !!" << endl;
+    //cout << "~StaticBTESynthetic is activated !!" << endl;
 #ifdef USE_GPU
 
 #else
@@ -237,13 +237,13 @@ Transient::Transient(BTEMesh *mesh, BTEBoundaryCondition *bcs, BTEBand *bands, B
         if(i<numCell % num_proc)
         {
             numCellLocalList[i]=  numCell / num_proc+1;
-            if(world_rank==0)
-                cout<<numCellLocalList[i]<<endl;
+            //if(world_rank==0)
+                //cout<<numCellLocalList[i]<<endl;
         } else
         {
             numCellLocalList[i]=  numCell / num_proc;
-            if(world_rank==0)
-                cout<<numCellLocalList[i]<<endl;
+            //if(world_rank==0)
+                //cout<<numCellLocalList[i]<<endl;
         }
     }
     startCellList=new int [num_proc];
@@ -251,13 +251,13 @@ Transient::Transient(BTEMesh *mesh, BTEBoundaryCondition *bcs, BTEBand *bands, B
         if(i<numCell % num_proc)
         {
             startCellList[i]=  (numCell / num_proc+1)*i;
-            if(world_rank==0)
-                cout<<startCellList[i]<<endl;
+            //if(world_rank==0)
+                //cout<<startCellList[i]<<endl;
         } else
         {
             startCellList[i]=(numCell / num_proc+1)*(numCell % num_proc)+(numCell / num_proc)*(i-numCell % num_proc);
-            if(world_rank==0)
-                cout<<startCellList[i]<<endl;
+            //if(world_rank==0)
+                //cout<<startCellList[i]<<endl;
         }
     }
 
@@ -845,7 +845,7 @@ bool Transient::_get_magin_check_error(int nt, double error_temp_limit, double e
     error_heat = error_heat / numCell / heat_max;
     if (worldRank == 0)
     {
-        cout << "----------------------------------------------------------------------------------" << endl;
+        //cout << "----------------------------------------------------------------------------------" << endl;
         cout << "Iteration #" << nt << "\t Margin per band per cell: Temperature:" << error << " Heat Flux:" << error_heat << endl;
     }
     if ((error > errorOld&&error_heat>errorOld_heat)|| isnan(error)|| isnan(error_heat) || isinf(error_heat) || isinf(error))
