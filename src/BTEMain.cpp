@@ -95,7 +95,7 @@ int main(int argc, char **argv)
             {
                 fin_const1 >> Order ;
             }
-            if(str.find("Method") >= 0 && str.find("Method") < str.length())
+            if(str.find("InterativeScheme") >= 0 && str.find("InterativeScheme") < str.length())
             {
                 fin_const1 >> Method ;
             }
