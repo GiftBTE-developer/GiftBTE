@@ -66,7 +66,7 @@ int main(int argc, char **argv)
     double Uniform_heat=0; //not necessary
     double DeltaT=-1; //necessary for transient
     double TotalT=-1; //necessary for transient
-    int IsTransient=0; //not necessary
+    string IsTransient="Steady"; //not necessary
     double Tref=300;
     //for TDTR case
     int use_TDTR=0;  //not necessary
@@ -160,7 +160,7 @@ int main(int argc, char **argv)
 
     }
     fin_const1.close();
-    if(IsTransient==1&&(TotalT==-1||DeltaT==-1))
+    if(IsTransient=="Transient"&&(TotalT==-1||DeltaT==-1))
     {
         cout<<"Error: Please provide DeltaTime and TotalTime for transient solver"<<endl;
         exit(0);
@@ -303,7 +303,7 @@ int main(int argc, char **argv)
 
     SolutionAll solutionAll(distributeMesh,bcs,bands,angles,num_proc,world_rank);
     solutionAll._set_initial(distributeMesh,bands,angles);
-    if(IsTransient != 1)
+    if(IsTransient != "Transient")
     {
         solutionAll._Fourier_Solver(distributeMesh,bcs,bands,num_proc,world_rank);
         MPI_Barrier(MPI_COMM_WORLD);
