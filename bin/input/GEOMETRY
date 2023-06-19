@@ -1,14 +1,14 @@
 GeometryDimension=
-2
+1
 ScaleX=
-1e-7
+0.5e-7
 ScaleY=
 1e-7
 ScaleZ=
 1e-7
 BCFile=
-input/inputbc_2D.dat
+input/inputbc.dat
 MeshType=//1D or COMSOL
 COMSOL
 MeshFile=
-input/2D_100_100.mphtxt
+input/oned.mphtxt

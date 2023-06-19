@@ -6,8 +6,10 @@ BandNumber:
 MaterialFile 1:
 2677 39.9E-12 1.627E6 1
 
+
 GeometryMaterialType: //geometryindex and materialindex start from 0
 1 1
+2 1
 
 MaterialDimension:
 3
