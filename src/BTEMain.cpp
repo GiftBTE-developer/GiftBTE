@@ -202,7 +202,7 @@ int main(int argc, char **argv)
             {
                 fin_const2 >> Name_Bc_File;
             }
-            if(str.find("MeshfileType") >= 0 && str.find("MeshfileType") < str.length() && str.find(ant) == str.npos)
+            if(str.find("MeshType") >= 0 && str.find("MeshType") < str.length() && str.find(ant) == str.npos)
             {
                 fin_const2 >> Name_Mesh_Type;
             }
@@ -210,7 +210,7 @@ int main(int argc, char **argv)
             {
                 fin_const2 >> Name_Mesh_File;
             }
-            if(str.find("HeatfileType") >= 0 && str.find("HeatfileType") < str.length() && str.find(ant) == str.npos)
+            if(str.find("HeatType") >= 0 && str.find("HeatType") < str.length() && str.find(ant) == str.npos)
             {
                 fin_const2 >> Name_Heat_Type;
             } // yufei adding

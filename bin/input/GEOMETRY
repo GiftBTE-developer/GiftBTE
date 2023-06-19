@@ -8,7 +8,7 @@ ScaleZ=
 1e-7
 BCFile=
 input/inputbc.dat
-MeshfileType=//MSH or COMSOL
+MeshType=//MSH or COMSOL
 COMSOL
 MeshFile=
 input/oned.mphtxt
