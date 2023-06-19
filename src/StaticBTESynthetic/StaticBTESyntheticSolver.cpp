@@ -161,7 +161,7 @@ void StaticBTESynthetic::solve(int Use_Backup, int Num_Max_Iter, int Use_Limiter
             if (worldRank == 0)
                 _print_out();
         }
-        if (nt >= 5000 && nt % 100 == 0)
+        if (nt >= 5000 && nt != Num_Max_Iter && nt % 100 == 0)
         {
             if (worldRank == 0)
                 cout << "More than 5,000 iterations have been performed. Please try \"Synthetic\" in IterativeScheme" << endl;
@@ -398,7 +398,7 @@ void StaticBTESynthetic::solve_Iterative(int Use_Backup, int Num_Max_Iter, int U
             if (worldRank == 0)
                 _print_out();
         }
-        if (nt >= 5000 && nt % 100 == 0)
+        if (nt >= 5000 && nt != Num_Max_Iter && nt % 100 == 0)
         {
             if (worldRank == 0)
                 cout << "More than 5,000 iterations have been performed. Please try \"Synthetic\" in IterativeScheme" << endl;
@@ -636,7 +636,7 @@ void StaticBTESynthetic::solve_firstorder
             if (worldRank == 0)
                 _print_out();
         }
-        if (nt >= 5000 && nt % 100 == 0)
+        if (nt >= 5000 && nt != Num_Max_Iter && nt % 100 == 0)
         {
             if (worldRank == 0)
                 cout << "More than 5,000 iterations have been performed. Please try \"Synthetic\" in IterativeScheme" << endl;
@@ -876,7 +876,7 @@ void StaticBTESynthetic::solve_firstorder
             if (worldRank == 0)
                 _print_out();
         }
-        if (nt >= 5000 && nt % 100 == 0)
+        if (nt >= 5000 && nt != Num_Max_Iter && nt % 100 == 0)
         {
             if (worldRank == 0)
                 cout << "More than 5,000 iterations have been performed. Please try \"Synthetic\" in IterativeScheme" << endl;
@@ -1083,7 +1083,7 @@ void StaticBTESynthetic::solve_DOM(int Use_Backup, int Num_Max_Iter, int Use_Lim
             if (worldRank == 0)
                 _print_out();
         }
-        if (nt >= 5000 && nt % 100 == 0)
+        if (nt >= 5000 && nt != Num_Max_Iter && nt % 100 == 0)
         {
             if (worldRank == 0)
                 cout << "More than 5,000 iterations have been performed. Please try \"Synthetic\" in IterativeScheme" << endl;
@@ -1297,7 +1297,7 @@ void StaticBTESynthetic::solve_DOM_Iterative
             if (worldRank == 0)
                 _print_out();
         }
-        if (nt >= 5000 && nt % 100 == 0)
+        if (nt >= 5000 && nt != Num_Max_Iter && nt % 100 == 0)
         {
             if (worldRank == 0)
                 cout << "More than 5,000 iterations have been performed. Please try \"Synthetic\" in IterativeScheme" << endl;
@@ -1499,7 +1499,7 @@ double error_temp_limit, double error_flux_limit)
             if (worldRank == 0)
                 _print_out();
         }
-        if (nt >= 5000 && nt % 100 == 0)
+        if (nt >= 5000 && nt != Num_Max_Iter && nt % 100 == 0)
         {
             if (worldRank == 0)
                 cout << "More than 5,000 iterations have been performed. Please try \"Synthetic\" in IterativeScheme" << endl;
@@ -1704,7 +1704,7 @@ void StaticBTESynthetic::solve_DOM_firstorder_Iterative
             if (worldRank == 0)
                 _print_out();
         }
-        if (nt >= 5000 && nt % 100 == 0)
+        if (nt >= 5000 && nt != Num_Max_Iter && nt % 100 == 0)
         {
             if (worldRank == 0)
                 cout << "More than 5,000 iterations have been performed. Please try \"Synthetic\" in IterativeScheme" << endl;
