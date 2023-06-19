@@ -1779,7 +1779,7 @@ void BTEMesh::setMeshParams1(BTEBoundaryCondition *bcs)
             double distance = 1000;
             for (int j = 0; j < Boundaries.size(); j++)
             {
-                if (bcs->boundaryConditions[Boundarie.index].index == -bcs->boundaryConditions[Boundaries[j].index].type - 1)
+                if (bcs->boundaryConditions[Boundarie.index].index == -bcs->boundaryConditions[Boundaries[j].index].type)//jiaxuan
                 {
                     double distance1 = get_distance(Elements[Boundarie.cellindex[0]].faces[Boundarie.faceindex[0]].center, Elements[Boundaries[j].cellindex[0]].faces[Boundaries[j].faceindex[0]].center);
                     if (distance1 < distance)
@@ -1800,7 +1800,7 @@ void BTEMesh::setMeshParams1(BTEBoundaryCondition *bcs)
             double distance = 100;
             for (int j = 0; j < Boundnodes.size(); j++)
             {
-                if (bcs->boundaryConditions[Boundnodesindex[i]].index == -bcs->boundaryConditions[Boundnodesindex[j]].type - 1)
+                if (bcs->boundaryConditions[Boundnodesindex[i]].index == -bcs->boundaryConditions[Boundnodesindex[j]].type)//jiaxuan
                 {
                     double distance1 = Nodes[Boundnodes[i]].distance(Nodes[Boundnodes[j]]);
                     if (distance1 < distance)

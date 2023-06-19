@@ -808,7 +808,7 @@ BTEBand::BTEBand(ifstream &inFile, int Dimension_Material)
                 {
                     break;
                 }
-                geo_matter_index.push_back(b);
+                geo_matter_index.push_back(b-1);
 
             }
         }

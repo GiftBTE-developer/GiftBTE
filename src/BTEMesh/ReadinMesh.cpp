@@ -102,7 +102,7 @@ void ReadIn::OneD(int Dimension_Geometry, std::ifstream &inFile, double L_x, dou
 
 
         for (int i = 0; i < boundaryElementIndex.size() ; ++i) {
-            boundaryElementIndex[i]=i;
+            boundaryElementIndex[i]=i+1;//jiaxuan
         }
     }
     else
@@ -239,6 +239,7 @@ void ReadIn::COMSOL(int Dimension_Geometry, std::ifstream &inFile, double L_x, d
                     for (int i = 0; i < numvert; i++)
                     {
                         inFile >>  boundaryElementIndex[i];
+                        boundaryElementIndex[i] = boundaryElementIndex[i] + 1;//jiaxuan
                     }
                 }
                 else if (numvert == 3)
@@ -401,7 +402,7 @@ void ReadIn::COMSOL(int Dimension_Geometry, std::ifstream &inFile, double L_x, d
                     {
                         int m;
                         inFile>>m;
-                        boundaryElementIndex.push_back(m);
+                        boundaryElementIndex.push_back(m+1);//jiaxuan
                     }
                 }
                 else if (nameoftype == "tri")
@@ -429,7 +430,7 @@ void ReadIn::COMSOL(int Dimension_Geometry, std::ifstream &inFile, double L_x, d
                     {
                         int m;
                         inFile>>m;
-                        boundaryElementIndex.push_back(m);
+                        boundaryElementIndex.push_back(m+1);//jiaxuan
                     }
                 }
                 else if (nameoftype == "hex")
@@ -631,7 +632,7 @@ void ReadIn::MSH(int Dimension_Geometry, ifstream &inFile, double L_x, double L_
                                 inFile>>tag_local>>a[0]>>a[1];
                                 a[0]=a[0]-1;
                                 a[1]=a[1]-1;
-                                boundaryElementIndex.push_back(tag_all-1);
+                                boundaryElementIndex.push_back(tag_all);//jiaxuan
                                 boundaryElements.push_back(a);
                             } else if (type==2)
                             {
@@ -751,7 +752,7 @@ void ReadIn::MSH(int Dimension_Geometry, ifstream &inFile, double L_x, double L_
                                 a[1]=a[1]-1;
                                 a[2]=a[2]-1;
                                 boundaryElements.push_back(a);
-                                boundaryElementIndex.push_back(tag_all-1);
+                                boundaryElementIndex.push_back(tag_all);//jiaxuan
                             } else if (type==3)
                             {
                                 int tag_local;
@@ -763,7 +764,7 @@ void ReadIn::MSH(int Dimension_Geometry, ifstream &inFile, double L_x, double L_
                                 a[2]=a[2]-1;
                                 a[3]=a[3]-1;
                                 boundaryElements.push_back(a);
-                                boundaryElementIndex.push_back(tag_all-1);
+                                boundaryElementIndex.push_back(tag_all);//jiaxuan
                             } else if(type==4)
                             {
                                 int tag_local;
