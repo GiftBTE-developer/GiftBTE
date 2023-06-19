@@ -1104,6 +1104,10 @@ BTEMesh::BTEMesh(int Dimension_Geometry,double L_x,double L_y,double L_z,std::ve
         Nodes[i].x=nodeX[i];
         Nodes[i].y=nodeY[i];
         Nodes[i].z=nodeZ[i];
+        if (Dimension_Geometry == 2)//jiaxuan
+        {
+            Nodes[i].z = 0;
+        }
     }
     Boundaries.resize(boundaryElements.size());
 

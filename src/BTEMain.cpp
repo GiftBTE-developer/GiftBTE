@@ -48,9 +48,9 @@ int main(int argc, char **argv)
     string Name_Heat_File; //not necessary
     string Name_multiscale_File; //not necessary
     string Name_InitialTemp_File; //jiaxuan adding not necessary
-    double L_x = 0; //necessary
-    double L_y = 0; //necessary
-    double L_z = 0; //necessary
+    double L_x = 1; //necessary
+    double L_y = 1; //necessary
+    double L_z = 1; //necessary
     int Dimension_Geometry=-1; //necessary
     string Order = "2"; //not necessary
     string Method = "DOM"; //not necessary
