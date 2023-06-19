@@ -306,7 +306,17 @@ int main(int argc, char **argv)
     solutionAll._set_initial(distributeMesh,bands,angles);
     if(State != "Transient")
     {
+        if (world_rank == 0)
+        {
+            cout<<endl;
+            cout<<"Begin Fourier Solver"<<endl;
+        }
         solutionAll._Fourier_Solver(distributeMesh,bcs,bands,num_proc,world_rank);
+        if (world_rank == 0)
+        {
+            cout<<"Finish Fourier Solver"<<endl;
+            cout<<endl;
+        }
         MPI_Barrier(MPI_COMM_WORLD);
         distributeMesh->_build_BTEMesh(Dimension_Geometry, L_x, L_y, L_z,bands,bcs,heatfile, Uniform_heat,Name_multiscale_File);
         MPI_Barrier(MPI_COMM_WORLD);

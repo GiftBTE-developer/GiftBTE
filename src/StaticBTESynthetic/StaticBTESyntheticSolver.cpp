@@ -17,13 +17,15 @@ void StaticBTESynthetic::solve(int Use_Backup, int Num_Max_Iter, int Use_Limiter
     _set_matrix("LU");
     errorIncreaseTime=0;
     _set_initial(Use_Backup);
-    cout<<"Begin to calculate coefficient ..."<<endl;
+    if (worldRank==0)
+    {cout<<"Begin to calculate coefficient ..."<<endl;}
     for (int inf_local = 0; inf_local < numDirectionLocal; inf_local++) {
         for (int iband_local = 0; iband_local < numBandLocal; ++iband_local) {
             _get_coefficient(iband_local, inf_local);
         }
     }
-    cout<<"Finish calculating coefficient"<<endl;
+    if (worldRank==0)
+    {cout<<"Finish calculating coefficient"<<endl;}
     _get_coefficient_macro();
 
 
@@ -490,13 +492,15 @@ void StaticBTESynthetic::solve_firstorder
     _set_matrix("LU");
     errorIncreaseTime=0;
     _set_initial(Use_Backup);
-    cout<<"Begin to calculate coefficient ..."<<endl;
+    if (worldRank==0)
+    {cout<<"Begin to calculate coefficient ..."<<endl;}
     for (int inf_local = 0; inf_local < numDirectionLocal; inf_local++) {
         for (int iband_local = 0; iband_local < numBandLocal; ++iband_local) {
             _get_coefficient(iband_local, inf_local);
         }
     }
-    cout<<"Finish calculating coefficient"<<endl;
+    if (worldRank==0)
+    {cout<<"Finish calculating coefficient"<<endl;}
     _get_coefficient_macro();
     //_set_bound_ee_1();
 
@@ -966,13 +970,15 @@ void StaticBTESynthetic::solve_DOM(int Use_Backup, int Num_Max_Iter, int Use_Lim
     _set_matrix("LU");
     errorIncreaseTime=0;
     _set_initial(Use_Backup);
-    cout<<"Begin to calculate coefficient ..."<<endl;
+    if (worldRank==0)
+    {cout<<"Begin to calculate coefficient ..."<<endl;}
     for (int inf_local = 0; inf_local < numDirectionLocal; inf_local++) {
         for (int iband_local = 0; iband_local < numBandLocal; ++iband_local) {
             _get_coefficient(iband_local, inf_local);
         }
     }
-    cout<<"Finish calculating coefficient"<<endl;
+    if (worldRank==0)
+    {cout<<"Finish calculating coefficient"<<endl;}
     //_set_bound_ee_1();
 
     auto total_iter_time = chrono::microseconds(0);
@@ -1388,13 +1394,15 @@ double error_temp_limit, double error_flux_limit)
     _set_matrix("LU");
     errorIncreaseTime=0;
     _set_initial(Use_Backup);
-    cout<<"Begin to calculate coefficient ..."<<endl;
+    if (worldRank==0)
+    {cout<<"Begin to calculate coefficient ..."<<endl;}
     for (int inf_local = 0; inf_local < numDirectionLocal; inf_local++) {
         for (int iband_local = 0; iband_local < numBandLocal; ++iband_local) {
             _get_coefficient(iband_local, inf_local);
         }
     }
-    cout<<"Finish calculating coefficient"<<endl;
+    if (worldRank==0)
+    {cout<<"Finish calculating coefficient"<<endl;}
     //_set_bound_ee_1();
 
     auto total_iter_time = chrono::microseconds(0);
