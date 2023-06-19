@@ -53,7 +53,7 @@ int main(int argc, char **argv)
     double L_z = 1; //necessary
     int Dimension_Geometry=-1; //necessary
     string Order = "2"; //not necessary
-    string Method = "DOM"; //not necessary
+    string Method = "Sequential"; //not necessary
     string Matrix_solver = "LU"; //not necessary
     int Num_Max_Iter=10000; //not necessary
     int Angle_method=2; //not necessary
@@ -202,7 +202,7 @@ int main(int argc, char **argv)
             {
                 fin_const2 >> Name_Bc_File;
             }
-            if(str.find("MeshType") >= 0 && str.find("MeshType") < str.length() && str.find(ant) == str.npos)
+            if(str.find("MeshfileType") >= 0 && str.find("MeshfileType") < str.length() && str.find(ant) == str.npos)
             {
                 fin_const2 >> Name_Mesh_Type;
             }
@@ -210,7 +210,7 @@ int main(int argc, char **argv)
             {
                 fin_const2 >> Name_Mesh_File;
             }
-            if(str.find("HeatFileType") >= 0 && str.find("HeatFileType") < str.length() && str.find(ant) == str.npos)
+            if(str.find("HeatfileType") >= 0 && str.find("HeatfileType") < str.length() && str.find(ant) == str.npos)
             {
                 fin_const2 >> Name_Heat_Type;
             } // yufei adding
