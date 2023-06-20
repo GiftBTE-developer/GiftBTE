@@ -139,23 +139,33 @@ int main(int argc, char **argv)
             //TDTR
             if(str.find("IsTDTR") >= 0 && str.find("IsTDTR") < str.length() && str.find(ant) == str.npos)
             {
-                fin_const1 >> use_TDTR; cout<<"use_TDTR: "<<use_TDTR<<endl;
+                fin_const1 >> use_TDTR;
+                if (world_rank == 0)
+                    cout<<"use_TDTR: "<<use_TDTR<<endl;
             }
             if(str.find("PulseTime") >= 0 && str.find("PulseTime") < str.length() && str.find(ant) == str.npos)
             {
-                fin_const1 >> pulse_time;cout<<"pulse_time: "<<pulse_time<<endl;
+                fin_const1 >> pulse_time;
+                if (world_rank == 0)
+                    cout<<"pulse_time: "<<pulse_time<<endl;
             }
             if(str.find("RepetitionFrequency") >= 0 && str.find("RepetitionFrequency") < str.length() && str.find(ant) == str.npos)
             {
-                fin_const1 >> repetition_frequency;cout<<"repetition_frequency: "<<repetition_frequency<<endl;
+                fin_const1 >> repetition_frequency;
+                if (world_rank == 0)
+                    cout<<"repetition_frequency: "<<repetition_frequency<<endl;
             }
             if(str.find("ModulationFrequency") >= 0 && str.find("ModulationFrequency") < str.length() && str.find(ant) == str.npos)
             {
-                fin_const1 >> modulation_frequency;cout<<"modulation_frequency: "<<modulation_frequency<<endl;
+                fin_const1 >> modulation_frequency;
+                if (world_rank == 0)
+                    cout<<"modulation_frequency: "<<modulation_frequency<<endl;
             }
             if(str.find("RadiusProbe") >= 0 && str.find("RadiusProbe") < str.length() && str.find(ant) == str.npos)
             {
-                fin_const1 >> xy_r;cout<<"RadiusProbe: "<<xy_r<<endl;
+                fin_const1 >> xy_r;
+                if (world_rank == 0)
+                    cout<<"RadiusProbe: "<<xy_r<<endl;
             }
         }
 
