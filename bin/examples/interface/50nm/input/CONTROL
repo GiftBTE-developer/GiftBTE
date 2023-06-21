@@ -1,0 +1,16 @@
+State= //Steady or Transient
+Steady
+Order= //1=first order; 2=second order
+2
+IterativeScheme= // Synthetic or Sequential
+Synthetic
+MatrixSolver= // LU or BICGSTAB
+LU
+MaxNumIter= 
+100000
+ResidualTemp=
+1e-8
+ResidualFlux=
+1e-2
+
+

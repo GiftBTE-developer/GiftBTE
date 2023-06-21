@@ -1,0 +1,21 @@
+MaterialNumber=
+2
+BandNumber=
+134
+
+MaterialFile 1= DATABASE
+../../../materials/DATABASE/Ge/Ge_ran.dat
+
+MaterialFile 2= DATABASE
+../../../materials/DATABASE/Si/Si_ran.dat
+
+GeometryMaterialType= //geometryindex and matterindex both start from 1
+1 1
+2 2
+
+MaterialDimension=
+3
+Ntheta=
+4
+Nphi=
+4
