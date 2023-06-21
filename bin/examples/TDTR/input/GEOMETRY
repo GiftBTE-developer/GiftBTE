@@ -1,0 +1,19 @@
+GeometryDimension= //1 or 2 or 3
+3
+ScaleX=
+5e-5
+ScaleY=
+5e-5
+ScaleZ=
+5e-5
+BCFile=
+input/inputbc_TDTR_3D.dat
+MeshType= // COMSOL or MSH
+COMSOL
+MeshFile=
+input/TDTR_3D.mphtxt
+HeatType= //COORDINATE or REGION
+COORDINATE
+HeatFile=
+input/TDTR_3d_heatfile.txt
+
