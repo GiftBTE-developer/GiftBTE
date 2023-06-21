@@ -1,0 +1,16 @@
+State= //Steady or Transient
+Transient
+Order= //1=first order; 2=second order
+2
+ResidualTemp=
+1E-14
+ResidualFlux=
+1E-14
+TimeStep=
+5e-11
+TotalTime=
+3e-5
+InitialTemperatureFile=
+input/initial_temperature.txt
+
+
