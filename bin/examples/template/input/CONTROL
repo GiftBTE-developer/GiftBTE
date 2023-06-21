@@ -1,0 +1,23 @@
+State= //Steady or Transient
+Steady
+Tref=
+0
+Order= //1=first order; 2=second order (recommend: 2)
+2
+IterativeScheme= // Synthetic or Sequential (recommend: Sequential)
+Sequential
+MatrixSolver= // LU or BICGSTAB (recommend: LU)
+LU
+MaxNumIter= 
+100000
+ResidualTemp= // (recommend: 1E-5)
+1E-5
+ResidualFlux= // (recommend: 1E-3)
+1E-3
+TimeStep=
+5e-11
+TotalTime=
+3e-5
+InitialTemperatureFile=
+input/initial_temperature.dat
+
