@@ -332,7 +332,8 @@ int main(int argc, char **argv)
         MPI_Barrier(MPI_COMM_WORLD);
         solutionAll._BTE_Solver(distributeMesh,bcs,bands,angles,num_proc,world_rank,Use_Backup,
                                 Num_Max_Iter,Order,Method,Matrix_solver,error_temp_limit,error_flux_limit);
-        solutionAll._print_out(distributeMesh);
+        if (world_rank == 0)
+        {solutionAll._print_out(distributeMesh);}
     } else
     {
         solutionAll._Transient_BTE_Solver(distributeMesh,bcs,bands,angles,num_proc,world_rank,Use_Backup,Order,error_temp_limit,error_flux_limit,DeltaT,TotalT
