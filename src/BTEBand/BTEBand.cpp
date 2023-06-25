@@ -13,6 +13,7 @@
 using namespace std;
 BTEBand::BTEBand(ifstream &inFile, int Dimension_Material)
 {
+    string ant="!";
     if (!inFile.is_open())
     {
         cout << "DEBUG: band file not open" << endl;
@@ -23,12 +24,12 @@ BTEBand::BTEBand(ifstream &inFile, int Dimension_Material)
     int Num_Matter=0;
     while(getline(inFile, str))
     {
-        if(str.find("Number of matter") >= 0 && str.find("Number of matter") < str.length())
+        if(str.find("MaterialNumber") >= 0 && str.find("MaterialNumber") < str.length() && str.find(ant) == str.npos)
         {
             inFile >> Num_Matter;
         }
 
-        if(str.find("Number of bands") >= 0 && str.find("Number of bands") < str.length())
+        if(str.find("BandNumber") >= 0 && str.find("BandNumber") < str.length() && str.find(ant) == str.npos)
         {
             inFile >> nband;
         }
@@ -57,7 +58,7 @@ BTEBand::BTEBand(ifstream &inFile, int Dimension_Material)
     {
         while (getline(inFile, line))
         {
-            if (line.find("Matter") >= 0 && line.find("Matter") < line.length())
+            if (line.find("MaterialFile") >= 0 && line.find("MaterialFile") < line.length() && str.find(ant) == str.npos)
             {
 
                 if (line.find("DATABASE") > 0 && line.find("DATABASE") < line.length())
@@ -792,7 +793,7 @@ BTEBand::BTEBand(ifstream &inFile, int Dimension_Material)
 
     while (getline(inFile, line))
     {
-        if (line.find("Geometry") >= 0 && line.find("Geometry") < line.length())
+        if (line.find("GeometryMaterialType") >= 0 && line.find("GeometryMaterialType") < line.length() && str.find(ant) == str.npos)
         {
             while (getline(inFile, line))
             {
@@ -807,7 +808,7 @@ BTEBand::BTEBand(ifstream &inFile, int Dimension_Material)
                 {
                     break;
                 }
-                geo_matter_index.push_back(b);
+                geo_matter_index.push_back(b-1);
 
             }
         }

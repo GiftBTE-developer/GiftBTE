@@ -1,20 +1,18 @@
-Number of matter=
+MaterialNumber=
 1
-Number of bands=
+BandNumber=
 1
-# Matter 1: 
-2677 39.9E-12 1.627E6 1 1 
+
+MaterialFile 1= DATABASE
+../../../materials/DATABASE/Si/Si_1.dat
 
 
-# Geometry: #geo index - matter index start from 0
-0 0
+GeometryMaterialType= //geometryindex and matterindex both start from 1
+1 1
 
-
-Dimension_Material:
+MaterialDimension=
 3
-Angle_method: //1:CADOM,2:GaussDOM
+Ntheta=
 2
-Ntheta:
-2
-Nphi:
+Nphi=
 2

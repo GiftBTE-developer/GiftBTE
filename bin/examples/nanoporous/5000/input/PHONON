@@ -1,21 +1,17 @@
-Number of matter=
+MaterialNumber:
 1
-Number of bands=
+BandNumber:
 12
 
-# Matter 1: ALAMODE
-input/materials/Si/tau300K_pure.dat
+MaterialFile 1:  ALAMODE
+../../../materials/ALAMODE/Si/tau300K_pure.dat
 
 
-# Geometry: #geo index - matter index start from 0
-0 0
-1 0
-2 0
+GeometryMaterialType: //geometryindex and matterindex both start from 1
+1 1
 
-Dimension_Material:
+MaterialDimension:
 3
-Angle_method: //1:CADOM,2:GaussDOM
-2
 Ntheta:
 8
 Nphi:

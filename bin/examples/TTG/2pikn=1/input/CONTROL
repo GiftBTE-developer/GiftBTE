@@ -1,34 +1,16 @@
-Transient:
-1
-Order://1:first order; 2:second order; 2limit: limited second order
+State= //Steady or Transient
+Transient
+Order= //1=first order; 2=second order
 2
-Method:// Synthetic or DOM
-Synthetic
-MatrixSolver:// LU or Iterative
-LU
-NumMaxIter:
-100000
-ErrorTempLimit:
+ResidualTemp=
 1E-14
-ErrorFluxLimit:
+ResidualFlux=
 1E-14
-Multiscale:
-none
-DeltaTime:
+TimeStep=
 1e-13
-TotalTime:
+TotalTime=
 3e-5
-InitialTemperature:
+InitialTemperatureFile=
 input/initial_temperature.txt
-use_TDTR:
-0
-pulse_time:
-0
-repetition_frequency:
-0
-modulation_frequency:
-0
-radius_0f_top_xy_plane:
-0
 
 

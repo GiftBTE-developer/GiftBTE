@@ -1,21 +1,13 @@
-DimensionGeometry=
+GeometryDimension= //1 or 2 or 3
 2
-Lx=
+ScaleX=
 50e-9
-Ly=
+ScaleY=
 50e-9
-Lz=
-50e-9
-UniformHeat=
-0
 BCFile=
 input/inputbc_2D.dat
-MeshType=//1D or COMSOL
+MeshType= // COMSOL or MSH
 COMSOL
 MeshFile=
 input/tworegin_2D_y.mphtxt
-HeatType=//REGION or COORDINATE
-COORDINATE
-HeatFile=
-none
 

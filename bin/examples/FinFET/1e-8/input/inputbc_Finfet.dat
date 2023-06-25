@@ -1,22 +1,22 @@
-18 #number of boundaries
+18 #Number of boundaries
 
-#boundary indexs #boundary condition:1:thermalization #temperature//31:leftandright,32:topandbottm//periodic: give -index-1 for example, if "0" boundary is connected to 3 boundary set second term as "-4", detT and 0, means you want set the temperature differece as detT for periodic bound; 0 and 0 means no temperature difference, do not set other value if you do not need temperature difference
-0 3 0
-1 2 0
-2 1 300
-3 3 0
-4 2 0
-5 3 0
-7 1 300
-8 2 0
+BoundaryIndex BoundaryType BoundaryValue //BoundaryIndex starts from 1 //BoundaryType=1:thermalizing; BoundaryType=2:diffusely reflecting; BoundaryType=3:specularly reflecting; BoundaryType=5:interficial; BoundaryType<0:periodic
+1 3 0
+2 2 0
+3 1 300
+4 3 0
+5 2 0
+6 3 0
+8 1 300
 9 2 0
 10 2 0
-11 1 300
-13 2 0
+11 2 0
+12 1 300
 14 2 0
-15 1 300
-17 1 300
+15 2 0
+16 1 300
 18 1 300
-19 3 0
-20 2 0
+19 1 300
+20 3 0
+21 2 0
 

@@ -1,21 +1,11 @@
-DimensionGeometry=
+GeometryDimension= //1 or 2 or 3
 1
-Lx=
+ScaleX=
 6.711215e-4
-Ly=
-0
-Lz=
-0
-UniformHeat=
-0
 BCFile=
 input/inputbc.dat
-MeshType=
-1D
+MeshType= // COMSOL or MSH
+COMSOL
 MeshFile=
-input/inputmesh.dat
-HeatType=
-COORDINATE
-HeatFile=
-none
+input/1000_1D.mphtxt
 

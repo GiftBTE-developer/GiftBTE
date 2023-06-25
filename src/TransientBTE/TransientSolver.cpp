@@ -260,7 +260,7 @@ void Transient::solve(int Use_Backup, double error_temp_limit, double error_flux
                     _print_out();
             }
 
-            if (worldRank == 0) {
+            /*if (worldRank == 0) {
 
                 cout << "  Time taken by inner loop: " << 1.0 * total_iter_time.count() / 1000 << " milliseconds"
                      << endl;
@@ -278,7 +278,7 @@ void Transient::solve(int Use_Backup, double error_temp_limit, double error_flux
                 cout << "  Time taken by macro: " << 1.0 * macro_iter_time.count() / 1000 << " milliseconds" << endl;
                 cout << "  Time taken by transfer: " << 1.0 * trasfer1_time.count() / 1000 << " milliseconds" << endl;
                 cout << "----------------------------------------------------------------------------------" << endl;
-            }
+            }*/
 
             if (worldRank == 0) {
                 for (int j = 1; j < numProc; ++j) {
@@ -389,7 +389,7 @@ void Transient::solve(int Use_Backup, double error_temp_limit, double error_flux
                     _print_out();
             }
 
-            if (worldRank == 0) {
+            /*if (worldRank == 0) {
 
                 cout << "  Time taken by inner loop: " << 1.0 * total_iter_time.count() / 1000 << " milliseconds"
                      << endl;
@@ -407,7 +407,7 @@ void Transient::solve(int Use_Backup, double error_temp_limit, double error_flux
                 cout << "  Time taken by macro: " << 1.0 * macro_iter_time.count() / 1000 << " milliseconds" << endl;
                 cout << "  Time taken by transfer: " << 1.0 * trasfer1_time.count() / 1000 << " milliseconds" << endl;
                 cout << "----------------------------------------------------------------------------------" << endl;
-            }
+            }*/
 
             if (worldRank == 0) {
                 for (int j = 1; j < numProc; ++j) {

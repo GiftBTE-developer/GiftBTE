@@ -102,7 +102,7 @@ void ReadIn::OneD(int Dimension_Geometry, std::ifstream &inFile, double L_x, dou
 
 
         for (int i = 0; i < boundaryElementIndex.size() ; ++i) {
-            boundaryElementIndex[i]=i;
+            boundaryElementIndex[i]=i+1;//jiaxuan
         }
     }
     else
@@ -114,7 +114,7 @@ void ReadIn::OneD(int Dimension_Geometry, std::ifstream &inFile, double L_x, dou
 }
 
 void ReadIn::COMSOL(int Dimension_Geometry, std::ifstream &inFile, double L_x, double L_y, double L_z) {
-    if (Dimension_Geometry == 1)
+    if (Dimension_Geometry == 1)//jiaxuan
     {
         if (!inFile.is_open())
         {
@@ -122,27 +122,125 @@ void ReadIn::COMSOL(int Dimension_Geometry, std::ifstream &inFile, double L_x, d
             exit(1);
         }
         string line;
+        string strmesh;
 
-        getline(inFile, line);
-        int num;
-        inFile >> num >> line;
-        volumeElements.resize(num);
-        nodeX.resize(num+1);
-        nodeY.resize(num+1);
-        nodeZ.resize(num+1);
-        for (int i = 0; i < num + 1; ++i)
+        getline(inFile,strmesh);
+        if (strmesh.find("COMSOL") > 0 && strmesh.find("COMSOL") < strmesh.length()) {
+            int dim;
+            while (getline(inFile, strmesh)) {
+                if (strmesh.find("# sdim") > 0 && strmesh.find("# sdim") < strmesh.length()) {
+                    dim = stoi(strmesh.substr(0, strmesh.find(" ")));
+                    break;
+                }
+            }
+            if (dim != Dimension_Geometry) {
+                cout << "Error: please check the dimension is correct or not" << endl;
+                exit(1);
+            }
+            int numnode;
+            while (getline(inFile, strmesh))
+            {
+                if (strmesh.find("# number of mesh") > 0 && strmesh.find("# number of mesh") < strmesh.length())
+                {
+                    numnode = stoi(strmesh.substr(0, strmesh.find(" ")));
+                    break;
+                }
+            }
+            nodeX.resize(numnode);
+            nodeY.resize(numnode);
+            nodeZ.resize(numnode);
+            for (int i = 0; i < 3; i++)
+                getline(inFile, strmesh);
+            for (int i = 0; i < numnode; i++)
+            {
+                inFile>>nodeX[i];
+                nodeZ[i]=0;
+                nodeY[i]=0;
+                nodeX[i]=nodeX[i]*L_x;
+            }
+            int numoftype;
+            while (getline(inFile, strmesh))
+            {
+                if (strmesh.find("# number of element types") > 0 && strmesh.find("# number of element types") < strmesh.length())
+                {
+                    numoftype = stoi(strmesh.substr(0, strmesh.find(" ")));
+                    break;
+                }
+            }
+            while (numoftype > 0)
+            {
+                numoftype--;
+                int numvert;
+                while (getline(inFile, strmesh))
+                {
+                    if (strmesh.find("# number of vertices per element") > 0 && strmesh.find("# number of vertices per element") < strmesh.length() || strmesh.find("# number of nodes per element") > 0 && strmesh.find("# number of nodes per element") < strmesh.length())
+                    {
+                        numvert = stoi(strmesh.substr(0, strmesh.find(" ")));
+                        break;
+                    }
+                }
+                if (numvert == 1)
+                {
+                    while (getline(inFile, strmesh))
+                    {
+                        if (strmesh.find("# number of elements") > 0 && strmesh.find("# number of elements") < strmesh.length())
+                        {
+                            numvert = stoi(strmesh.substr(0, strmesh.find(" ")));
+                            break;
+                        }
+                    }
+                    boundaryElements.resize(numvert);
+                    getline(inFile, strmesh);
+                    boundaryElementIndex.resize(numvert);
+                    for (int i = 0; i < numvert; i++)
+                    {
+                        boundaryElements[i].resize(1);
+                        //inFile >> boundaryElements[i][0] >> boundaryElements[i][1];
+                        inFile >> boundaryElements[i][0];
+                    }
+                    for (int i = 0; i < 4; i++)
+                        getline(inFile, strmesh);
+                    for (int i = 0; i < numvert; i++)
+                    {
+                        inFile >>  boundaryElementIndex[i];
+                        boundaryElementIndex[i] = boundaryElementIndex[i] + 1;//jiaxuan
+                    }
+
+                }
+                else if (numvert == 2)
+                {
+                    while (getline(inFile, strmesh))
+                    {
+                        if (strmesh.find("# number of elements") > 0 && strmesh.find("# number of elements") < strmesh.length())
+                        {
+                            numvert = stoi(strmesh.substr(0, strmesh.find(" ")));
+                            break;
+                        }
+                    }
+                    getline(inFile, strmesh);
+                    for (int i = 0; i < numvert; ++i)
+                    {
+                        vector<int> c1;
+                        c1.resize(2);
+                        inFile >> c1[0] >> c1[1];
+                        volumeElements.push_back(c1);
+                    }
+                    for (int i = 0; i < 4; i++)
+                        getline(inFile, strmesh);
+                    for (int i = volumeElements.size() - numvert; i < volumeElements.size(); i++)
+                    {
+                        int m;
+                        inFile>>m;
+                        volumeElementIndex.push_back(m);
+                    }
+                }
+            }
+        }else
         {
-
-            nodeX[i] = L_x / num * i;
-            nodeY[i]=0;
-            nodeZ[i]=0;
+            cout<<"Error: mesh file format error"<<endl;
+            exit(1);
         }
 
-        for (int i = 0; i < num; ++i)
-        {
-            volumeElements[i].push_back(i);
-            volumeElements[i].push_back(i+1);
-        }
     }
     else if (Dimension_Geometry == 2)
     {
@@ -154,7 +252,6 @@ void ReadIn::COMSOL(int Dimension_Geometry, std::ifstream &inFile, double L_x, d
         }
 
 
-        string line;
         string strmesh;
 
         getline(inFile,strmesh);
@@ -239,6 +336,7 @@ void ReadIn::COMSOL(int Dimension_Geometry, std::ifstream &inFile, double L_x, d
                     for (int i = 0; i < numvert; i++)
                     {
                         inFile >>  boundaryElementIndex[i];
+                        boundaryElementIndex[i] = boundaryElementIndex[i] + 1;//jiaxuan
                     }
                 }
                 else if (numvert == 3)
@@ -401,7 +499,7 @@ void ReadIn::COMSOL(int Dimension_Geometry, std::ifstream &inFile, double L_x, d
                     {
                         int m;
                         inFile>>m;
-                        boundaryElementIndex.push_back(m);
+                        boundaryElementIndex.push_back(m+1);//jiaxuan
                     }
                 }
                 else if (nameoftype == "tri")
@@ -429,7 +527,7 @@ void ReadIn::COMSOL(int Dimension_Geometry, std::ifstream &inFile, double L_x, d
                     {
                         int m;
                         inFile>>m;
-                        boundaryElementIndex.push_back(m);
+                        boundaryElementIndex.push_back(m+1);//jiaxuan
                     }
                 }
                 else if (nameoftype == "hex")
@@ -631,7 +729,7 @@ void ReadIn::MSH(int Dimension_Geometry, ifstream &inFile, double L_x, double L_
                                 inFile>>tag_local>>a[0]>>a[1];
                                 a[0]=a[0]-1;
                                 a[1]=a[1]-1;
-                                boundaryElementIndex.push_back(tag_all-1);
+                                boundaryElementIndex.push_back(tag_all);//jiaxuan
                                 boundaryElements.push_back(a);
                             } else if (type==2)
                             {
@@ -751,7 +849,7 @@ void ReadIn::MSH(int Dimension_Geometry, ifstream &inFile, double L_x, double L_
                                 a[1]=a[1]-1;
                                 a[2]=a[2]-1;
                                 boundaryElements.push_back(a);
-                                boundaryElementIndex.push_back(tag_all-1);
+                                boundaryElementIndex.push_back(tag_all);//jiaxuan
                             } else if (type==3)
                             {
                                 int tag_local;
@@ -763,7 +861,7 @@ void ReadIn::MSH(int Dimension_Geometry, ifstream &inFile, double L_x, double L_
                                 a[2]=a[2]-1;
                                 a[3]=a[3]-1;
                                 boundaryElements.push_back(a);
-                                boundaryElementIndex.push_back(tag_all-1);
+                                boundaryElementIndex.push_back(tag_all);//jiaxuan
                             } else if(type==4)
                             {
                                 int tag_local;

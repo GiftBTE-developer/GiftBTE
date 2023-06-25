@@ -1104,6 +1104,10 @@ BTEMesh::BTEMesh(int Dimension_Geometry,double L_x,double L_y,double L_z,std::ve
         Nodes[i].x=nodeX[i];
         Nodes[i].y=nodeY[i];
         Nodes[i].z=nodeZ[i];
+        if (Dimension_Geometry == 2)//jiaxuan
+        {
+            Nodes[i].z = 0;
+        }
     }
     Boundaries.resize(boundaryElements.size());
 
@@ -1133,6 +1137,7 @@ void BTEMesh::setMeshParams(BTEBand *bands)
         {
             if(Elements[i].index>=bands->geo_matter_index.size())
             {
+                cout<<Elements[i].index<<" "<<bands->geo_matter_index.size()<<endl;
                 cout<<"Error: some region does not have material, check PHONON and GEOMETRY"<<endl;
                 exit(0);
             }
@@ -1778,7 +1783,7 @@ void BTEMesh::setMeshParams1(BTEBoundaryCondition *bcs)
             double distance = 1000;
             for (int j = 0; j < Boundaries.size(); j++)
             {
-                if (bcs->boundaryConditions[Boundarie.index].index == -bcs->boundaryConditions[Boundaries[j].index].type - 1)
+                if (bcs->boundaryConditions[Boundarie.index].index == -bcs->boundaryConditions[Boundaries[j].index].type)//jiaxuan
                 {
                     double distance1 = get_distance(Elements[Boundarie.cellindex[0]].faces[Boundarie.faceindex[0]].center, Elements[Boundaries[j].cellindex[0]].faces[Boundaries[j].faceindex[0]].center);
                     if (distance1 < distance)
@@ -1799,7 +1804,7 @@ void BTEMesh::setMeshParams1(BTEBoundaryCondition *bcs)
             double distance = 100;
             for (int j = 0; j < Boundnodes.size(); j++)
             {
-                if (bcs->boundaryConditions[Boundnodesindex[i]].index == -bcs->boundaryConditions[Boundnodesindex[j]].type - 1)
+                if (bcs->boundaryConditions[Boundnodesindex[i]].index == -bcs->boundaryConditions[Boundnodesindex[j]].type)//jiaxuan
                 {
                     double distance1 = Nodes[Boundnodes[i]].distance(Nodes[Boundnodes[j]]);
                     if (distance1 < distance)
@@ -1926,7 +1931,7 @@ void BTEMesh::BTEMesh_initialTemp(ifstream &initialTemp,double Tref)//jiaxuan
                 }
             }
 
-            cout<<"Number of initial temperature nodes: "<<numtempnode<<endl;
+            //cout<<"Number of initial temperature nodes: "<<numtempnode<<endl;
             this->Tempnodes.resize(numtempnode);
             for (int i = 0; i < numtempnode; i++) {
                 getline(initialTemp, strmesh);
@@ -1997,7 +2002,7 @@ void BTEMesh::BTEMesh_initialTemp(ifstream &initialTemp,double Tref)//jiaxuan
                     break;
                 }
             }
-            cout<<"Number of initial temperature nodes: "<<numtempnode<<endl;
+            //cout<<"Number of initial temperature nodes: "<<numtempnode<<endl;
 
             this->Tempnodes.resize(numtempnode);
             for (int i = 0; i < numtempnode; i++) {
@@ -2077,7 +2082,7 @@ void BTEMesh::BTEMesh_initialTemp(ifstream &initialTemp,double Tref)//jiaxuan
                 }
             }
 
-            cout<<"Number of initial temperature nodes: "<<numtempnode<<endl;
+            //cout<<"Number of initial temperature nodes: "<<numtempnode<<endl;
             this->Tempnodes.resize(numtempnode);
             for (int i = 0; i < numtempnode; i++) {
                 getline(initialTemp, strmesh);
@@ -2209,7 +2214,7 @@ void BTEMesh::BTEMesh_heatin(ifstream &inHeat, double Uniform_Heat, std::string 
                         }
                     }
 
-                    cout<<"Number of heat nodes: "<<numheatnode<<endl;
+                    //cout<<"Number of heat nodes: "<<numheatnode<<endl;
                     this->Heatnodes.resize(numheatnode); 
                     for (int i = 0; i < numheatnode; i++) {
                         getline(inHeat, strmesh);
@@ -2292,7 +2297,7 @@ void BTEMesh::BTEMesh_heatin(ifstream &inHeat, double Uniform_Heat, std::string 
                         }
                     }
 
-                    cout<<"Number of heat nodes: "<<numheatnode<<endl;
+                    //cout<<"Number of heat nodes: "<<numheatnode<<endl;
                     this->Heatnodes.resize(numheatnode); 
                     for (int i = 0; i < numheatnode; i++) {
                         getline(inHeat, strmesh);
@@ -2376,7 +2381,7 @@ void BTEMesh::BTEMesh_heatin(ifstream &inHeat, double Uniform_Heat, std::string 
                         }
                     }
 
-                    cout<<"Number of heat nodes: "<<numheatnode<<endl;
+                    //cout<<"Number of heat nodes: "<<numheatnode<<endl;
                     this->Heatnodes.resize(numheatnode); 
                     for (int i = 0; i < numheatnode; i++) {
                         getline(inHeat, strmesh);

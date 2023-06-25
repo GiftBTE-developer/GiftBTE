@@ -17,11 +17,15 @@ void StaticBTESynthetic::solve(int Use_Backup, int Num_Max_Iter, int Use_Limiter
     _set_matrix("LU");
     errorIncreaseTime=0;
     _set_initial(Use_Backup);
+    if (worldRank==0)
+    {cout<<"Begin to calculate coefficient ..."<<endl;}
     for (int inf_local = 0; inf_local < numDirectionLocal; inf_local++) {
         for (int iband_local = 0; iband_local < numBandLocal; ++iband_local) {
             _get_coefficient(iband_local, inf_local);
         }
     }
+    if (worldRank==0)
+    {cout<<"Finish calculating coefficient"<<endl;}
     _get_coefficient_macro();
 
 
@@ -159,13 +163,19 @@ void StaticBTESynthetic::solve(int Use_Backup, int Num_Max_Iter, int Use_Limiter
             if (worldRank == 0)
                 _print_out();
         }
+        if (nt >= 5000 && nt != Num_Max_Iter && nt % 100 == 0)
+        {
+            if (worldRank == 0)
+                cout << "More than 5,000 iterations have been performed. Please try \"Synthetic\" in IterativeScheme" << endl;
+            MPI_Barrier(MPI_COMM_WORLD);
+        }
         if (errorIncreaseTime >= 10)
         {
             nt = Num_Max_Iter;
             if (worldRank == 0)
                 _print_out();
             if (worldRank == 0)
-                cout << "error increases for 10 times, maybe the solution can not converge. Try \"-1\" in limiter" << endl;
+                cout << "Error increases for 10 times, maybe the solution can not converge. Try \"-1\" in limiter" << endl;
             MPI_Barrier(MPI_COMM_WORLD);
         }
         if (nt % 1 == 0)
@@ -240,7 +250,7 @@ void StaticBTESynthetic::solve_Iterative(int Use_Backup, int Num_Max_Iter, int U
 
     _set_face_matrix();
     _set_cell_matrix_larger();
-    _set_matrix("Iterative");
+    _set_matrix("BICGSTAB");
     errorIncreaseTime=0;
     _set_initial(Use_Backup);
 
@@ -311,7 +321,14 @@ void StaticBTESynthetic::solve_Iterative(int Use_Backup, int Num_Max_Iter, int U
 
                 auto solve_start = chrono::high_resolution_clock::now();
 
+                if (worldRank==0 && inf_local==0 && iband_local==0) {
+                    cout<<"Begin to calculate coefficient ..."<<endl;
+                }
                 _get_coefficient_Iterative(iband_local,inf_local);
+                if (worldRank==0 && inf_local==numDirectionLocal-1 && iband_local==numBandLocal-1) {
+                    cout<<"Finish calculating coefficient"<<endl;
+                }
+
                 Eigen::BiCGSTAB<Eigen::SparseMatrix<double>,Eigen::IncompleteLUT<double>> cg1;
                 sol1=cg1.compute(stiffMatrix).solve(Re1);
                 for (int i = 0; i < numCell; ++i)
@@ -383,13 +400,19 @@ void StaticBTESynthetic::solve_Iterative(int Use_Backup, int Num_Max_Iter, int U
             if (worldRank == 0)
                 _print_out();
         }
+        if (nt >= 5000 && nt != Num_Max_Iter && nt % 100 == 0)
+        {
+            if (worldRank == 0)
+                cout << "More than 5,000 iterations have been performed. Please try \"Synthetic\" in IterativeScheme" << endl;
+            MPI_Barrier(MPI_COMM_WORLD);
+        }
         if (errorIncreaseTime >= 10)
         {
             nt = Num_Max_Iter;
             if (worldRank == 0)
                 _print_out();
             if (worldRank == 0)
-                cout << "error increases for 10 times, maybe the solution can not converge. Try \"-1\" in limiter" << endl;
+                cout << "Error increases for 10 times, maybe the solution can not converge. Try \"-1\" in limiter" << endl;
             MPI_Barrier(MPI_COMM_WORLD);
         }
         if (nt % 1 == 0)
@@ -452,7 +475,7 @@ void StaticBTESynthetic::solve_Iterative(int Use_Backup, int Num_Max_Iter, int U
 #ifdef USE_TIME
         cout << "Time taken by iteration: " << duration.count() * 0.001 << " milliseconds" << endl;
 #endif
-    _delete_matrix("Iterative");
+    _delete_matrix("BICGSTAB");
     _delete_face_matrix();
     _delete_cell_matrix();
 
@@ -469,11 +492,15 @@ void StaticBTESynthetic::solve_firstorder
     _set_matrix("LU");
     errorIncreaseTime=0;
     _set_initial(Use_Backup);
+    if (worldRank==0)
+    {cout<<"Begin to calculate coefficient ..."<<endl;}
     for (int inf_local = 0; inf_local < numDirectionLocal; inf_local++) {
         for (int iband_local = 0; iband_local < numBandLocal; ++iband_local) {
             _get_coefficient(iband_local, inf_local);
         }
     }
+    if (worldRank==0)
+    {cout<<"Finish calculating coefficient"<<endl;}
     _get_coefficient_macro();
     //_set_bound_ee_1();
 
@@ -613,13 +640,19 @@ void StaticBTESynthetic::solve_firstorder
             if (worldRank == 0)
                 _print_out();
         }
+        if (nt >= 5000 && nt != Num_Max_Iter && nt % 100 == 0)
+        {
+            if (worldRank == 0)
+                cout << "More than 5,000 iterations have been performed. Please try \"Synthetic\" in IterativeScheme" << endl;
+            MPI_Barrier(MPI_COMM_WORLD);
+        }
         if (errorIncreaseTime >= 10)
         {
             nt = Num_Max_Iter;
             if (worldRank == 0)
                 _print_out();
             if (worldRank == 0)
-                cout << "error increases for 10 times, maybe the solution can not converge. Try \"-1\" in limiter" << endl;
+                cout << "Error increases for 10 times, maybe the solution can not converge. Try \"-1\" in limiter" << endl;
             MPI_Barrier(MPI_COMM_WORLD);
         }
         if (nt % 1 == 0)
@@ -695,7 +728,7 @@ void StaticBTESynthetic::solve_firstorder
 
 
     _set_face_matrix();
-    _set_matrix("Iterative");
+    _set_matrix("BICGSTAB");
     errorIncreaseTime=0;
     _set_initial(Use_Backup);
 
@@ -768,7 +801,14 @@ void StaticBTESynthetic::solve_firstorder
 
                 auto solve_start = chrono::high_resolution_clock::now();
 
+                if (worldRank==0 && inf_local==0 && iband_local==0) {
+                    cout<<"Begin to calculate coefficient ..."<<endl;
+                }
                 _get_coefficient_Iterative(iband_local,inf_local);
+                if (worldRank==0 && inf_local==numDirectionLocal-1 && iband_local==numBandLocal-1) {
+                    cout<<"Finish calculating coefficient"<<endl;
+                }
+
                 Eigen::BiCGSTAB<Eigen::SparseMatrix<double>,Eigen::IncompleteLUT<double>> cg1;
                 sol1=cg1.compute(stiffMatrix).solve(Re1);
                 for (int i = 0; i < numCell; ++i)
@@ -840,13 +880,19 @@ void StaticBTESynthetic::solve_firstorder
             if (worldRank == 0)
                 _print_out();
         }
+        if (nt >= 5000 && nt != Num_Max_Iter && nt % 100 == 0)
+        {
+            if (worldRank == 0)
+                cout << "More than 5,000 iterations have been performed. Please try \"Synthetic\" in IterativeScheme" << endl;
+            MPI_Barrier(MPI_COMM_WORLD);
+        }
         if (errorIncreaseTime >= 10)
         {
             nt = Num_Max_Iter;
             if (worldRank == 0)
                 _print_out();
             if (worldRank == 0)
-                cout << "error increases for 10 times, maybe the solution can not converge. Try \"-1\" in limiter" << endl;
+                cout << "Error increases for 10 times, maybe the solution can not converge. Try \"-1\" in limiter" << endl;
             MPI_Barrier(MPI_COMM_WORLD);
         }
         if (nt % 1 == 0)
@@ -909,7 +955,7 @@ void StaticBTESynthetic::solve_firstorder
 #ifdef USE_TIME
         cout << "Time taken by iteration: " << duration.count() * 0.001 << " milliseconds" << endl;
 #endif
-    _delete_matrix("Iterative");
+    _delete_matrix("BICGSTAB");
     _delete_face_matrix();
 
 
@@ -924,11 +970,15 @@ void StaticBTESynthetic::solve_DOM(int Use_Backup, int Num_Max_Iter, int Use_Lim
     _set_matrix("LU");
     errorIncreaseTime=0;
     _set_initial(Use_Backup);
+    if (worldRank==0)
+    {cout<<"Begin to calculate coefficient ..."<<endl;}
     for (int inf_local = 0; inf_local < numDirectionLocal; inf_local++) {
         for (int iband_local = 0; iband_local < numBandLocal; ++iband_local) {
             _get_coefficient(iband_local, inf_local);
         }
     }
+    if (worldRank==0)
+    {cout<<"Finish calculating coefficient"<<endl;}
     //_set_bound_ee_1();
 
     auto total_iter_time = chrono::microseconds(0);
@@ -1039,13 +1089,19 @@ void StaticBTESynthetic::solve_DOM(int Use_Backup, int Num_Max_Iter, int Use_Lim
             if (worldRank == 0)
                 _print_out();
         }
+        if (nt >= 5000 && nt != Num_Max_Iter && nt % 100 == 0)
+        {
+            if (worldRank == 0)
+                cout << "More than 5,000 iterations have been performed. Please try \"Synthetic\" in IterativeScheme" << endl;
+            MPI_Barrier(MPI_COMM_WORLD);
+        }
         if (errorIncreaseTime >= 10)
         {
             nt = Num_Max_Iter;
             if (worldRank == 0)
                 _print_out();
             if (worldRank == 0)
-                cout << "error increases for 10 times, maybe the solution can not converge. Try \"-1\" in limiter" << endl;
+                cout << "Error increases for 10 times, maybe the solution can not converge. Try \"-1\" in limiter" << endl;
             MPI_Barrier(MPI_COMM_WORLD);
         }
         if (nt % 1 == 0)
@@ -1124,7 +1180,7 @@ void StaticBTESynthetic::solve_DOM_Iterative
 
 
     _set_cell_matrix_larger();
-    _set_matrix("Iterative");
+    _set_matrix("BICGSTAB");
     errorIncreaseTime=0;
     _set_initial(Use_Backup);
 
@@ -1193,7 +1249,14 @@ void StaticBTESynthetic::solve_DOM_Iterative
 
                 auto solve_start = chrono::high_resolution_clock::now();
 
+                if (worldRank==0 && inf_local==0 && iband_local==0) {
+                    cout<<"Begin to calculate coefficient ..."<<endl;
+                }
                 _get_coefficient_Iterative(iband_local,inf_local);
+                if (worldRank==0 && inf_local==numDirectionLocal-1 && iband_local==numBandLocal-1) {
+                    cout<<"Finish calculating coefficient"<<endl;
+                }
+
                 Eigen::BiCGSTAB<Eigen::SparseMatrix<double>,Eigen::IncompleteLUT<double>> cg1;
                 sol1=cg1.compute(stiffMatrix).solve(Re1);
                 for (int i = 0; i < numCell; ++i)
@@ -1240,13 +1303,19 @@ void StaticBTESynthetic::solve_DOM_Iterative
             if (worldRank == 0)
                 _print_out();
         }
+        if (nt >= 5000 && nt != Num_Max_Iter && nt % 100 == 0)
+        {
+            if (worldRank == 0)
+                cout << "More than 5,000 iterations have been performed. Please try \"Synthetic\" in IterativeScheme" << endl;
+            MPI_Barrier(MPI_COMM_WORLD);
+        }
         if (errorIncreaseTime >= 10)
         {
             nt = Num_Max_Iter;
             if (worldRank == 0)
                 _print_out();
             if (worldRank == 0)
-                cout << "error increases for 10 times, maybe the solution can not converge. Try \"-1\" in limiter" << endl;
+                cout << "Error increases for 10 times, maybe the solution can not converge. Try \"-1\" in limiter" << endl;
             MPI_Barrier(MPI_COMM_WORLD);
         }
         if (nt % 1 == 0)
@@ -1309,7 +1378,7 @@ void StaticBTESynthetic::solve_DOM_Iterative
 #ifdef USE_TIME
         cout << "Time taken by iteration: " << duration.count() * 0.001 << " milliseconds" << endl;
 #endif
-    _delete_matrix("Iterative");
+    _delete_matrix("BICGSTAB");
 
     _delete_cell_matrix();
 
@@ -1325,11 +1394,15 @@ double error_temp_limit, double error_flux_limit)
     _set_matrix("LU");
     errorIncreaseTime=0;
     _set_initial(Use_Backup);
+    if (worldRank==0)
+    {cout<<"Begin to calculate coefficient ..."<<endl;}
     for (int inf_local = 0; inf_local < numDirectionLocal; inf_local++) {
         for (int iband_local = 0; iband_local < numBandLocal; ++iband_local) {
             _get_coefficient(iband_local, inf_local);
         }
     }
+    if (worldRank==0)
+    {cout<<"Finish calculating coefficient"<<endl;}
     //_set_bound_ee_1();
 
     auto total_iter_time = chrono::microseconds(0);
@@ -1434,13 +1507,19 @@ double error_temp_limit, double error_flux_limit)
             if (worldRank == 0)
                 _print_out();
         }
+        if (nt >= 5000 && nt != Num_Max_Iter && nt % 100 == 0)
+        {
+            if (worldRank == 0)
+                cout << "More than 5,000 iterations have been performed. Please try \"Synthetic\" in IterativeScheme" << endl;
+            MPI_Barrier(MPI_COMM_WORLD);
+        }
         if (errorIncreaseTime >= 10)
         {
             nt = Num_Max_Iter;
             if (worldRank == 0)
                 _print_out();
             if (worldRank == 0)
-                cout << "error increases for 10 times, maybe the solution can not converge. Try \"-1\" in limiter" << endl;
+                cout << "Error increases for 10 times, maybe the solution can not converge. Try \"-1\" in limiter" << endl;
             MPI_Barrier(MPI_COMM_WORLD);
         }
         if (nt % 1 == 0)
@@ -1516,7 +1595,7 @@ void StaticBTESynthetic::solve_DOM_firstorder_Iterative
  {
 
 
-    _set_matrix("Iterative");
+    _set_matrix("BICGSTAB");
     errorIncreaseTime=0;
     _set_initial(Use_Backup);
 
@@ -1579,7 +1658,14 @@ void StaticBTESynthetic::solve_DOM_firstorder_Iterative
 
                 auto solve_start = chrono::high_resolution_clock::now();
 
+                if (worldRank==0 && inf_local==0 && iband_local==0) {
+                    cout<<"Begin to calculate coefficient ..."<<endl;
+                }
                 _get_coefficient_Iterative(iband_local,inf_local);
+                if (worldRank==0 && inf_local==numDirectionLocal-1 && iband_local==numBandLocal-1) {
+                    cout<<"Finish calculating coefficient"<<endl;
+                }
+
                 Eigen::BiCGSTAB<Eigen::SparseMatrix<double>,Eigen::IncompleteLUT<double>> cg1;
                 sol1=cg1.compute(stiffMatrix).solve(Re1);
                 for (int i = 0; i < numCell; ++i)
@@ -1626,13 +1712,19 @@ void StaticBTESynthetic::solve_DOM_firstorder_Iterative
             if (worldRank == 0)
                 _print_out();
         }
+        if (nt >= 5000 && nt != Num_Max_Iter && nt % 100 == 0)
+        {
+            if (worldRank == 0)
+                cout << "More than 5,000 iterations have been performed. Please try \"Synthetic\" in IterativeScheme" << endl;
+            MPI_Barrier(MPI_COMM_WORLD);
+        }
         if (errorIncreaseTime >= 10)
         {
             nt = Num_Max_Iter;
             if (worldRank == 0)
                 _print_out();
             if (worldRank == 0)
-                cout << "error increases for 10 times, maybe the solution can not converge. Try \"-1\" in limiter" << endl;
+                cout << "Error increases for 10 times, maybe the solution can not converge. Try \"-1\" in limiter" << endl;
             MPI_Barrier(MPI_COMM_WORLD);
         }
         if (nt % 1 == 0)
@@ -1695,7 +1787,7 @@ void StaticBTESynthetic::solve_DOM_firstorder_Iterative
 #ifdef USE_TIME
         cout << "Time taken by iteration: " << duration.count() * 0.001 << " milliseconds" << endl;
 #endif
-    _delete_matrix("Iterative");
+    _delete_matrix("BICGSTAB");
 
 
 

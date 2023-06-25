@@ -1,22 +1,14 @@
-Transient:
-0
-Order://1:first order; 2:second order; 2limit: limited second order
+State= //Steady or Transient
+Steady
+Order=//1=first order; 2=second order
 2
-Method:// Synthetic or DOM
+IterativeScheme= // Synthetic or Sequential
 Synthetic
-MatrixSolver:// LU or Iterative
+MatrixSolver= // LU or BICGSTAB
 LU
-NumMaxIter:
+MaxNumIter=
 100000
-ErrorTempLimit:
+ResidualTemp=
 1e-5
-ErrorFluxLimit:
+ResidualFlux=
 1e-2
-Multiscale:
-none
-DeltaTime:
-1e-14
-TotalTime:
-1e-10
-
-

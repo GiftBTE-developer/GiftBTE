@@ -1,18 +1,19 @@
-Number of matter=
+MaterialNumber:
 1
-Number of bands=
-5
-Matter 1: ShengBTE =
-input/materials/Ge/ShengBTEFile
-Matter 2: ShengBTE =
-input/materials/Ge/ShengBTEFile
-Geometry: #geo index - matter index start from 0 =
-0 0
-Dimension_Material:
+BandNumber:
+1
+
+MaterialFile 1:
+2677 39.9E-12 1.627E6 1
+
+
+GeometryMaterialType: //geometryindex and materialindex start from 0
+1 1
+2 1
+
+MaterialDimension:
 3
-Angle_method: //1:CADOM,2:GaussDOM
-2
 Ntheta:
-1
+4
 Nphi:
-1
+4
