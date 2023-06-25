@@ -768,7 +768,7 @@ void StaticBTESynthetic::_set_initial(int Use_Backup) const
             int iband = iband_local * (ceil(double(numProc) / double(numDirection))) + worldRank / numDirection;
             for (int kk = 0; kk < numCell; kk++)
             {
-                energyDensity[iband_local][inf_local][kk]= temperature[kk] * heatCapacity[matter[kk]][iband_local][inf_local];
+                energyDensity[iband_local][inf_local][kk]= temperature[kk] * heatCapacity[matter[kk]][iband][inf];
             }
         }
 
