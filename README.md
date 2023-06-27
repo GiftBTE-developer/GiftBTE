@@ -134,7 +134,9 @@ Type in the command line under the GiftBTE folder
 
 Output in command line
 
-![屏幕快照 2023-06-12 上午11 15 07](https://github.com/Gift-BTE-developer/Gift-BTE/assets/50352151/46b6867f-b4c5-4416-8481-08bc565b6f4f)
+![1](https://github.com/GiftBTE-developer/GiftBTE/assets/133620758/0bcdc95d-3da5-449e-bb80-cff89f37a16e)
+![2](https://github.com/GiftBTE-developer/GiftBTE/assets/133620758/b469b29f-7c00-4dee-b0f6-1eef223937e2)
+![3](https://github.com/GiftBTE-developer/GiftBTE/assets/133620758/4dac43e2-5e82-4e31-a3d8-78d452fb4c62)
 
 
 Common error: 
