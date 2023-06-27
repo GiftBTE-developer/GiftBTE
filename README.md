@@ -124,11 +124,11 @@ Or directly clone the repository by git (may need installation)
 
 Type in the command line under the GiftBTE folder
 
-- $ cd GiftBTE
+- $ cd GiftBTE-master
 
 - $ cmake -B cpu-build -S.  -DCMAKE_BUILD_TYPE=Release
 
-- $ cp cpu-build
+- $ cd cpu-build
 
 - $ make
 
