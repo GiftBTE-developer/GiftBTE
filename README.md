@@ -149,8 +149,7 @@ GiftBTE provides many examples under bin/examples. One can choose an example to 
 $ cd bin
 $ cd examples
 $ cd cross-plane
-$ cd 1D
 $ cd 1e-6
-$ mpirun -np 4 ../../../../BTE_CPU
+$ mpirun -np 4 ../../../BTE_CPU
 
 # More details can be found in [User's Mannual](https://sjtu.feishu.cn/docx/GzB2dXQfaozenFxEtP4cQEJOnKb)
