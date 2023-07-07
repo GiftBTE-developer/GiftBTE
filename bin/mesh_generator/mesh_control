@@ -1,0 +1,14 @@
+GeometryDimension= // 1 represents 1D line; 2 represents 2D square/rectangle geometry; 3 represents 3D cubic geometry 
+3
+X_Length= // the scale of in the x direction
+2
+Y_Length= // the scale of in the y direction
+1
+Z_Length= // the scale of in the z direction
+1
+X_MeshNumber= // the number of diecrete meshes in the x direction
+20
+Y_MeshNumber=  // the number of diecrete meshes in the y direction
+10
+Z_MeshNumber=  // the number of diecrete meshes in the z direction
+10
