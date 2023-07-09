@@ -14,7 +14,7 @@ plot(Tempcell_ref_20(:,1)/20e-9,Tempcell_ref_20(:,4),'b','LineWidth',2);
 hold on
 plot(Tempcell_ref_50(:,1)/50e-9,Tempcell_ref_50(:,4),'b','LineWidth',2);
 hold on
-plot(Tempcell_ref_220(:,1)/220e-9,Tempcell_ref_220(:,4),'b','LineWidth',2);
+h1=plot(Tempcell_ref_220(:,1)/220e-9,Tempcell_ref_220(:,4),'b','LineWidth',2);
 hold on
 
 load 20nm/TempLattice.dat; % GiftBTE L=20nm
@@ -26,11 +26,11 @@ scatter(TempLattice(:,2)/50e-9,TempLattice(:,4),80,'r'); % non-dimensional x pos
 hold on
 
 load 220nm/TempLattice.dat; % GiftBTE L=220nm
-scatter(TempLattice(:,2)/220e-9,TempLattice(:,4),80,'r'); % non-dimensional x position versus temperature
+h2=scatter(TempLattice(:,2)/220e-9,TempLattice(:,4),80,'r'); % non-dimensional x position versus temperature
 hold on
 
 %%
-legend('Ran et al','GiftBTE','FontSize',24,'Location','Southwest');
+legend([h1 h2],'Ran et al','GiftBTE','FontSize',24,'Location','Southwest');
 legend boxoff
 
 xlabel('X*','FontSize',24);

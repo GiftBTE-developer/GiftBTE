@@ -175,7 +175,7 @@ void StaticBTESynthetic::solve(int Use_Backup, int Num_Max_Iter, int Use_Limiter
             if (worldRank == 0)
                 _print_out();
             if (worldRank == 0)
-                cout << "Error increases for 10 times, maybe the solution can not converge. Try \"-1\" in limiter" << endl;
+                cout << "Error increases for 10 times, maybe the solution can not converge. Try to set Order=1" << endl;
             MPI_Barrier(MPI_COMM_WORLD);
         }
         if (nt % 1 == 0)
@@ -412,7 +412,7 @@ void StaticBTESynthetic::solve_Iterative(int Use_Backup, int Num_Max_Iter, int U
             if (worldRank == 0)
                 _print_out();
             if (worldRank == 0)
-                cout << "Error increases for 10 times, maybe the solution can not converge. Try \"-1\" in limiter" << endl;
+                cout << "Error increases for 10 times, maybe the solution can not converge. Try to set Order=1" << endl;
             MPI_Barrier(MPI_COMM_WORLD);
         }
         if (nt % 1 == 0)
@@ -652,7 +652,7 @@ void StaticBTESynthetic::solve_firstorder
             if (worldRank == 0)
                 _print_out();
             if (worldRank == 0)
-                cout << "Error increases for 10 times, maybe the solution can not converge. Try \"-1\" in limiter" << endl;
+                cout << "Error increases for 10 times, maybe the solution can not converge. Try to set Order=1" << endl;
             MPI_Barrier(MPI_COMM_WORLD);
         }
         if (nt % 1 == 0)
@@ -892,7 +892,7 @@ void StaticBTESynthetic::solve_firstorder
             if (worldRank == 0)
                 _print_out();
             if (worldRank == 0)
-                cout << "Error increases for 10 times, maybe the solution can not converge. Try \"-1\" in limiter" << endl;
+                cout << "Error increases for 10 times, maybe the solution can not converge. Try to set Order=1" << endl;
             MPI_Barrier(MPI_COMM_WORLD);
         }
         if (nt % 1 == 0)
@@ -1101,7 +1101,7 @@ void StaticBTESynthetic::solve_DOM(int Use_Backup, int Num_Max_Iter, int Use_Lim
             if (worldRank == 0)
                 _print_out();
             if (worldRank == 0)
-                cout << "Error increases for 10 times, maybe the solution can not converge. Try \"-1\" in limiter" << endl;
+                cout << "Error increases for 10 times, maybe the solution can not converge. Try to set Order=1" << endl;
             MPI_Barrier(MPI_COMM_WORLD);
         }
         if (nt % 1 == 0)
@@ -1315,7 +1315,7 @@ void StaticBTESynthetic::solve_DOM_Iterative
             if (worldRank == 0)
                 _print_out();
             if (worldRank == 0)
-                cout << "Error increases for 10 times, maybe the solution can not converge. Try \"-1\" in limiter" << endl;
+                cout << "Error increases for 10 times, maybe the solution can not converge. Try to set Order=1" << endl;
             MPI_Barrier(MPI_COMM_WORLD);
         }
         if (nt % 1 == 0)
@@ -1519,7 +1519,7 @@ double error_temp_limit, double error_flux_limit)
             if (worldRank == 0)
                 _print_out();
             if (worldRank == 0)
-                cout << "Error increases for 10 times, maybe the solution can not converge. Try \"-1\" in limiter" << endl;
+                cout << "Error increases for 10 times, maybe the solution can not converge. Try to set Order=1" << endl;
             MPI_Barrier(MPI_COMM_WORLD);
         }
         if (nt % 1 == 0)
@@ -1724,7 +1724,7 @@ void StaticBTESynthetic::solve_DOM_firstorder_Iterative
             if (worldRank == 0)
                 _print_out();
             if (worldRank == 0)
-                cout << "Error increases for 10 times, maybe the solution can not converge. Try \"-1\" in limiter" << endl;
+                cout << "Error increases for 10 times, maybe the solution can not converge. Try to set Order=1" << endl;
             MPI_Barrier(MPI_COMM_WORLD);
         }
         if (nt % 1 == 0)

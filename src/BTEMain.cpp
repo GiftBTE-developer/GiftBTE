@@ -40,6 +40,13 @@ int main(int argc, char **argv)
     cout << "Bind solver rank " << world_rank << " to device " << device_id << "." << endl;
 #endif
 
+    if (world_rank == 0)
+    {
+        //cout<<"If you use GiftBTE for your research, Please cite our paper: GiftBTE: An efficient deterministic solver for non-gray phonon Boltzmann transport equation"<<endl;
+        cout<<"******************************** INTIALIZATIONS ********************************"<<endl;
+    }
+    MPI_Barrier(MPI_COMM_WORLD);
+
     string Name_Mesh_Type; //necessary
     string Name_Heat_Type; //yufei adding not necessary
     string Name_Mesh_File; //necessary
@@ -277,8 +284,14 @@ int main(int argc, char **argv)
     inputangle.close();
     if (world_rank == 0)
     {
-        cout << "mesh " << Name_Mesh_File  << " bcfile " << Name_Bc_File << " L_x " << L_x << " ntheta " << Num_Theta << " nphi " << Num_Phi << endl;
+        //cout << "mesh: " << Name_Mesh_File  << " bcfile " << Name_Bc_File << " L_x " << L_x << " ntheta " << Num_Theta << " nphi " << Num_Phi << endl;
+        cout<< "Order=" << Order << "  IterativeScheme="<< Method << "  MatrixSolver=" << Matrix_solver << endl;
+        cout<< "GeometryDimension=" << Dimension_Geometry << "  ScaleX=" << L_x << "  ScaleY=" << L_y << "  ScaleZ=" << L_z << endl;
+        cout<< "meshtype=" << Name_Mesh_Type << "  meshfile=" << Name_Mesh_File << "  bcfile=" << Name_Bc_File <<endl;
+        cout<< "ntheta=" << Num_Theta << "  nphi=" << Num_Phi << endl;
+
     }
+    MPI_Barrier(MPI_COMM_WORLD);
 
     ifstream bandFile("input/PHONON");
     auto bands = new BTEBand(bandFile, Dimension_Material);
@@ -290,6 +303,10 @@ int main(int argc, char **argv)
 
     BTEMesh *mesh;
 
+    if (world_rank == 0)
+    {
+        cout<<endl<<"Begin setting meshes ..."<<endl;
+    }
     ifstream geofile(Name_Mesh_File);
     ifstream heatfile(Name_Heat_File);
     ifstream initialtempfile(Name_InitialTemp_File);//jiaxuan
@@ -304,11 +321,20 @@ int main(int argc, char **argv)
     geofile.close();
     heatfile.close();
     initialtempfile.close();//jiaxuan
-
-
+    if (world_rank == 0)
+    {
+        cout<<"Finish setting meshes"<<endl;
+    }
+    MPI_Barrier(MPI_COMM_WORLD);
 
     BTEAngle *angles;
     angles = new BTEAngle(Num_Theta, Num_Phi, Dimension_Material, Angle_method);
+
+    if (world_rank == 0)
+    {
+        cout<<endl<<"************************************* RUN *************************************"<<endl;
+    }
+    MPI_Barrier(MPI_COMM_WORLD);
 
 #ifndef USE_GPU
 
@@ -318,7 +344,7 @@ int main(int argc, char **argv)
     {
         if (world_rank == 0)
         {
-            cout<<endl;
+            //cout<<endl;
             cout<<"Begin Fourier Solver"<<endl;
         }
         solutionAll._Fourier_Solver(distributeMesh,bcs,bands,num_proc,world_rank);
@@ -352,7 +378,7 @@ int main(int argc, char **argv)
 #endif
     if (world_rank == 0)
     {
-        cout << "******************************" << endl << "Calculation Finished !" << endl << "******************************" << endl;
+        cout << endl <<"********************************" << endl << "***  Calculation Finished !  ***" << endl << "********************************" << endl;
     }
 
     delete bands;

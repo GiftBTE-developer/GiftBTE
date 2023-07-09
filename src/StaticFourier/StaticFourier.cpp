@@ -835,7 +835,7 @@ void StaticFourier::_get_bound_flux()
 
 
 void StaticFourier::_print_out() {
-    std::ofstream output("Temperature.dat");
+    std::ofstream output("Temperature_macro.dat");
     for (int i = 0; i < numCell ; ++i) {
         output<<elementCenterX[i]<<" "<<elementCenterY[i]<<" "<<elementCenterZ[i]<<" "<<temperature[i]<<std::endl;
     }
@@ -847,7 +847,7 @@ void StaticFourier::_print_out() {
     }
     output1.close();*/
 
-    std::ofstream output2("HeatFlux.dat");
+    std::ofstream output2("HeatFlux_macro.dat");
     for (int i = 0; i < numCell; ++i)
     {
         output2 << setw(15) << elementCenterX[i]  << setw(15) << elementCenterY[i] << setw(15) << elementCenterZ[i] << setw(15) << heatFluxXGlobal[i] << setw(15) << heatFluxYGlobal[i] << setw(15) << heatFluxZGlobal[i] << endl;

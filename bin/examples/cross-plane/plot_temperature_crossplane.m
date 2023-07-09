@@ -35,7 +35,7 @@ hold on
 %%
 box on
 
-legend('Analytical','GiftBTE','FontSize',24);
+legend('GiftBTE','Analytical','FontSize',24);
 legend boxoff
 
 xlabel('X*','FontSize',24);

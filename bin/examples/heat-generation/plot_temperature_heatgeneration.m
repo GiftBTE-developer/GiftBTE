@@ -12,7 +12,7 @@ semilogy(Ta1(:,1),Ta1(:,2),'b','LineWidth',2);
 hold on
 plot(Ta2(:,1),Ta2(:,2),'b','LineWidth',2);
 hold on
-plot(Ta3(:,1),Ta3(:,2),'b','LineWidth',2);
+h1=plot(Ta3(:,1),Ta3(:,2),'b','LineWidth',2);
 hold on
 
 %%
@@ -42,13 +42,13 @@ load 1e-5/TempLattice.dat; % GiftBTE L=1e-5m
 L=1e-5;
 T11=TempLattice;
 T11(:,4)=8*k*(T11(:,4))/S/L/L;
-scatter(T11(:,2)/L,T11(:,4),80,'r'); % non-dimensional x position versus temperature
+h2=scatter(T11(:,2)/L,T11(:,4),80,'r'); % non-dimensional x position versus temperature
 hold on
 
 %%
 box on
 
-legend('Cao et al','GiftBTE','FontSize',24,'Location','best');
+legend([h1 h2],'Cao et al','GiftBTE','Location','best');
 legend boxoff
 
 xlabel('X*','FontSize',24);

@@ -66,7 +66,11 @@ BTEBand::BTEBand(ifstream &inFile, int Dimension_Material)
                     string File;
                     inFile>>File;
                     ifstream inputband(File);
-
+                    if (!inputband.is_open())
+                    {
+                        cout << "Error: DATABASE band file not open" << endl;
+                        exit(1);
+                    }
                     for (int j = 0; j < nband; ++j)
                     {
                         inputband>> bands[j].group_velocity[i] >> bands[j].relaxation_time[i] >> bands[j].heat_capacity[i] >> bands[j].lattice_ratio[i] >> bands[j].heat_ratio[i];
@@ -87,6 +91,11 @@ BTEBand::BTEBand(ifstream &inFile, int Dimension_Material)
                     string File_control=Directory + "/CONTROL";//?
                     string tempstr;
                     ifstream control(File_control);
+                    if (!control.is_open())
+                    {
+                        cout << "Error: ShengBTE CONTROL file not open" << endl;
+                        exit(1);
+                    }
                     while (getline(control, tempstr))
                     {
                         if (tempstr.find("ngrid(:)") > 0 && tempstr.find("ngrid(:)") < tempstr.length())
@@ -289,7 +298,7 @@ BTEBand::BTEBand(ifstream &inFile, int Dimension_Material)
                     ifstream omega(File_omega);
                     if (!omega.is_open())
                     {
-                        cout << "Error: band file not open" << endl;
+                        cout << "Error: ShengBTE BTE.omega file not open" << endl;
                         exit(1);
                     }
                     int ioo=0;
@@ -341,7 +350,7 @@ BTEBand::BTEBand(ifstream &inFile, int Dimension_Material)
                     ifstream qpoints(File_qpoints);
                     if (!qpoints.is_open())
                     {
-                        cout << "DEBUG: band file not open" << endl;
+                        cout << "DEBUG: ShengBTE BTE.qpoints_full file not open" << endl;
                         exit(1);
                     }
                     int iqq=0;
@@ -393,7 +402,7 @@ BTEBand::BTEBand(ifstream &inFile, int Dimension_Material)
                     ifstream wfinal(File_wfinal);
                     if (!wfinal.is_open())
                     {
-                        cout << "Error: band file not open" << endl;
+                        cout << "Error: ShengBTE BTE.w_final file not open" << endl;
                         exit(1);
                     }
                     int iww=0;
@@ -445,7 +454,7 @@ BTEBand::BTEBand(ifstream &inFile, int Dimension_Material)
                     ifstream vfull(File_vfull);
                     if (!vfull.is_open())
                     {
-                        cout << "DEBUG: band file not open" << endl;
+                        cout << "DEBUG: ShengBTE BTE.v file not open" << endl;
                         exit(1);
                     }
                     int ivv=0;
@@ -613,6 +622,11 @@ BTEBand::BTEBand(ifstream &inFile, int Dimension_Material)
                     string File;
                     inFile>>File;
                     ifstream inputband(File);
+                    if (!inputband.is_open())
+                    {
+                        cout << "Error: ALAMODE band file not open" << endl;
+                        exit(1);
+                    }
                     string strband;
                     while (getline(inputband, strband))
                     {

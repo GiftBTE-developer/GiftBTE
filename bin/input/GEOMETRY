@@ -9,6 +9,6 @@ ScaleZ=
 BCFile=
 input/inputbc.dat
 MeshType=//MSH or COMSOL
-COMSOL
+1D
 MeshFile=
-input/oned.mphtxt
+input/inputmesh.dat

@@ -2696,7 +2696,7 @@ void StaticBTESynthetic::_marco_solution()
         error_old=internalerror;
         if(intererrorIncreaseTime>=10)
         {
-            cout<<"cannot congerve, try limiter or 1 st order"<<endl;
+            cout<<"cannot congerve, try to set Order=1 or 2limit"<<endl;
             exit(1);
         }
         if(worldRank==0)

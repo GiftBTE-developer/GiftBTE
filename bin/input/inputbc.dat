@@ -1,6 +1,5 @@
-3 #number of boundaries
+2 #number of boundaries
 
 #boundary indexs #boundary condition:1:thermalization #temperature//31:leftandright,32:topandbottm//periodic: give -index-1 for example, if "0" boundary is connected to 3 boundary set second term as "-4", detT and 0, means you want set the temperature differece as detT for periodic bound; 0 and 0 means no temperature difference, do not set other value if you do not need temperature difference
 1 1 1
-2 5 1 input/interface1_xin_134.dat
-3 1 0
+2 1 0
