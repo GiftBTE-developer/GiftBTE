@@ -862,8 +862,19 @@ void StaticFourier::_print_out() {
     outputVTK<<"POINTS "<<numnode<<" float"<<endl;
     for (int i = 0; i < numnode; ++i)
     {
+        double Length_Y;
+        double Length_Z;
+        if (dimension==2)
+        {
+           Length_Z=1;
+        }
+        if (dimension==1)
+        {
+           Length_Z=1;
+           Length_Y=1;
+        }
         outputVTK<<nodeX[i]/L_x <<" "
-        << nodeY[i]/L_y <<" " << nodeZ[i]/L_z  << endl;
+        << nodeY[i]/Length_Y <<" " << nodeZ[i]/Length_Z  << endl;
     }
     int totalnum=0;
     for (int i = 0; i < numCell; ++i) {
