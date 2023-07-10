@@ -142,7 +142,8 @@ Output in command line
 Common error: 
 
 - C++ compiler not found: the C++ compiler is not installed 
-- MPI not found: the MPI library is not installed 
+- MPI not found: the MPI library is not installed
+- If the CMake fails, please delete the cpu-build ($ rm -rf cpu-build) folder before retries.
 
 ### Step 4. Run example
 GiftBTE provides many examples under bin/examples. One can choose an example to test. For example: 
