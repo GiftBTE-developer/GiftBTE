@@ -28,7 +28,7 @@ GiftBTE is a powerful tool designed to investigate submicron heat conduction. At
 This software is distributed under the GNU General Public License v3.0 license. See the LICENSE.txt file for license rights and limitations.
 
 ## How to cite GiftBTE
-Please cite the following article when you use GiftBTE 
+Please cite the following article when you use GiftBTE:  
 Yue Hu, Yongxing Shen, Hua Bao,
 Ultra-efficient and parameter-free computation of submicron thermal transport with phonon Boltzmann transport equation,
 Fundamental Research,
