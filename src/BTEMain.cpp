@@ -40,6 +40,7 @@ int main(int argc, char **argv)
     cout << "Bind solver rank " << world_rank << " to device " << device_id << "." << endl;
 #endif
 
+    MPI_Barrier(MPI_COMM_WORLD);
     if (world_rank == 0)
     {
         //cout<<"If you use GiftBTE for your research, Please cite our paper: GiftBTE: An efficient deterministic solver for non-gray phonon Boltzmann transport equation"<<endl;
