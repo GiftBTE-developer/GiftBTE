@@ -864,9 +864,15 @@ void StaticFourier::_print_out() {
     {
         double Length_Y;
         double Length_Z;
+        if (dimension==3)
+        {
+           Length_Z=L_z;
+           Length_Y=L_y;
+        }
         if (dimension==2)
         {
            Length_Z=1;
+           Length_Y=L_y;
         }
         if (dimension==1)
         {
