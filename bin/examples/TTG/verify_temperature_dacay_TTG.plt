@@ -1,0 +1,5 @@
+set xlabel 'X*'
+set ylabel 'T*'
+set yrange [-0.2:1]
+set xrange [0:10]
+plot "2pikn=5/TTG.dat" using ($1/3.99e-11):2 with l lt 1 lw 5 title "GiftBTE 2pikn=5", "2pikn=2/TTG.dat" using ($1/3.99e-11):2 with l lt 2 lw 5 title "GiftBTE 2pikn=2", "2pikn=1/TTG.dat" using ($1/3.99e-11):2 with l lt 3 lw 5 title "GiftBTE 2pikn=1", "2pikn=05/TTG.dat" using ($1/3.99e-11):2 with l lt 4 lw 5 title "GiftBTE 2pikn=05", "2pikn=025/TTG.dat" using ($1/3.99e-11):2 with l lt 5 lw 5 title "GiftBTE 2pikn=025", "analytical_result/kk5.txt" using 1:2 with l lt 0 lw 5 title "Analytical", "analytical_result/kk2.txt" using 1:2 with l lt 0 lw 5 title "", "analytical_result/kk1.txt" using 1:2 with l lt 0 lw 5 title "", "analytical_result/kk05.txt" using 1:2 with l lt 0 lw 5 title "", "analytical_result/kk025.txt" using 1:2 with l lt 0 lw 5 title ""
