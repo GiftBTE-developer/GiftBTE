@@ -133,6 +133,7 @@ void StaticBTESynthetic::solve(int Use_Backup, int Num_Max_Iter, int Use_Limiter
                 MPI_Allreduce(heatFluxXLocal, heatFluxXGlobal, numCell, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
                 MPI_Allreduce(heatFluxYLocal, heatFluxYGlobal, numCell, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
                 MPI_Allreduce(heatFluxZLocal, heatFluxZGlobal, numCell, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+                MPI_Allreduce(temperaturebandLocal, temperatureband, numCell*numBand, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
                 auto transfer_end = chrono::high_resolution_clock::now();
                 trasfer1_time+=chrono::duration_cast<chrono::microseconds>(transfer_end - transfer_start);
             }
@@ -370,6 +371,7 @@ void StaticBTESynthetic::solve_Iterative(int Use_Backup, int Num_Max_Iter, int U
                 MPI_Allreduce(heatFluxXLocal, heatFluxXGlobal, numCell, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
                 MPI_Allreduce(heatFluxYLocal, heatFluxYGlobal, numCell, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
                 MPI_Allreduce(heatFluxZLocal, heatFluxZGlobal, numCell, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+                MPI_Allreduce(temperaturebandLocal, temperatureband, numCell*numBand, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
                 auto transfer_end = chrono::high_resolution_clock::now();
                 trasfer1_time+=chrono::duration_cast<chrono::microseconds>(transfer_end - transfer_start);
             }
@@ -610,6 +612,7 @@ void StaticBTESynthetic::solve_firstorder
                 MPI_Allreduce(heatFluxXLocal, heatFluxXGlobal, numCell, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
                 MPI_Allreduce(heatFluxYLocal, heatFluxYGlobal, numCell, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
                 MPI_Allreduce(heatFluxZLocal, heatFluxZGlobal, numCell, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+                MPI_Allreduce(temperaturebandLocal, temperatureband, numCell*numBand, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
                 auto transfer_end = chrono::high_resolution_clock::now();
                 trasfer1_time+=chrono::duration_cast<chrono::microseconds>(transfer_end - transfer_start);
             }
@@ -850,6 +853,7 @@ void StaticBTESynthetic::solve_firstorder
                 MPI_Allreduce(heatFluxXLocal, heatFluxXGlobal, numCell, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
                 MPI_Allreduce(heatFluxYLocal, heatFluxYGlobal, numCell, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
                 MPI_Allreduce(heatFluxZLocal, heatFluxZGlobal, numCell, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+                MPI_Allreduce(temperaturebandLocal, temperatureband, numCell*numBand, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
                 auto transfer_end = chrono::high_resolution_clock::now();
                 trasfer1_time+=chrono::duration_cast<chrono::microseconds>(transfer_end - transfer_start);
             }
@@ -1068,6 +1072,7 @@ void StaticBTESynthetic::solve_DOM(int Use_Backup, int Num_Max_Iter, int Use_Lim
                 MPI_Allreduce(heatFluxXLocal, heatFluxXGlobal, numCell, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
                 MPI_Allreduce(heatFluxYLocal, heatFluxYGlobal, numCell, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
                 MPI_Allreduce(heatFluxZLocal, heatFluxZGlobal, numCell, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+                MPI_Allreduce(temperaturebandLocal, temperatureband, numCell*numBand, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
                 auto transfer_end = chrono::high_resolution_clock::now();
                 trasfer1_time+=chrono::duration_cast<chrono::microseconds>(transfer_end - transfer_start);
             }
@@ -1282,6 +1287,7 @@ void StaticBTESynthetic::solve_DOM_Iterative
                 MPI_Allreduce(heatFluxXLocal, heatFluxXGlobal, numCell, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
                 MPI_Allreduce(heatFluxYLocal, heatFluxYGlobal, numCell, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
                 MPI_Allreduce(heatFluxZLocal, heatFluxZGlobal, numCell, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+                MPI_Allreduce(temperaturebandLocal, temperatureband, numCell*numBand, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
                 auto transfer_end = chrono::high_resolution_clock::now();
                 trasfer1_time+=chrono::duration_cast<chrono::microseconds>(transfer_end - transfer_start);
             }
@@ -1486,6 +1492,7 @@ double error_temp_limit, double error_flux_limit)
                 MPI_Allreduce(heatFluxXLocal, heatFluxXGlobal, numCell, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
                 MPI_Allreduce(heatFluxYLocal, heatFluxYGlobal, numCell, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
                 MPI_Allreduce(heatFluxZLocal, heatFluxZGlobal, numCell, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+                MPI_Allreduce(temperaturebandLocal, temperatureband, numCell*numBand, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
                 auto transfer_end = chrono::high_resolution_clock::now();
                 trasfer1_time+=chrono::duration_cast<chrono::microseconds>(transfer_end - transfer_start);
             }
@@ -1691,6 +1698,7 @@ void StaticBTESynthetic::solve_DOM_firstorder_Iterative
                 MPI_Allreduce(heatFluxXLocal, heatFluxXGlobal, numCell, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
                 MPI_Allreduce(heatFluxYLocal, heatFluxYGlobal, numCell, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
                 MPI_Allreduce(heatFluxZLocal, heatFluxZGlobal, numCell, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+                MPI_Allreduce(temperaturebandLocal, temperatureband, numCell*numBand, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
                 auto transfer_end = chrono::high_resolution_clock::now();
                 trasfer1_time+=chrono::duration_cast<chrono::microseconds>(transfer_end - transfer_start);
             }

@@ -1,10 +1,10 @@
 MaterialNumber:
 1
 BandNumber:
-1
+2
 
-MaterialFile 1:
-2677 39.9E-12 1.627E6 1 1
+MaterialFile 1: ShengBTE
+materials/ShengBTE/GaN
 
 
 GeometryMaterialType: //geometryindex and materialindex start from 0

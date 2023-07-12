@@ -61,6 +61,8 @@ public:
     double *temperatureLocal;
     double *temperatureVertex;
     double *temperature1;
+    double *temperatureband;
+    double *temperaturebandLocal;
 
     double *totalEnergy;
     double *totalEnergyLocal;
