@@ -32,7 +32,7 @@ Please cite the following article when you use GiftBTE:
 Yue Hu, Ru Jia, Jiaxuan Xu, Yufei Sheng, Minhua Wen, James Lin, Yongxing Shen, Hua Bao, GiftBTE: An efficient deterministic solver for non-gray phonon Boltzmann transport equation, arXiv preprint arXiv:2306.14181 (2023).
 https://doi.org/10.48550/arXiv.2306.14181.
 
-##Issues & Bug report
+## Issues & Bug report
 - If you find a bug or issue related to GiftBTE, please report it at [Github Issues](https://github.com/Gift-BTE-developer/Gift-BTE/issues)
 - Other questions and suggestions can be posted on the Github Disccusions [Github Disccusions](https://github.com/GiftBTE-developer/GiftBTE/discussions)
 
