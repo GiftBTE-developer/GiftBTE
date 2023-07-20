@@ -27,7 +27,7 @@ https://www.bilibili.com/video/BV19u4y1S7ao/?share_source=copy_web&vd_source=200
 ![method-figure1](https://github.com/Gift-BTE-developer/Gift-BTE/assets/133620758/86174800-9b5c-4b00-9fab-a4643f14727f)
 
 ## Links
-- Documentation: https://sjtu.feishu.cn/docx/GzB2dXQfaozenFxEtP4cQEJOnKb
+- Documentation: https://bte.sjtu.edu.cn/
 - Git repository: https://github.com/GiftBTE-developer/GiftBTE.git
 
 ## License
