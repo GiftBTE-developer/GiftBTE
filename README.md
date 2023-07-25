@@ -38,6 +38,7 @@ This software is distributed under the GNU General Public License v3.0 license. 
 
 ## How to cite GiftBTE
 Please cite the following article when you use GiftBTE:
+
 Yue Hu, Ru Jia, Jiaxuan Xu, Yufei Sheng, Minhua Wen, James Lin, Yongxing Shen, Hua Bao, GiftBTE: An efficient deterministic solver for non-gray phonon Boltzmann transport equation, arXiv preprint arXiv:2306.14181 (2023).
 https://doi.org/10.48550/arXiv.2306.14181.
 
