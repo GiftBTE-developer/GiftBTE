@@ -119,7 +119,6 @@ Or directly clone the repository by git (may need installation)
 
 - $ git clone https://github.com/GiftBTE-developer/GiftBTE.git
 
-- $ git Checkout master
 
 
 
