@@ -63,10 +63,9 @@ Shanghai Jiao Tong University
 China
 
 # Download
-You can download the package from the git repository as:
- https://github.com/GiftBTE-developer/GiftBTE.git
+You can download the package from the git repository as: https://github.com/GiftBTE-developer/GiftBTE
 
-If you choose the GitHub version, please use the ‘master’ branch.
+Please download the ‘master’ branch or the latest version (v1.0.0).
 
 # Installation
 ## Requirement
