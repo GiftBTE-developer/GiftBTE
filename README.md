@@ -112,7 +112,7 @@ when output the folder of cmake like
 ### Step 2. Download source
 
 You can download the package from the git repository as:
- https://github.com/GiftBTE-developer/GiftBTE.git
+ https://github.com/GiftBTE-developer/GiftBTE
  - $ unzip GiftBTE-master.zip
  
 Or directly clone the repository by git (may need installation)
