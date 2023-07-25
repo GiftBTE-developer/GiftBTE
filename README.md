@@ -12,8 +12,6 @@ https://www.bilibili.com/video/BV1r14y1Q7je/?share_source=copy_web&vd_source=200
 
 https://www.bilibili.com/video/BV19u4y1S7ao/?share_source=copy_web&vd_source=200fa4770a16926e2993543e680fef05
 
-https://www.bilibili.com/list/609834262?sid=3462820&desc=1&oid=956191475&bvid=BV1BW4y1d7jn
-
 ## Features
 ### General
 - Deterministic solver of phonon Boltzmann transport equation
