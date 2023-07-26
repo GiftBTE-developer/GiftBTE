@@ -68,8 +68,8 @@ int main(int argc, char **argv)
     int Dimension_Material=3; //not necessary
     int Num_Phi=4; //not necessary
     int Num_Theta=4; //not necessary
-    double error_temp_limit=1e-5;  //not necessary
-    double error_flux_limit=1e-3;  //not necessary
+    double error_temp_limit=1e-6;  //not necessary
+    double error_flux_limit=1e-4;  //not necessary
     bool Use_Backup=false;
     double Uniform_heat=0; //not necessary
     double DeltaT=-1; //necessary for transient
