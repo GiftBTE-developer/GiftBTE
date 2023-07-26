@@ -70,7 +70,7 @@ China
 You can download the package from the git repository as:
 https://github.com/GiftBTE-developer/GiftBTE
 
-Please download the ‘master’ branch or the latest version (v1.0.0).
+Please download the ‘master’ branch or the latest version.
 
 # Installation
 ## Requirement
@@ -117,7 +117,7 @@ when output the folder of cmake like
 
 You can download the package from the git repository as:
  https://github.com/GiftBTE-developer/GiftBTE
- - $ unzip GiftBTE-1.0.0.zip
+ - $ unzip GiftBTE-1.0.0-beta.zip
 
 
 
@@ -125,7 +125,7 @@ You can download the package from the git repository as:
 
 Type in the command line under the GiftBTE folder
 
-- $ cd GiftBTE-1.0.0
+- $ cd GiftBTE-1.0.0-beta
 
 - $ cmake -B cpu-build -S.  -DCMAKE_BUILD_TYPE=Release
 
