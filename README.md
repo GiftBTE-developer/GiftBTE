@@ -69,7 +69,7 @@ China
 # Download
 You can download the package from the git repository as: https://github.com/GiftBTE-developer/GiftBTE
 
-Please download the ‘master’ branch or the latest version.
+Please download the ‘master’ branch or the latest released version.
 
 # Installation
 ## Requirement
