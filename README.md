@@ -42,7 +42,7 @@ Please cite the following papers when you use GiftBTE:
 Yue Hu, Ru Jia, Jiaxuan Xu, Yufei Sheng, Minhua Wen, James Lin, Yongxing Shen, Hua Bao, GiftBTE: An efficient deterministic solver for non-gray phonon Boltzmann transport equation, arXiv preprint arXiv:2306.14181 (2023).
 https://doi.org/10.48550/arXiv.2306.14181.
 
-Hu, Yue, Yongxing Shen, Hua Bao, Ultra-efficient and parameter-free computation of submicron thermal transport with phonon Boltzmann transport equation, Fundamental Research (2022). 
+Yue Hu, Yongxing Shen, Hua Bao, Ultra-efficient and parameter-free computation of submicron thermal transport with phonon Boltzmann transport equation, Fundamental Research (2022). 
 https://doi.org/10.1016/j.fmre.2022.06.007.
 
 ## Issues & Bug report
