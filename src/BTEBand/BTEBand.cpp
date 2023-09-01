@@ -287,7 +287,11 @@ BTEBand::BTEBand(ifstream &inFile, int Dimension_Material)
                                     break;
                                 }
                             }
-                            Temperature = stod(vv1.substr(pos1));//unit:K
+                            //Temperature = stod(vv1.substr(pos1));//unit:K
+                            if (vv1.find("TRUE")==str.npos && vv1.find("True")==str.npos)
+                            {
+                                Temperature = stod(vv1.substr(pos1));//unit:K
+                            }
                         }
                     }
                     Volume = (lattvec[0][0]*lattvec[1][1]*lattvec[2][2] + lattvec[1][0]*lattvec[2][1]*lattvec[0][2] + lattvec[0][1]*lattvec[1][2]*lattvec[2][0] - lattvec[0][2]*lattvec[1][1]*lattvec[2][0] - lattvec[0][1]*lattvec[0][1]*lattvec[2][2] - lattvec[0][0]*lattvec[1][2]*lattvec[2][1])*lfactor*lfactor*lfactor;//unit:?
@@ -571,9 +575,14 @@ BTEBand::BTEBand(ifstream &inFile, int Dimension_Material)
                     }
                     vector<double> freqbin;
                     freqbin.resize(nband+1);
-                    freqbin[0]=minfreq-1;//
+                    freqbin[0]=-1;//
                     for (int j = 1; j < nband+1; ++j) {
-                        freqbin[j]=minfreq+(maxfreq-minfreq)/nband*j;
+                        //freqbin[j]=minfreq+(maxfreq-minfreq)/nband*j;
+                        freqbin[j]=freqbin[0]+ceil(totalmode/nband)*j;
+                        if (j==nband)
+                        {
+                            freqbin[j]=totalmode;
+                        }
                     }
 
                     vector<double> sumC,sumCv,sumk;
@@ -582,7 +591,7 @@ BTEBand::BTEBand(ifstream &inFile, int Dimension_Material)
                     sumk.resize(nband,0);
                     for (int j = 0; j < totalmode; ++j) {
                         for (int k = 0; k < nband; ++k) {
-                            if(frequency_mode[j]>freqbin[k]&&frequency_mode[j]<=freqbin[k+1])
+                            if(j>freqbin[k]&&j<=freqbin[k+1])
                             {
                                 sumC[k]+=capacity_mode[j];
                                 sumCv[k]+=capacity_mode[j]*vel_mode[j];
@@ -680,9 +689,13 @@ BTEBand::BTEBand(ifstream &inFile, int Dimension_Material)
                             }
                             vector<double> freqbin;
                             freqbin.resize(nband+1);
-                            freqbin[0]=minfreq;
+                            freqbin[0]=-1;
                             for (int j = 1; j < nband+1; ++j) {
-                                freqbin[j]=minfreq+(maxfreq-minfreq)/nband*j;
+                                freqbin[j]=freqbin[0]+ceil(totalmode/nband)*j;
+                                if (j==nband)
+                                {
+                                    freqbin[j]=totalmode;
+                                }
                             }
                             vector<double> sumC,sumCv,sumk;
                             sumC.resize(nband,0);
@@ -690,7 +703,7 @@ BTEBand::BTEBand(ifstream &inFile, int Dimension_Material)
                             sumk.resize(nband,0);
                             for (int j = 0; j < totalmode; ++j) {
                                 for (int k = 0; k < nband; ++k) {
-                                    if(frequency[j]>freqbin[k]&&frequency[j]<=freqbin[k+1])
+                                    if(j>freqbin[k]&&j<=freqbin[k+1])
                                     {
                                         sumC[k]+=capacity[j];
                                         sumCv[k]+=capacity[j]*velocity[j];
@@ -787,6 +800,7 @@ BTEBand::BTEBand(ifstream &inFile, int Dimension_Material)
                 kappabulk[i] += bands[j].heat_capacity[i] * bands[j].group_velocity[i] * bands[j].group_velocity[i] * bands[j].relaxation_time[i] / 3;
             capacitybulk[i]+=bands[j].heat_capacity[i];
         }
+        //cout<<kappabulk[i]<<endl;
         if(isnan(kappabulk[i]))
         {
             cout<<"Error: mistake in phonon properties, nan"<<endl;
