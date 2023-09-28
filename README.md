@@ -56,6 +56,8 @@ This project is/was partially supported by the following projects:
 - National Natural Science Foundation of China (Grant No. 52122606)
 
 ## Contributors & Contact
+Authors: Yue Hu, Ru Jia, Jiaxuan Xu, Yufei Sheng, Minhua Wen, James Lin, Yongxing Shen, Hua Bao*
+
 GiftBTE developers in TPEC Lab (Contact: Gift-BTE@outlook.com)
 
 TPEC Lab: https://sites.ji.sjtu.edu.cn/hua-bao/
@@ -69,7 +71,7 @@ China
 # Download
 You can download the package from the git repository as: https://github.com/GiftBTE-developer/GiftBTE
 
-Please download the ‘master’ branch or the latest released version.
+Please download the ‘master’ branch.
 
 # Installation
 ## Requirement
