@@ -1,5 +1,0 @@
-#add_library(BTEMesh BTEMesh.cpp "${StaticBTESolver_SOURCE_DIR}/includes/StaticBTESynthetic/BTEMesh.h")
-add_library(BTEMesh  BTEMesh.cpp COMSOL.cpp oneD.cpp Distribute.cpp ReadinMesh.cpp)
-# target_include_directories(BTEMesh PUBLIC "${StaticBTESolver_SOURCE_DIR}/includes")
-target_link_libraries(BTEMesh PUBLIC BTEutility)
-# target_compile_features(BTEMesh PUBLIC cxx_std_14)
