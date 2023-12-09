@@ -143,6 +143,13 @@ int main(int argc, char **argv)
             if(str.find("InitialTemperatureFile") >= 0 && str.find("InitialTemperatureFile") < str.length() && str.find(ant) == str.npos)
             {
                 fin_const1 >> Name_InitialTemp_File ;//jiaxuan
+                //add_Jia
+                if (world_rank == 0) {
+                    cout
+                            << " Requests for this part(InitialTemperatureFile) of the code should be addressed to hua.bao@sjtu.edu.cn ; "
+                            << endl;
+                }
+                exit(0);
             }
             //TDTR
             if(str.find("IsTDTR") >= 0 && str.find("IsTDTR") < str.length() && str.find(ant) == str.npos)
@@ -150,6 +157,14 @@ int main(int argc, char **argv)
                 fin_const1 >> use_TDTR;
                 if (world_rank == 0)
                     cout<<"use_TDTR: "<<use_TDTR<<endl;
+                //add_Jia
+                if (use_TDTR==1) {
+                    if (world_rank == 0){
+                        cout << " Requests for this part(TDTR) of the code should be addressed to hua.bao@sjtu.edu.cn ; "
+                             << endl;
+                    }
+                    exit(0);
+                }
             }
             if(str.find("PulseTime") >= 0 && str.find("PulseTime") < str.length() && str.find(ant) == str.npos)
             {
@@ -199,6 +214,15 @@ int main(int argc, char **argv)
             if(str.find("GeometryDimension") >= 0 && str.find("GeometryDimension") < str.length() && str.find(ant) == str.npos)
             {
                 fin_const2 >> Dimension_Geometry;
+                //add_Jia
+                if(Dimension_Geometry==3)
+                {
+                    if (world_rank == 0)
+                    {
+                        cout<<"Requests for this part(Dimension_Geometry=3) of the code should be addressed to hua.bao@sjtu.edu.cn ; "<<endl;
+                    }
+                    exit(0);
+                }
             }
             if(str.find("ScaleX") >= 0 && str.find("ScaleX") < str.length() && str.find(ant) == str.npos)
             {
@@ -256,6 +280,12 @@ int main(int argc, char **argv)
     }
     else if(Dimension_Geometry==3&&(L_x==0||L_y==0||L_z==0))
     {
+        //add_Jia
+        if(Dimension_Geometry==3)
+        {
+            cout<<" Requests for this part(IDimension_Geometry=3) of the code should be addressed to hua.bao@sjtu.edu.cn ; "<<endl;
+            exit(0);
+        }
         cout<<"Error: Please provide Lx, Ly and Lz for two dimensional problem"<<endl;
         exit(0);
     }
