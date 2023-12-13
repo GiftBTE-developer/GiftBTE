@@ -146,7 +146,7 @@ int main(int argc, char **argv)
                 //add_Jia
                 if (world_rank == 0) {
                     cout
-                            << " Requests for this part(InitialTemperatureFile) of the code should be addressed to hua.bao@sjtu.edu.cn ; "
+                            << " Requests for this part(InitialTemperatureFile) of the code should be addressed to contact us ; "
                             << endl;
                 }
                 exit(0);
@@ -160,7 +160,7 @@ int main(int argc, char **argv)
                 //add_Jia
                 if (use_TDTR==1) {
                     if (world_rank == 0){
-                        cout << " Requests for this part(TDTR) of the code should be addressed to hua.bao@sjtu.edu.cn ; "
+                        cout << " Requests for this part(TDTR) of the code should be addressed to contact us ; "
                              << endl;
                     }
                     exit(0);
@@ -219,7 +219,7 @@ int main(int argc, char **argv)
                 {
                     if (world_rank == 0)
                     {
-                        cout<<"Requests for this part(Dimension_Geometry=3) of the code should be addressed to hua.bao@sjtu.edu.cn ; "<<endl;
+                        cout<<"Requests for this part(Dimension_Geometry=3) of the code should be addressed to contact us ; "<<endl;
                     }
                     exit(0);
                 }
@@ -283,7 +283,7 @@ int main(int argc, char **argv)
         //add_Jia
         if(Dimension_Geometry==3)
         {
-            cout<<" Requests for this part(IDimension_Geometry=3) of the code should be addressed to hua.bao@sjtu.edu.cn ; "<<endl;
+            cout<<" Requests for this part(IDimension_Geometry=3) of the code should be addressed to contact us ; "<<endl;
             exit(0);
         }
         cout<<"Error: Please provide Lx, Ly and Lz for two dimensional problem"<<endl;
