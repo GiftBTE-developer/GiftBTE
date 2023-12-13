@@ -1098,7 +1098,7 @@ void BTEMesh::BTEMesh_heatin(ifstream &inHeat, double Uniform_Heat, std::string 
         if (heat_type == "COORDINATE"){
             //delete_Jia
 
-                cout<< "Requests for this part (heat COORDINATE) of the code should be addressed to hua.bao@sjtu.edu.cn; "
+                cout<< "Requests for this part (heat COORDINATE) of the code should be addressed to contact us; "
                         << endl;
             exit(0);
         }
