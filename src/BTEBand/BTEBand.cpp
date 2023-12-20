@@ -549,7 +549,7 @@ BTEBand::BTEBand(ifstream &inFile, int Dimension_Material)
                             double value = capacity_all[i1][i2] / iqq * vel_all[i1][i2] * vel_all[i1][i2] * tau_all[i1][i2];
                             if (isnan(value)){
                                 num_nan++;
-                            }else{
+                            }else if(value>=0){
                                 frequency_mode.push_back(omega_all[i1][i2]);
                                 capacity_mode.push_back(capacity_all[i1][i2] / iqq);
                                 vel_mode.push_back(vel_all[i1][i2]);
