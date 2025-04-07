@@ -164,6 +164,7 @@ The current website version supports 2D case calculations.
 For 3D cases, you do not need to compile the BTE_CPU file yourself — simply use the provided BTE_CPU file.
 
 Examples of 3D functions:
+
 $ chmod -x BTE_CPU
 
 $ cd bin/examples/Finfet/1e-7
