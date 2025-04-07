@@ -159,4 +159,21 @@ $ cd cross-plane
 $ cd 1e-6
 $ mpirun -np 4 ../../../BTE_CPU
 
+### About 3D case function
+The current website version supports 2D case calculations.
+For 3D cases, you do not need to compile the BTE_CPU file yourself — simply use the provided BTE_CPU file.
+
+Examples of 3D functions:
+$ chmod -x BTE_CPU
+
+$ cd bin/examples/Finfet/1e-7
+
+$ mpirun -np 4 ../../../../BTE_CPU
+
+
+The attached executable was built with the following environment versions. To ensure proper execution, it is recommended to use the same or compatible versions:
+-OpenMPI: 4.1
+-GCC: 7.5
+-CMake: 3.14
+
 # More details can be found in [User's Mannual](https://sjtu.feishu.cn/docx/GzB2dXQfaozenFxEtP4cQEJOnKb)
