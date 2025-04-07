@@ -219,7 +219,7 @@ int main(int argc, char **argv)
                 {
                     if (world_rank == 0)
                     {
-                        cout<<"Requests for this part(Dimension_Geometry=3) of the code should be addressed to contact us ; "<<endl;
+                        cout<<"If you need to use the 3D case(Dimension_Geometry=3), please dirctly execute provided BTE_CPU file; "<<endl;
                     }
                     exit(0);
                 }
