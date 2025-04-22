@@ -57,7 +57,7 @@ This project is/was partially supported by the following projects:
 ## Contributors & Contact
 Authors: Yue Hu, Ru Jia, Jiaxuan Xu, Yufei Sheng, Minhua Wen, James Lin, Yongxing Shen, Hua Bao*
 
-Mr. Peng Wan (Center for High Performance Computing, Shanghai Jiao Tong University) is the main contributor to the GPU version of GiftBTE.
+Mr. Peng Wan (Center for High Performance Computing, Shanghai Jiao Tong University) is the main contributor to the GPU version of GiftBTE
 
 GiftBTE developers in TPEC Lab (Contact: Gift-BTE@outlook.com)
 
