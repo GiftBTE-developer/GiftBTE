@@ -133,8 +133,11 @@ Or directly clone the repository by git (may need installation)
 Type in the command line under the GiftBTE folder
 
 $ cd GiftBTE-master
+
 $ cmake -B cpu-build -S.  -DCMAKE_BUILD_TYPE=Release
+
 $ cd cpu-build
+
 $ make
 
 Output in command line
@@ -152,10 +155,15 @@ Common error:
 
 ### Step 4. Run example
 GiftBTE provides many examples under bin/examples. One can choose an example to test. For example: 
+
 $ cd bin
+
 $ cd examples
+
 $ cd cross-plane
+
 $ cd 1e-6
+
 $ mpirun -np 4 ../../../BTE_CPU
 
 ### About 3D cases
@@ -163,8 +171,11 @@ The current website version supports steady-state 2D case calculations.
 For steady-state and transient-state (TDTR and TTG) 3D cases, you do not need to compile the GiftBTE code yourself — simply use the provided executable BTE_CPU file.
 
 Examples for running 3D cases:
+
 $ chmod -x BTE_CPU
+
 $ cd bin/examples/Finfet/1e-7
+
 $ mpirun -np 4 ../../../../BTE_CPU
 
 The attached executable BTE_CPU file was built with the following environment. It is recommended to use the same or compatible versions:
@@ -180,9 +191,13 @@ The compiled executable BTE_GPU file is also attached in the current website, wh
 - Cuda: 12.4
 
 Examples for running:
+
 $ chmod -x BTE_GPU
+
 $ cd bin/examples/TDTR
+
 $ export OMPI_MCA_btl=self,vader,tcp
+
 $ mpirun -np 1 ../../../BTE_GPU
 
 # More
