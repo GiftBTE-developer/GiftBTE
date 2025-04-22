@@ -18,7 +18,7 @@ https://www.bilibili.com/video/BV19u4y1S7ao/?share_source=copy_web&vd_source=200
 - Applicable to any crystalline materials and structures
 - Applicable to steady-state and transient problem
 - Interface to ShengBTE, ALAMODE, GMSH, COMSOL, and Paraview packages
-- Mainly written in C++, parallelized in MPI
+- Mainly written in C++, parallelized in MPI with CPUs or GPUs
 
 ### Application
 - Computing thermal conductivity of nanostructures such as nano-porous media, superlattice, nanowires, nano-composite
@@ -57,6 +57,8 @@ This project is/was partially supported by the following projects:
 ## Contributors & Contact
 Authors: Yue Hu, Ru Jia, Jiaxuan Xu, Yufei Sheng, Minhua Wen, James Lin, Yongxing Shen, Hua Bao*
 
+Mr. Peng Wan (Center for High Performance Computing, Shanghai Jiao Tong University) is the main contributor to the GPU version of GiftBTE.
+
 GiftBTE developers in TPEC Lab (Contact: Gift-BTE@outlook.com)
 
 TPEC Lab: https://sites.ji.sjtu.edu.cn/hua-bao/
@@ -77,7 +79,7 @@ Please download the ‘master’ branch.
 - C++ compiler (gcc is recommended)
 - Cmake
 - MPI library (openmpi is recommended)
--  Linux environment is recommended
+- Linux environment is recommended
 
 ## Install and compile
 ### Step 1. Install all required packages
@@ -130,13 +132,10 @@ Or directly clone the repository by git (may need installation)
 
 Type in the command line under the GiftBTE folder
 
-- $ cd GiftBTE-master
-
-- $ cmake -B cpu-build -S.  -DCMAKE_BUILD_TYPE=Release
-
-- $ cd cpu-build
-
-- $ make
+$ cd GiftBTE-master
+$ cmake -B cpu-build -S.  -DCMAKE_BUILD_TYPE=Release
+$ cd cpu-build
+$ make
 
 Output in command line
 
@@ -159,22 +158,32 @@ $ cd cross-plane
 $ cd 1e-6
 $ mpirun -np 4 ../../../BTE_CPU
 
-### About 3D case function
-The current website version supports 2D case calculations.
-For 3D cases, you do not need to compile the BTE_CPU file yourself — simply use the provided BTE_CPU file.
+### About 3D cases
+The current website version supports steady-state 2D case calculations.
+For steady-state and transient-state (TDTR and TTG) 3D cases, you do not need to compile the GiftBTE code yourself — simply use the provided executable BTE_CPU file.
 
-Examples of 3D functions:
-
+Examples for running 3D cases:
 $ chmod -x BTE_CPU
-
 $ cd bin/examples/Finfet/1e-7
-
 $ mpirun -np 4 ../../../../BTE_CPU
 
+The attached executable BTE_CPU file was built with the following environment. It is recommended to use the same or compatible versions:
+- OpenMPI: 4.1
+- GCC: 7.5
+- CMake: 3.14
 
-The attached executable was built with the following environment versions. To ensure proper execution, it is recommended to use the same or compatible versions:
--OpenMPI: 4.1
--GCC: 7.5
--CMake: 3.14
+### The GPU version for transient-state cases (TTG and TDTR)
+The compiled executable BTE_GPU file is also attached in the current website, which supports solving transient-state TTG and TDTR cases with GPUs. This executable BTE_GPU file was built with the following environment:
+- OpenMPI: 4.1
+- GCC: 12.3
+- CMake: 3.27
+- Cuda: 12.4
 
-# More details can be found in [User's Mannual](https://sjtu.feishu.cn/docx/GzB2dXQfaozenFxEtP4cQEJOnKb)
+Examples for running:
+$ chmod -x BTE_GPU
+$ cd bin/examples/TDTR
+$ export OMPI_MCA_btl=self,vader,tcp
+$ mpirun -np 1 ../../../BTE_GPU
+
+# More
+More details can be found in [User's Mannual](https://sjtu.feishu.cn/docx/GzB2dXQfaozenFxEtP4cQEJOnKb)
