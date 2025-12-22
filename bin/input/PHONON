@@ -1,0 +1,18 @@
+MaterialNumber:
+1
+BandNumber:
+20
+
+MaterialFile 1: ShengBTE
+materials/ShengBTE/GaN
+
+
+GeometryMaterialType: //geometryindex and materialindex start from 0
+1 1
+
+MaterialDimension:
+3
+Ntheta:
+4
+Nphi:
+4

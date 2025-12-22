@@ -1,0 +1,26 @@
+State= //Steady or Transient
+Transient
+Tref=
+0
+Order= //1=first order; 2=second order
+2
+ResidualTemp=
+1E-14
+ResidualFlux=
+1E-14
+TimeStep=
+1e-12
+TotalTime=
+1e-7
+IsTDTR= // 0 or 1
+1
+PulseTime=
+1e-12
+RepetitionFrequency=
+80
+ModulationFrequency=
+10
+RadiusProbe=
+3.8e-6
+
+

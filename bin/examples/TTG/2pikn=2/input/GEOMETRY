@@ -1,0 +1,12 @@
+GeometryDimension= //1 or 2 or 3
+1
+ScaleX=
+3.35560737e-7
+BCFile=
+input/inputbc.dat
+MeshType= // COMSOL or MSH
+COMSOL
+MeshFile=
+input/500_1D.mphtxt
+
+

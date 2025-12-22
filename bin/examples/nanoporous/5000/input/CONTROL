@@ -1,0 +1,8 @@
+State= //Steady or Transient
+Steady
+IterativeScheme= // Synthetic or Sequential
+Sequential
+
+
+
+

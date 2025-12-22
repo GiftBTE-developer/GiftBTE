@@ -1,0 +1,19 @@
+MaterialNumber=
+1
+BandNumber=
+15
+
+MaterialFile 1=  ALAMODE
+../../../materials/ALAMODE/Si/tau300K_pure.dat
+
+GeometryMaterialType= //geometryindex and matterindex both start from 1
+1 1
+2 1
+3 1
+
+MaterialDimension=
+3
+Ntheta=
+2
+Nphi=
+4

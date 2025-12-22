@@ -1,0 +1,12 @@
+GeometryDimension= //1 or 2 or 3
+2
+ScaleX=
+5e-6
+ScaleY=
+5e-6
+BCFile=
+input/inputbc_2D_porous.dat
+MeshType= // COMSOL or MSH
+MSH
+MeshFile=
+input/gms2685.msh

@@ -1,0 +1,13 @@
+GeometryDimension= //1 or 2 or 3
+2
+ScaleX=
+20e-9
+ScaleY=
+20e-9
+BCFile=
+input/inputbc_2D.dat
+MeshType= // COMSOL or MSH
+COMSOL
+MeshFile=
+input/tworegin_2D_y.mphtxt
+

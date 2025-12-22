@@ -1,0 +1,38 @@
+&allocations
+        nelements=2,
+        natoms=2,
+        ngrid(:)=12 12 12
+        norientations=3
+&end
+&crystal
+        lfactor=0.6059141,
+        lattvec(:,1)=0.0  0.5  0.5,
+        lattvec(:,2)=0.5  0.0  0.5,
+        lattvec(:,3)=0.5  0.5  0.0,
+        elements="In" "As"
+        types=1 2,
+        positions(:,1)=0.00  0.00  0.00,
+        positions(:,2)=0.25  0.25  0.25
+        epsilon(:,1)=19.643 0.00 0.00,
+        epsilon(:,2)=0.00 19.643 0.00,
+        epsilon(:,3)=0.00 0.00 19.643,
+        born(:,1,1)=2.67810 0.00 0.00,
+        born(:,2,1)=0.00 2.67810 0.00,
+        born(:,3,1)=0.00 0.00 2.67810,
+        born(:,1,2)=-2.67558 0.00 0.00,
+        born(:,2,2)=0.00 -2.67558 0.00,
+        born(:,3,2)=0.00 0.00 -2.67558,
+        scell(:)=5 5 5
+        orientations(:,1)=1 0 0,
+        orientations(:,2)=1 1 0,
+        orientations(:,3)=1 1 1
+&end
+&parameters
+        T=300.
+        scalebroad=1.0
+&end
+&flags
+	convergence=.FALSE.
+        nonanalytic=.TRUE.
+        nanowires=.TRUE.
+&end

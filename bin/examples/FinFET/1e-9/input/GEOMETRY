@@ -1,0 +1,19 @@
+GeometryDimension= //1 or 2 or 3
+3
+ScaleX=
+1e-9
+ScaleY=
+1e-9
+ScaleZ=
+1e-9
+BCFile=
+input/inputbc_Finfet.dat
+MeshType= // COMSOL or MSH
+COMSOL
+MeshFile=
+input/FinFet_bound_1w4.mphtxt
+HeatType= //COORDINATE or REGION
+REGION
+HeatFile=
+input/heatfile.dat 
+

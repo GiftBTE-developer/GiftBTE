@@ -1,0 +1,7 @@
+4 #Number of boundaries
+
+BoundaryIndex BoundaryType BoundaryValue //BoundaryIndex starts from 1 //BoundaryType=1:thermalizing; BoundaryType=2:diffusely reflecting; BoundaryType=3:specularly reflecting; BoundaryType=5:interficial; BoundaryType<0:periodic
+1 -4 1
+2 2 0
+3 2 0
+4 -1 0
