@@ -1,4 +1,4 @@
-# Gift-BTE
+# GiftBTE
 An efficient deterministic solver for phonon BTE
 
 1. Input File Generator
